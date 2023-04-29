@@ -67,3 +67,6 @@ node_modules/
 
 # Docker dev environment configuration
 compose-dev.yaml
+
+# VSCode files
+.vscode/
