@@ -1,0 +1,15 @@
+type CenoteSocialData {
+    # googlePlaces: GooglePlacesData
+    # tripadvisor: TripadvisorData
+    comments: [Comment]
+}
+
+type Comment {
+    commenter: String
+    comment: String
+    # QUESTION: Is it worth it to create a custom review type that forces the value to be between 0 and 5 with only one decimal place?
+    review: Float
+}
+
+# TODO: Define GooglePlacesData type
+# TODO: Define TripadvisorData type

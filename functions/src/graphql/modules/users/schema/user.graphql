@@ -1,0 +1,7 @@
+# From graphql-scalars
+scalar EmailAddress
+
+type User {
+    id: ID!
+    email: EmailAddress!
+}

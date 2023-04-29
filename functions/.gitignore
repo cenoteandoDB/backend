@@ -2,6 +2,9 @@
 lib/**/*.js
 lib/**/*.js.map
 
+# Schema files in distribution directory
+lib/**/*.graphql
+
 # TypeScript v1 declaration files
 typings/
 

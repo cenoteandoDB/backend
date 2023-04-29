@@ -1,0 +1,47 @@
+# From graphql-scalars
+scalar DateTime
+scalar URL
+
+enum CenoteType {
+	NO_TYPE
+	CENOTE
+	DRY_CAVE
+	WATER_WELL
+	WATERY # TODO: Come up with better term for "aguada", maybe WATER_POINT?
+}
+
+enum CenoteIssue {
+    GEOTAG_NOT_VERIFIED
+}
+
+# TODO: Reference, Species, VariableWithData
+
+type Cenote {
+	# NOTE: Required - id, name?, touristic, type
+	id: ID!
+    # QUESTION: How to deal with unnamed cenotes? (from automated sources or recently discovered)
+	name: String
+	alternativeNames: [String]
+	type: CenoteType!
+	location: CenoteLocation!
+
+	# TODO: Review touristic cenote definition
+	touristic: Boolean!
+	social: CenoteSocialData
+
+	# references: [Reference]
+	# species: [Species]
+	photos: [URL]
+	maps: [URL]
+
+	# TODO: Define how this data is fetched by the frontend.
+	# data: [VariableWithData]
+
+	creator: User
+	contributors: [User]
+
+	createdAt: DateTime
+	updatedAt: DateTime
+
+	issues: [CenoteIssue]
+}
