@@ -1,0 +1,7 @@
+type Query {
+	species: [Species]
+	speciesById(id: ID!): Species
+	speciesByAphiaId(aphiaId: String!): Species
+	speciesByINaturalistId(iNaturalist: String!): Species
+	speciesCsv: String
+}

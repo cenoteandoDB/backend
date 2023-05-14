@@ -11,9 +11,13 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
                     longitude: args.new_cenote.coordinates.longitude,
                 },
                 geojson: {},
+                country: "Mexico",
+                municipality: "Yucatan",
+                state: "Yucatan"
             },
             touristic: true,
             type: "NO_TYPE",
+            
         };
     },
 };

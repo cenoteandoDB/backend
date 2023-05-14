@@ -1,0 +1,15 @@
+input NewSpeciesInput {
+    aphiaId: String
+	iNaturalistId: String
+}
+
+input UpdateSpeciesInput {
+    id: ID!
+    aphiaId: String
+	iNaturalistId: String
+}
+
+type Mutation {
+    createSpecies(new_species: NewSpeciesInput!): Species
+    updateSpecies(new_species: UpdateSpeciesInput!): Species
+}

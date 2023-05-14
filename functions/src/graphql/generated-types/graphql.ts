@@ -23,16 +23,16 @@ export type Scalars = {
 
 export type Cenote = {
   __typename?: 'Cenote';
-  alternativeNames?: Maybe<Array<Maybe<Scalars['String']>>>;
+  alternativeNames?: Maybe<Array<Scalars['String']>>;
   contributors?: Maybe<Array<Maybe<User>>>;
   createdAt?: Maybe<Scalars['DateTime']>;
   creator?: Maybe<User>;
   id: Scalars['ID'];
   issues?: Maybe<Array<Maybe<CenoteIssue>>>;
   location: CenoteLocation;
-  maps?: Maybe<Array<Maybe<Scalars['URL']>>>;
+  maps?: Maybe<Array<Scalars['URL']>>;
   name?: Maybe<Scalars['String']>;
-  photos?: Maybe<Array<Maybe<Scalars['URL']>>>;
+  photos?: Maybe<Array<Scalars['URL']>>;
   social?: Maybe<CenoteSocialData>;
   touristic: Scalars['Boolean'];
   type: CenoteType;
@@ -55,10 +55,10 @@ export type CenoteIssue =
 export type CenoteLocation = {
   __typename?: 'CenoteLocation';
   coordinates: Coordinates;
-  country?: Maybe<Scalars['String']>;
+  country: Scalars['String'];
   geojson: Scalars['JSON'];
-  municipality?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
+  municipality: Scalars['String'];
+  state: Scalars['String'];
 };
 
 export type CenoteSocialData = {
@@ -94,7 +94,9 @@ export type CoordinatesInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createCenote?: Maybe<Cenote>;
+  createSpecies?: Maybe<Species>;
   updateEmail?: Maybe<User>;
+  updateSpecies?: Maybe<Species>;
 };
 
 
@@ -103,13 +105,28 @@ export type MutationCreateCenoteArgs = {
 };
 
 
+export type MutationCreateSpeciesArgs = {
+  new_species: NewSpeciesInput;
+};
+
+
 export type MutationUpdateEmailArgs = {
   email: Scalars['EmailAddress'];
   id: Scalars['ID'];
 };
 
+
+export type MutationUpdateSpeciesArgs = {
+  new_species: UpdateSpeciesInput;
+};
+
 export type NewCenoteInput = {
   coordinates: CoordinatesInput;
+};
+
+export type NewSpeciesInput = {
+  aphiaId?: InputMaybe<Scalars['String']>;
+  iNaturalistId?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -118,7 +135,13 @@ export type Query = {
   cenotes?: Maybe<Array<Maybe<Cenote>>>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
+  species?: Maybe<Array<Maybe<Species>>>;
+  speciesByAphiaId?: Maybe<Species>;
+  speciesByINaturalistId?: Maybe<Species>;
+  speciesById?: Maybe<Species>;
+  speciesCsv?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
+  users?: Maybe<Array<Maybe<User>>>;
 };
 
 
@@ -127,7 +150,37 @@ export type QueryCenoteByIdArgs = {
 };
 
 
+export type QuerySpeciesByAphiaIdArgs = {
+  aphiaId: Scalars['String'];
+};
+
+
+export type QuerySpeciesByINaturalistIdArgs = {
+  iNaturalist: Scalars['String'];
+};
+
+
+export type QuerySpeciesByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type QueryUserArgs = {
+  id: Scalars['ID'];
+};
+
+export type Species = {
+  __typename?: 'Species';
+  aphiaId?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  iNaturalistId?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type UpdateSpeciesInput = {
+  aphiaId?: InputMaybe<Scalars['String']>;
+  iNaturalistId?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
 };
 
@@ -135,7 +188,15 @@ export type User = {
   __typename?: 'User';
   email: Scalars['EmailAddress'];
   id: Scalars['ID'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  role: UserRole;
 };
+
+export type UserRole =
+  | 'ADMIN'
+  | 'BASIC'
+  | 'CENOTERO_ADVANCED';
 
 
 
@@ -227,10 +288,14 @@ export type ResolversTypes = {
   Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
+  NewSpeciesInput: NewSpeciesInput;
   Query: ResolverTypeWrapper<{}>;
+  Species: ResolverTypeWrapper<Species>;
   String: ResolverTypeWrapper<Scalars['String']>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
+  UpdateSpeciesInput: UpdateSpeciesInput;
   User: ResolverTypeWrapper<User>;
+  UserRole: UserRole;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -252,23 +317,26 @@ export type ResolversParentTypes = {
   Longitude: Scalars['Longitude'];
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
+  NewSpeciesInput: NewSpeciesInput;
   Query: {};
+  Species: Species;
   String: Scalars['String'];
   URL: Scalars['URL'];
+  UpdateSpeciesInput: UpdateSpeciesInput;
   User: User;
 };
 
 export type CenoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cenote'] = ResolversParentTypes['Cenote']> = {
-  alternativeNames?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  alternativeNames?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   contributors?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   creator?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   issues?: Resolver<Maybe<Array<Maybe<ResolversTypes['CenoteIssue']>>>, ParentType, ContextType>;
   location?: Resolver<ResolversTypes['CenoteLocation'], ParentType, ContextType>;
-  maps?: Resolver<Maybe<Array<Maybe<ResolversTypes['URL']>>>, ParentType, ContextType>;
+  maps?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  photos?: Resolver<Maybe<Array<Maybe<ResolversTypes['URL']>>>, ParentType, ContextType>;
+  photos?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
   social?: Resolver<Maybe<ResolversTypes['CenoteSocialData']>, ParentType, ContextType>;
   touristic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['CenoteType'], ParentType, ContextType>;
@@ -284,10 +352,10 @@ export type CenoteBoundsResolvers<ContextType = any, ParentType extends Resolver
 
 export type CenoteLocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['CenoteLocation'] = ResolversParentTypes['CenoteLocation']> = {
   coordinates?: Resolver<ResolversTypes['Coordinates'], ParentType, ContextType>;
-  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   geojson?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
-  municipality?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  municipality?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -331,7 +399,9 @@ export interface LongitudeScalarConfig extends GraphQLScalarTypeConfig<Resolvers
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
+  createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
   updateEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateEmailArgs, 'email' | 'id'>>;
+  updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'new_species'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -339,7 +409,22 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Cenote']>>>, ParentType, ContextType>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  species?: Resolver<Maybe<Array<Maybe<ResolversTypes['Species']>>>, ParentType, ContextType>;
+  speciesByAphiaId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByAphiaIdArgs, 'aphiaId'>>;
+  speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalist'>>;
+  speciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByIdArgs, 'id'>>;
+  speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+};
+
+export type SpeciesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Species'] = ResolversParentTypes['Species']> = {
+  aphiaId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  iNaturalistId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['URL'], any> {
@@ -349,6 +434,9 @@ export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -366,6 +454,7 @@ export type Resolvers<ContextType = any> = {
   Longitude?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Species?: SpeciesResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
 };

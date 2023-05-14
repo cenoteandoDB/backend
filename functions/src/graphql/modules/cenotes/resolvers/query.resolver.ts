@@ -11,6 +11,9 @@ export const QueryResolver: CenotesModule.Resolvers["Query"] = {
                     longitude: "0",
                 },
                 geojson: {},
+                country: "Mexico",
+                municipality: "Yucatan",
+                state: "Yucatan"
             },
             touristic: true,
         };

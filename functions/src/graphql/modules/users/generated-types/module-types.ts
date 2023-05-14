@@ -4,13 +4,18 @@ import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
     Mutation: 'updateEmail';
-    Query: 'user';
-    User: 'id' | 'email';
+    Query: 'users' | 'user';
+    User: 'id' | 'name' | 'email' | 'password' | 'role';
+  };
+  
+  interface DefinedEnumValues {
+    UserRole: 'BASIC' | 'CENOTERO_ADVANCED' | 'ADMIN';
   };
   
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type User = Pick<Types.User, DefinedFields['User']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type UserRole = DefinedEnumValues['UserRole'];
   
   export type Scalars = Pick<Types.Scalars, 'EmailAddress'>;
   export type EmailAddressScalarConfig = Types.EmailAddressScalarConfig;
@@ -36,12 +41,16 @@ export namespace UsersModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
+      users?: gm.Middleware[];
       user?: gm.Middleware[];
     };
     User?: {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
+      name?: gm.Middleware[];
       email?: gm.Middleware[];
+      password?: gm.Middleware[];
+      role?: gm.Middleware[];
     };
   };
 }

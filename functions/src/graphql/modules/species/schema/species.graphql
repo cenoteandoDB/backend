@@ -1,0 +1,12 @@
+# From graphql-scalars
+scalar DateTime
+
+type Species {
+	id: ID!
+
+	aphiaId: String
+	iNaturalistId: String
+	
+	createdAt: DateTime
+	updatedAt: DateTime
+}

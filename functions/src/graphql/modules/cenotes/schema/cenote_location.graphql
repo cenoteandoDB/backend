@@ -10,9 +10,9 @@ type CenoteLocation {
 	# -> Maybe instead of gadm we should include only country, state, and municipality information
 	coordinates: Coordinates!
 	geojson: JSON! # TODO: Use GeoJSON PointObject
-    country: String
-    state: String
-    municipality: String
+    country: String!
+    state: String!
+    municipality: String!
 }
 
 type Coordinates {

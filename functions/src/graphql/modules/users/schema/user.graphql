@@ -1,7 +1,16 @@
 # From graphql-scalars
 scalar EmailAddress
 
+enum UserRole {
+    BASIC
+    CENOTERO_ADVANCED
+    ADMIN
+}
+
 type User {
     id: ID!
+    name: String!
     email: EmailAddress!
+    password: String!
+    role: UserRole!
 }

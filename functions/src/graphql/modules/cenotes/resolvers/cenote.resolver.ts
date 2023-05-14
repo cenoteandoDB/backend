@@ -12,6 +12,9 @@ export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
                 longitude: "0",
             },
             geojson: {},
+            country: "Mexico",
+            municipality: "Yucatan",
+            state: "Yucatan"
         };
     },
     touristic: () => true,

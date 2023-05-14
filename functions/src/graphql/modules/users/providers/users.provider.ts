@@ -11,7 +11,16 @@ export class UsersProvider {
      */
     async getUserById(id: string): Promise<UsersModule.User> {
         return new Promise((resolve, reject) => {
-            return resolve({id: id, email: "user@example.com"});
+            return resolve(
+                {
+                id: id,
+                name: "name",
+                email: "user@example.com",
+                password: "password",
+                role: "ADMIN"
+                }
+            );
         });
+
     }
 }

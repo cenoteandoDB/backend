@@ -21,7 +21,7 @@ type Cenote {
 	id: ID!
     # QUESTION: How to deal with unnamed cenotes? (from automated sources or recently discovered)
 	name: String
-	alternativeNames: [String]
+	alternativeNames: [String!]
 	type: CenoteType!
 	location: CenoteLocation!
 
@@ -29,10 +29,10 @@ type Cenote {
 	touristic: Boolean!
 	social: CenoteSocialData
 
-	# references: [Reference]
-	# species: [Species]
-	photos: [URL]
-	maps: [URL]
+	# references: [Reference!]
+	# species: [Species!]
+	photos: [URL!]
+	maps: [URL!]
 
 	# TODO: Define how this data is fetched by the frontend.
 	# data: [VariableWithData]
