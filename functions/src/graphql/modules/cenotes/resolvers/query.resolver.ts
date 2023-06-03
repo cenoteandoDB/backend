@@ -1,35 +1,16 @@
 import {CenotesModule} from "../generated-types/module-types";
+import { CenotesProvider } from "../providers/cenotes.provider";
 
 export const QueryResolver: CenotesModule.Resolvers["Query"] = {
+    cenotes: () => CenotesProvider.getCenotes(),
+
     cenoteById: (parent, args, contextValue, info) => {
-        return {
-            id: args.id,
-            type: "NO_TYPE",
-            location: {
-                coordinates: {
-                    latitude: "0",
-                    longitude: "0",
-                },
-                geojson: {},
-                country: "Mexico",
-                municipality: "Yucatan",
-                state: "Yucatan"
-            },
-            touristic: true,
-        };
+        return CenotesProvider.getCenoteById(args.id)
     },
-    cenotes: () => [],
+
     cenotesBounds: () => {
-        return {
-            top_left: {
-                latitude: "0",
-                longitude: "0",
-            },
-            bottom_right: {
-                latitude: "0",
-                longitude: "0",
-            },
-        };
+        return CenotesProvider.getCenotesBounds()
     },
+    
     cenotesCsv: () => "",
 };

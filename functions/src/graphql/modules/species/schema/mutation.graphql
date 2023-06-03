@@ -11,5 +11,5 @@ input UpdateSpeciesInput {
 
 type Mutation {
     createSpecies(new_species: NewSpeciesInput!): Species
-    updateSpecies(new_species: UpdateSpeciesInput!): Species
+    updateSpecies(updated_species: UpdateSpeciesInput!): Species
 }

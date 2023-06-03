@@ -1,15 +1,11 @@
 import { SpeciesModule } from "../generated-types/module-types";
+import { SpeciesProvider } from "../providers/species.provider";
 
-// TODO: Implement this
 export const MutationResolver: SpeciesModule.Resolvers["Mutation"] = {
     createSpecies: (parent, args, contextValue, info) => {
-        return {
-            id: "id"
-        };
+        return SpeciesProvider.createSpecies(args.new_species)
     },
     updateSpecies: (parent, args, contextValue, info) => {
-        return {
-            id: "id",
-        };
+        return SpeciesProvider.updateSpecies(args.updated_species)
     },
 };
