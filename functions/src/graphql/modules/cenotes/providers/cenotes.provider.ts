@@ -1,6 +1,6 @@
 import { ID } from "graphql-modules/shared/types";
 import { db } from "../../database/db";
-import { Cenote, NewCenoteInput } from "../../../generated-types/graphql";
+import { Cenote, CenoteLocation, NewCenoteInput, UpdatedCenoteInput } from "../../../generated-types/graphql";
 
 const cenotesDB = db.cenotes
 
@@ -39,17 +39,26 @@ export const CenotesProvider = {
 
     cenotesToCsv: () => "",
 
-    createCenote: async (new_cenote: NewCenoteInput) => {
+    createCenote: async (new_cenote: NewCenoteInput, location: CenoteLocation) => {
         const docRef = cenotesDB.doc();
         await docRef.set({
             id: docRef.id,
             createdAt: new Date().toISOString(),
+            location,
             ...new_cenote
         })
         
         const snapshot = await cenotesDB.doc(docRef.id).get()
         return snapshot.data() as Cenote
     },
-    updateCenote: () => {
+    
+    updateCenote: async (updated_cenote: UpdatedCenoteInput) => {
+        await cenotesDB.doc(updated_cenote.id).update({
+            ...updated_cenote,
+            updatedAt: new Date().toISOString()
+        })
+
+        const snapshot = await cenotesDB.doc(updated_cenote.id).get()
+        return snapshot.data() as Cenote
     }
 };

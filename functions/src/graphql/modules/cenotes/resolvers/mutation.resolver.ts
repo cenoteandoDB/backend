@@ -1,23 +1,31 @@
-import {CenotesModule} from "../generated-types/module-types";
+import { CenoteLocation, CoordinatesInput } from "../../../generated-types/graphql";
+import { CenotesModule } from "../generated-types/module-types";
+import { CenotesProvider } from "../providers/cenotes.provider";
 
 // TODO: Implement this
 export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
     createCenote: (parent, args, contextValue, info) => {
-        return {
-            id: "new_cenote_id_000",
-            location: {
-                coordinates: {
-                    latitude: args.new_cenote.coordinates.latitude,
-                    longitude: args.new_cenote.coordinates.longitude,
-                },
-                geojson: {},
-                country: "Mexico",
-                municipality: "Yucatan",
-                state: "Yucatan"
-            },
-            touristic: true,
-            type: "NO_TYPE",
-            
-        };
+        const location = getCenoteLocation(args.new_cenote.coordinates)
+        return CenotesProvider.createCenote(args.new_cenote, location)
     },
+    updateCenote: (parent, args, contextValue, info) => {
+        return CenotesProvider.updateCenote(args.updated_cenote)
+    }
 };
+
+const getCenoteLocation = (input: CoordinatesInput) => {
+    const location : CenoteLocation = {
+        coordinates: {
+            latitude: input.latitude,
+            longitude: input.longitude,
+        },
+        country: "Mexico",
+        state: "State",
+        municipality: "Municipality"
+    }
+
+    return location
+}
+
+
+

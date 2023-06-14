@@ -17,16 +17,17 @@ enum CenoteIssue {
 # TODO: Reference, Species, VariableWithData
 
 type Cenote {
-	# NOTE: Required - id, name?, touristic, type
+	# NOTE: Required
 	id: ID!
-    # QUESTION: How to deal with unnamed cenotes? (from automated sources or recently discovered)
-	name: String
-	alternativeNames: [String!]
-	type: CenoteType!
-	location: CenoteLocation!
-
-	# TODO: Review touristic cenote definition
 	touristic: Boolean!
+	location: CenoteLocation!
+	type: CenoteType!
+
+    # QUESTION: How to deal with unnamed cenotes? (from automated sources or recently discovered)
+	name: String!
+	alternativeNames: [String!]
+
+	issues: [CenoteIssue]
 	social: CenoteSocialData
 
 	# references: [Reference!]
@@ -38,10 +39,9 @@ type Cenote {
 	# data: [VariableWithData]
 
 	creator: User
-	contributors: [User]
+	# contributors: [User]
 
 	createdAt: DateTime
 	updatedAt: DateTime
 
-	issues: [CenoteIssue]
 }

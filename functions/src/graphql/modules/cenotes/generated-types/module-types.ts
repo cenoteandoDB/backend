@@ -3,13 +3,13 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
-    Cenote: 'id' | 'name' | 'alternativeNames' | 'type' | 'location' | 'touristic' | 'social' | 'photos' | 'maps' | 'creator' | 'contributors' | 'createdAt' | 'updatedAt' | 'issues';
-    CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'municipality';
+    Cenote: 'id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'createdAt' | 'updatedAt';
+    CenoteLocation: 'coordinates' | 'country' | 'state' | 'municipality';
     Coordinates: 'latitude' | 'longitude';
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
     Comment: 'commenter' | 'comment' | 'review';
-    Mutation: 'createCenote';
+    Mutation: 'createCenote' | 'updateCenote';
     Query: 'cenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds';
   };
   
@@ -21,6 +21,7 @@ export namespace CenotesModule {
   interface DefinedInputFields {
     CoordinatesInput: 'latitude' | 'longitude';
     NewCenoteInput: 'coordinates';
+    UpdatedCenoteInput: 'id' | 'touristic' | 'type' | 'name' | 'alternativeNames' | 'issues';
   };
   
   export type CenoteType = DefinedEnumValues['CenoteType'];
@@ -34,6 +35,7 @@ export namespace CenotesModule {
   export type Comment = Pick<Types.Comment, DefinedFields['Comment']>;
   export type CoordinatesInput = Pick<Types.CoordinatesInput, DefinedInputFields['CoordinatesInput']>;
   export type NewCenoteInput = Pick<Types.NewCenoteInput, DefinedInputFields['NewCenoteInput']>;
+  export type UpdatedCenoteInput = Pick<Types.UpdatedCenoteInput, DefinedInputFields['UpdatedCenoteInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   
@@ -76,24 +78,22 @@ export namespace CenotesModule {
     Cenote?: {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
+      touristic?: gm.Middleware[];
+      location?: gm.Middleware[];
+      type?: gm.Middleware[];
       name?: gm.Middleware[];
       alternativeNames?: gm.Middleware[];
-      type?: gm.Middleware[];
-      location?: gm.Middleware[];
-      touristic?: gm.Middleware[];
+      issues?: gm.Middleware[];
       social?: gm.Middleware[];
       photos?: gm.Middleware[];
       maps?: gm.Middleware[];
       creator?: gm.Middleware[];
-      contributors?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
-      issues?: gm.Middleware[];
     };
     CenoteLocation?: {
       '*'?: gm.Middleware[];
       coordinates?: gm.Middleware[];
-      geojson?: gm.Middleware[];
       country?: gm.Middleware[];
       state?: gm.Middleware[];
       municipality?: gm.Middleware[];
@@ -121,6 +121,7 @@ export namespace CenotesModule {
     Mutation?: {
       '*'?: gm.Middleware[];
       createCenote?: gm.Middleware[];
+      updateCenote?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];

@@ -1,29 +1,10 @@
-import {CenotesModule} from "../generated-types/module-types";
+import { StorageProvider } from "../../gcp/gcp.provider";
+import { CenotesModule } from "../generated-types/module-types";
 
 export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
-    id: (parent, args, contextValue, info) => parent.id,
-    name: () => "Cenote Name",
-    alternativeNames: () => [],
-    type: () => "NO_TYPE",
-    location: () => {
-        return {
-            coordinates: {
-                latitude: "0",
-                longitude: "0",
-            },
-            geojson: {},
-            country: "Mexico",
-            municipality: "Yucatan",
-            state: "Yucatan"
-        };
-    },
-    touristic: () => true,
-    social: () => null,
-    photos: () => [],
-    maps: () => [],
-    creator: () => null,
-    contributors: () => [],
-    createdAt: () => null,
-    updatedAt: () => null,
-    issues: () => [],
+    name: (parent) => parent.name != null ? parent.name : "no-name",
+    touristic: (parent) => parent.touristic != null ? parent.touristic : false,
+    type: (parent) => parent.type != null ? parent.type : 'NO_TYPE',
+    photos: (parent) => StorageProvider.getPhotos(parent.id),
+    maps: (parent) => StorageProvider.getMaps(parent.id),
 };

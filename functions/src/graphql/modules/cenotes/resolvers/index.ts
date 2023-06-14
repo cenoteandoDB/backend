@@ -1,7 +1,7 @@
 import {CenotesModule} from "../generated-types/module-types";
 import {MutationResolver} from "./mutation.resolver";
 import {QueryResolver} from "./query.resolver";
-// import {CenoteResolver} from "./cenote.resolver";
+import {CenoteResolver} from "./cenote.resolver";
 import {
     DateTimeResolver,
     JSONResolver,
@@ -13,7 +13,7 @@ import {
 export const CenotesResolvers: CenotesModule.Resolvers = {
     Mutation: MutationResolver,
     Query: QueryResolver,
-    // Cenote: CenoteResolver,
+    Cenote: CenoteResolver,
     Latitude: LatitudeResolver,
     Longitude: LongitudeResolver,
     DateTime: DateTimeResolver,
