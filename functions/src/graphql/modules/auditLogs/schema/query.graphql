@@ -1,0 +1,3 @@
+type Query {
+	cenoteAuditLogs(id: ID!, type: AuditLogType!): [AuditLog]
+}

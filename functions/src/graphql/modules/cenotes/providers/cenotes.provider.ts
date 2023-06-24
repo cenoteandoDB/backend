@@ -6,8 +6,8 @@ const cenotesDB = db.cenotes
 
 export const CenotesProvider = {
     getCenotes: async () => {
-        const cenote = await cenotesDB.get()
-        return cenote.docs.map(doc => doc.data() as Cenote)
+        const cenotes = await cenotesDB.get()
+        return cenotes.docs.map(doc => doc.data() as Cenote)
     },
 
     getCenoteById: async (id: ID) => {

@@ -1,0 +1,20 @@
+# From graphql-scalars
+scalar DateTime
+scalar JSON
+
+enum AuditLogType {
+	NEW_CENOTE
+	UPDATED_CENOTE
+	NEW_REFERENCE
+	UPDATED_REFERENCE
+}
+
+type AuditLog {
+	id: ID!
+	objectId: ID!
+	type: AuditLogType!
+	arguments: JSON!
+	timestamp: DateTime!
+
+	# user
+}

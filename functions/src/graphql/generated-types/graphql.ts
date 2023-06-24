@@ -21,6 +21,21 @@ export type Scalars = {
   URL: any;
 };
 
+export type AuditLog = {
+  __typename?: 'AuditLog';
+  arguments: Scalars['JSON'];
+  id: Scalars['ID'];
+  objectId: Scalars['ID'];
+  timestamp: Scalars['DateTime'];
+  type: AuditLogType;
+};
+
+export type AuditLogType =
+  | 'NEW_CENOTE'
+  | 'NEW_REFERENCE'
+  | 'UPDATED_CENOTE'
+  | 'UPDATED_REFERENCE';
+
 export type Cenote = {
   __typename?: 'Cenote';
   alternativeNames?: Maybe<Array<Scalars['String']>>;
@@ -135,6 +150,7 @@ export type NewSpeciesInput = {
 
 export type Query = {
   __typename?: 'Query';
+  cenoteAuditLogs?: Maybe<Array<Maybe<AuditLog>>>;
   cenoteById?: Maybe<Cenote>;
   cenotes?: Maybe<Array<Maybe<Cenote>>>;
   cenotesBounds?: Maybe<CenoteBounds>;
@@ -146,6 +162,12 @@ export type Query = {
   speciesCsv?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
+};
+
+
+export type QueryCenoteAuditLogsArgs = {
+  id: Scalars['ID'];
+  type: AuditLogType;
 };
 
 
@@ -282,6 +304,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AuditLog: ResolverTypeWrapper<AuditLog>;
+  AuditLogType: AuditLogType;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Cenote: ResolverTypeWrapper<Cenote>;
   CenoteBounds: ResolverTypeWrapper<CenoteBounds>;
@@ -314,6 +338,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AuditLog: AuditLog;
   Boolean: Scalars['Boolean'];
   Cenote: Cenote;
   CenoteBounds: CenoteBounds;
@@ -339,6 +364,15 @@ export type ResolversParentTypes = {
   UpdateSpeciesInput: UpdateSpeciesInput;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: User;
+};
+
+export type AuditLogResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuditLog'] = ResolversParentTypes['AuditLog']> = {
+  arguments?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  objectId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['AuditLogType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type CenoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cenote'] = ResolversParentTypes['Cenote']> = {
@@ -419,6 +453,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  cenoteAuditLogs?: Resolver<Maybe<Array<Maybe<ResolversTypes['AuditLog']>>>, ParentType, ContextType, RequireFields<QueryCenoteAuditLogsArgs, 'id' | 'type'>>;
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
   cenotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Cenote']>>>, ParentType, ContextType>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
@@ -455,6 +490,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type Resolvers<ContextType = any> = {
+  AuditLog?: AuditLogResolvers<ContextType>;
   Cenote?: CenoteResolvers<ContextType>;
   CenoteBounds?: CenoteBoundsResolvers<ContextType>;
   CenoteLocation?: CenoteLocationResolvers<ContextType>;
