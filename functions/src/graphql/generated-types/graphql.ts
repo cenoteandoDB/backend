@@ -21,6 +21,11 @@ export type Scalars = {
   URL: any;
 };
 
+export type AccessLevel =
+  | 'PRIVATE'
+  | 'PUBLIC'
+  | 'SENSITIVE';
+
 export type AuditLog = {
   __typename?: 'AuditLog';
   arguments: Scalars['JSON'];
@@ -116,9 +121,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCenote?: Maybe<Cenote>;
   createSpecies?: Maybe<Species>;
+  createVariable?: Maybe<Variable>;
   updateCenote?: Maybe<Cenote>;
   updateEmail?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
+  updateVariable?: Maybe<Variable>;
 };
 
 
@@ -129,6 +136,11 @@ export type MutationCreateCenoteArgs = {
 
 export type MutationCreateSpeciesArgs = {
   new_species: NewSpeciesInput;
+};
+
+
+export type MutationCreateVariableArgs = {
+  new_variable: NewVariableInput;
 };
 
 
@@ -147,6 +159,11 @@ export type MutationUpdateSpeciesArgs = {
   updated_species: UpdateSpeciesInput;
 };
 
+
+export type MutationUpdateVariableArgs = {
+  updated_variable: UpdateVariableInput;
+};
+
 export type NewCenoteInput = {
   coordinates: CoordinatesInput;
 };
@@ -154,6 +171,20 @@ export type NewCenoteInput = {
 export type NewSpeciesInput = {
   aphiaId?: InputMaybe<Scalars['String']>;
   iNaturalistId?: InputMaybe<Scalars['String']>;
+};
+
+export type NewVariableInput = {
+  accessLevel?: InputMaybe<AccessLevel>;
+  description?: InputMaybe<Scalars['String']>;
+  enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  methodology?: InputMaybe<Scalars['String']>;
+  multiple?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  origin?: InputMaybe<VariableOrigin>;
+  theme?: InputMaybe<VariableTheme>;
+  timeseries?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<VariableType>;
+  units?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -170,6 +201,9 @@ export type Query = {
   speciesCsv?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
+  variableById?: Maybe<Variable>;
+  variables?: Maybe<Array<Maybe<Variable>>>;
+  variablesByTheme?: Maybe<Array<Maybe<Variable>>>;
 };
 
 
@@ -203,6 +237,16 @@ export type QueryUserArgs = {
   id: Scalars['ID'];
 };
 
+
+export type QueryVariableByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryVariablesByThemeArgs = {
+  theme: VariableTheme;
+};
+
 export type Species = {
   __typename?: 'Species';
   aphiaId?: Maybe<Scalars['String']>;
@@ -216,6 +260,21 @@ export type UpdateSpeciesInput = {
   aphiaId?: InputMaybe<Scalars['String']>;
   iNaturalistId?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
+};
+
+export type UpdateVariableInput = {
+  accessLevel?: InputMaybe<AccessLevel>;
+  description?: InputMaybe<Scalars['String']>;
+  enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  id: Scalars['ID'];
+  methodology?: InputMaybe<Scalars['String']>;
+  multiple?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  origin?: InputMaybe<VariableOrigin>;
+  theme?: InputMaybe<VariableTheme>;
+  timeseries?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<VariableType>;
+  units?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdatedCenoteInput = {
@@ -240,6 +299,53 @@ export type UserRole =
   | 'ADMIN'
   | 'BASIC'
   | 'CENOTERO_ADVANCED';
+
+export type Variable = {
+  __typename?: 'Variable';
+  accessLevel?: Maybe<AccessLevel>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  enumValues?: Maybe<Array<Maybe<Scalars['String']>>>;
+  id: Scalars['ID'];
+  methodology?: Maybe<Scalars['String']>;
+  multiple?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
+  origin?: Maybe<VariableOrigin>;
+  theme?: Maybe<VariableTheme>;
+  timeseries?: Maybe<Scalars['Boolean']>;
+  type?: Maybe<VariableType>;
+  units?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type VariableOrigin =
+  | 'BOTH'
+  | 'FIELD'
+  | 'OFFICE';
+
+export type VariableTheme =
+  | 'BIODIVERSITY'
+  | 'CULTURAL'
+  | 'DISTURBANCE'
+  | 'DIVING'
+  | 'GEOMORPHOLOGY'
+  | 'GEOREFERENCE'
+  | 'LOCATION'
+  | 'ORGANIZATION'
+  | 'REGULATION'
+  | 'TOURISM'
+  | 'WATER';
+
+export type VariableType =
+  | 'BOOLEAN'
+  | 'DATE'
+  | 'DATETIME'
+  | 'ENUM'
+  | 'JSON'
+  | 'NUMBER_WITH_UNITS'
+  | 'TEXT'
+  | 'TIME'
+  | 'UNITLESS_NUMBER';
 
 
 
@@ -312,6 +418,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AccessLevel: AccessLevel;
   AuditLog: ResolverTypeWrapper<AuditLog>;
   AuditLogType: AuditLogType;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -336,14 +443,20 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
   NewSpeciesInput: NewSpeciesInput;
+  NewVariableInput: NewVariableInput;
   Query: ResolverTypeWrapper<{}>;
   Species: ResolverTypeWrapper<Species>;
   String: ResolverTypeWrapper<Scalars['String']>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
   UpdateSpeciesInput: UpdateSpeciesInput;
+  UpdateVariableInput: UpdateVariableInput;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: ResolverTypeWrapper<User>;
   UserRole: UserRole;
+  Variable: ResolverTypeWrapper<Variable>;
+  VariableOrigin: VariableOrigin;
+  VariableTheme: VariableTheme;
+  VariableType: VariableType;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -369,13 +482,16 @@ export type ResolversParentTypes = {
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
   NewSpeciesInput: NewSpeciesInput;
+  NewVariableInput: NewVariableInput;
   Query: {};
   Species: Species;
   String: Scalars['String'];
   URL: Scalars['URL'];
   UpdateSpeciesInput: UpdateSpeciesInput;
+  UpdateVariableInput: UpdateVariableInput;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: User;
+  Variable: Variable;
 };
 
 export type AuditLogResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuditLog'] = ResolversParentTypes['AuditLog']> = {
@@ -467,9 +583,11 @@ export interface LongitudeScalarConfig extends GraphQLScalarTypeConfig<Resolvers
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
   createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
+  createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateEmailArgs, 'email' | 'id'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
+  updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'updated_variable'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -485,6 +603,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  variableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryVariableByIdArgs, 'id'>>;
+  variables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType>;
+  variablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryVariablesByThemeArgs, 'theme'>>;
 };
 
 export type SpeciesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Species'] = ResolversParentTypes['Species']> = {
@@ -509,6 +630,24 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
+  accessLevel?: Resolver<Maybe<ResolversTypes['AccessLevel']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  enumValues?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  methodology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  multiple?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  origin?: Resolver<Maybe<ResolversTypes['VariableOrigin']>, ParentType, ContextType>;
+  theme?: Resolver<Maybe<ResolversTypes['VariableTheme']>, ParentType, ContextType>;
+  timeseries?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['VariableType']>, ParentType, ContextType>;
+  units?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   AuditLog?: AuditLogResolvers<ContextType>;
   Cenote?: CenoteResolvers<ContextType>;
@@ -528,6 +667,7 @@ export type Resolvers<ContextType = any> = {
   Species?: SpeciesResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
+  Variable?: VariableResolvers<ContextType>;
 };
 
 

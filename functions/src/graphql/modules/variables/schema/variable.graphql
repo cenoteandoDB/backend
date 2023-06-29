@@ -1,0 +1,62 @@
+# From graphql-scalars
+scalar DateTime
+
+enum AccessLevel {
+	PUBLIC
+	PRIVATE
+	SENSITIVE
+}
+
+enum VariableTheme {
+	LOCATION
+	GEOREFERENCE
+	CULTURAL
+	GEOMORPHOLOGY
+	BIODIVERSITY
+	DISTURBANCE
+	TOURISM
+	DIVING
+	ORGANIZATION
+	REGULATION
+	WATER
+}
+
+enum VariableType {
+	TEXT
+	BOOLEAN
+	ENUM
+	JSON
+	UNITLESS_NUMBER
+	NUMBER_WITH_UNITS
+	DATETIME
+	DATE
+	TIME
+}
+
+enum VariableOrigin {
+	FIELD
+	OFFICE
+	BOTH
+}
+
+type Variable {
+	id: ID!
+
+	name: String
+	description: String
+	
+	type: VariableType
+	units: String   			#SHOULD be an enum 
+	enumValues: [String]
+    timeseries: Boolean
+    multiple: Boolean
+    accessLevel: AccessLevel
+    theme: VariableTheme
+    origin: VariableOrigin
+    methodology: String
+
+	createdAt: DateTime
+	updatedAt: DateTime
+
+	# creator: User 
+}
