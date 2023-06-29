@@ -3,7 +3,8 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
-    Cenote: 'id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'createdAt' | 'updatedAt';
+    CityDistances: 'location' | 'distance' | 'time';
+    Cenote: 'id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'distances' | 'createdAt' | 'updatedAt';
     CenoteLocation: 'coordinates' | 'country' | 'state' | 'municipality';
     Coordinates: 'latitude' | 'longitude';
     CenoteBounds: 'top_left' | 'bottom_right';
@@ -26,6 +27,7 @@ export namespace CenotesModule {
   
   export type CenoteType = DefinedEnumValues['CenoteType'];
   export type CenoteIssue = DefinedEnumValues['CenoteIssue'];
+  export type CityDistances = Pick<Types.CityDistances, DefinedFields['CityDistances']>;
   export type Cenote = Pick<Types.Cenote, DefinedFields['Cenote']>;
   export type CenoteLocation = Pick<Types.CenoteLocation, DefinedFields['CenoteLocation']>;
   export type CenoteSocialData = Pick<Types.CenoteSocialData, DefinedFields['CenoteSocialData']>;
@@ -46,6 +48,7 @@ export namespace CenotesModule {
   export type LatitudeScalarConfig = Types.LatitudeScalarConfig;
   export type LongitudeScalarConfig = Types.LongitudeScalarConfig;
   
+  export type CityDistancesResolvers = Pick<Types.CityDistancesResolvers, DefinedFields['CityDistances'] | '__isTypeOf'>;
   export type CenoteResolvers = Pick<Types.CenoteResolvers, DefinedFields['Cenote'] | '__isTypeOf'>;
   export type CenoteLocationResolvers = Pick<Types.CenoteLocationResolvers, DefinedFields['CenoteLocation'] | '__isTypeOf'>;
   export type CoordinatesResolvers = Pick<Types.CoordinatesResolvers, DefinedFields['Coordinates'] | '__isTypeOf'>;
@@ -56,6 +59,7 @@ export namespace CenotesModule {
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
   
   export interface Resolvers {
+    CityDistances?: CityDistancesResolvers;
     Cenote?: CenoteResolvers;
     CenoteLocation?: CenoteLocationResolvers;
     Coordinates?: CoordinatesResolvers;
@@ -75,6 +79,12 @@ export namespace CenotesModule {
     '*'?: {
       '*'?: gm.Middleware[];
     };
+    CityDistances?: {
+      '*'?: gm.Middleware[];
+      location?: gm.Middleware[];
+      distance?: gm.Middleware[];
+      time?: gm.Middleware[];
+    };
     Cenote?: {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
@@ -88,6 +98,7 @@ export namespace CenotesModule {
       photos?: gm.Middleware[];
       maps?: gm.Middleware[];
       creator?: gm.Middleware[];
+      distances?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

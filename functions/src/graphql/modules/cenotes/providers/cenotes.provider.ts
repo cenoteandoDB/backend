@@ -1,6 +1,6 @@
 import { ID } from "graphql-modules/shared/types";
 import { db } from "../../database/db";
-import { Cenote, CenoteLocation, NewCenoteInput, UpdatedCenoteInput } from "../../../generated-types/graphql";
+import { Cenote, CenoteLocation, CityDistances, NewCenoteInput, UpdatedCenoteInput } from "../../../generated-types/graphql";
 
 const cenotesDB = db.cenotes
 
@@ -60,5 +60,13 @@ export const CenotesProvider = {
 
         const snapshot = await cenotesDB.doc(updated_cenote.id).get()
         return snapshot.data() as Cenote
+    },
+
+    setCenoteDistances: async (cenote: Cenote, distances: CityDistances[]) => {
+        cenotesDB.doc(cenote.id).update({
+            ...cenote,
+            updatedAt: new Date().toISOString(),
+            distances
+        })
     }
 };

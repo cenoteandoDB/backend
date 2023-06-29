@@ -41,6 +41,7 @@ export type Cenote = {
   alternativeNames?: Maybe<Array<Scalars['String']>>;
   createdAt?: Maybe<Scalars['DateTime']>;
   creator?: Maybe<User>;
+  distances?: Maybe<Array<Maybe<CityDistances>>>;
   id: Scalars['ID'];
   issues?: Maybe<Array<Maybe<CenoteIssue>>>;
   location: CenoteLocation;
@@ -85,6 +86,13 @@ export type CenoteType =
   | 'NO_TYPE'
   | 'WATERY'
   | 'WATER_WELL';
+
+export type CityDistances = {
+  __typename?: 'CityDistances';
+  distance?: Maybe<Scalars['Float']>;
+  location: Scalars['String'];
+  time?: Maybe<Scalars['Int']>;
+};
 
 export type Comment = {
   __typename?: 'Comment';
@@ -313,6 +321,7 @@ export type ResolversTypes = {
   CenoteLocation: ResolverTypeWrapper<CenoteLocation>;
   CenoteSocialData: ResolverTypeWrapper<CenoteSocialData>;
   CenoteType: CenoteType;
+  CityDistances: ResolverTypeWrapper<CityDistances>;
   Comment: ResolverTypeWrapper<Comment>;
   Coordinates: ResolverTypeWrapper<Coordinates>;
   CoordinatesInput: CoordinatesInput;
@@ -320,6 +329,7 @@ export type ResolversTypes = {
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
@@ -344,6 +354,7 @@ export type ResolversParentTypes = {
   CenoteBounds: CenoteBounds;
   CenoteLocation: CenoteLocation;
   CenoteSocialData: CenoteSocialData;
+  CityDistances: CityDistances;
   Comment: Comment;
   Coordinates: Coordinates;
   CoordinatesInput: CoordinatesInput;
@@ -351,6 +362,7 @@ export type ResolversParentTypes = {
   EmailAddress: Scalars['EmailAddress'];
   Float: Scalars['Float'];
   ID: Scalars['ID'];
+  Int: Scalars['Int'];
   JSON: Scalars['JSON'];
   Latitude: Scalars['Latitude'];
   Longitude: Scalars['Longitude'];
@@ -379,6 +391,7 @@ export type CenoteResolvers<ContextType = any, ParentType extends ResolversParen
   alternativeNames?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   creator?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  distances?: Resolver<Maybe<Array<Maybe<ResolversTypes['CityDistances']>>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   issues?: Resolver<Maybe<Array<Maybe<ResolversTypes['CenoteIssue']>>>, ParentType, ContextType>;
   location?: Resolver<ResolversTypes['CenoteLocation'], ParentType, ContextType>;
@@ -408,6 +421,13 @@ export type CenoteLocationResolvers<ContextType = any, ParentType extends Resolv
 
 export type CenoteSocialDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['CenoteSocialData'] = ResolversParentTypes['CenoteSocialData']> = {
   comments?: Resolver<Maybe<Array<Maybe<ResolversTypes['Comment']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CityDistancesResolvers<ContextType = any, ParentType extends ResolversParentTypes['CityDistances'] = ResolversParentTypes['CityDistances']> = {
+  distance?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  location?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  time?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -495,6 +515,7 @@ export type Resolvers<ContextType = any> = {
   CenoteBounds?: CenoteBoundsResolvers<ContextType>;
   CenoteLocation?: CenoteLocationResolvers<ContextType>;
   CenoteSocialData?: CenoteSocialDataResolvers<ContextType>;
+  CityDistances?: CityDistancesResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
   Coordinates?: CoordinatesResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
