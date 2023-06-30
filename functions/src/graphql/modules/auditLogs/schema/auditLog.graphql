@@ -7,10 +7,11 @@ enum AuditLogType {
 	UPDATED_CENOTE
 	NEW_REFERENCE
 	UPDATED_REFERENCE
+	NEW_VARIABLE
+	UPDATED_VARIABLE
 }
 
 type AuditLog {
-	id: ID!
 	objectId: ID!
 	type: AuditLogType!
 	arguments: JSON!

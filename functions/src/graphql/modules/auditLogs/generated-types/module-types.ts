@@ -3,12 +3,12 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace AuditLogsModule {
   interface DefinedFields {
-    AuditLog: 'id' | 'objectId' | 'type' | 'arguments' | 'timestamp';
-    Query: 'cenoteAuditLogs';
+    AuditLog: 'objectId' | 'type' | 'arguments' | 'timestamp';
+    Query: 'auditLogs';
   };
   
   interface DefinedEnumValues {
-    AuditLogType: 'NEW_CENOTE' | 'UPDATED_CENOTE' | 'NEW_REFERENCE' | 'UPDATED_REFERENCE';
+    AuditLogType: 'NEW_CENOTE' | 'UPDATED_CENOTE' | 'NEW_REFERENCE' | 'UPDATED_REFERENCE' | 'NEW_VARIABLE' | 'UPDATED_VARIABLE';
   };
   
   export type AuditLogType = DefinedEnumValues['AuditLogType'];
@@ -35,7 +35,6 @@ export namespace AuditLogsModule {
     };
     AuditLog?: {
       '*'?: gm.Middleware[];
-      id?: gm.Middleware[];
       objectId?: gm.Middleware[];
       type?: gm.Middleware[];
       arguments?: gm.Middleware[];
@@ -43,7 +42,7 @@ export namespace AuditLogsModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
-      cenoteAuditLogs?: gm.Middleware[];
+      auditLogs?: gm.Middleware[];
     };
   };
 }

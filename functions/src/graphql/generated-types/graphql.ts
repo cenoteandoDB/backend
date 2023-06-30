@@ -29,7 +29,6 @@ export type AccessLevel =
 export type AuditLog = {
   __typename?: 'AuditLog';
   arguments: Scalars['JSON'];
-  id: Scalars['ID'];
   objectId: Scalars['ID'];
   timestamp: Scalars['DateTime'];
   type: AuditLogType;
@@ -38,8 +37,10 @@ export type AuditLog = {
 export type AuditLogType =
   | 'NEW_CENOTE'
   | 'NEW_REFERENCE'
+  | 'NEW_VARIABLE'
   | 'UPDATED_CENOTE'
-  | 'UPDATED_REFERENCE';
+  | 'UPDATED_REFERENCE'
+  | 'UPDATED_VARIABLE';
 
 export type Cenote = {
   __typename?: 'Cenote';
@@ -189,7 +190,7 @@ export type NewVariableInput = {
 
 export type Query = {
   __typename?: 'Query';
-  cenoteAuditLogs?: Maybe<Array<Maybe<AuditLog>>>;
+  auditLogs?: Maybe<Array<Maybe<AuditLog>>>;
   cenoteById?: Maybe<Cenote>;
   cenotes?: Maybe<Array<Maybe<Cenote>>>;
   cenotesBounds?: Maybe<CenoteBounds>;
@@ -207,7 +208,7 @@ export type Query = {
 };
 
 
-export type QueryCenoteAuditLogsArgs = {
+export type QueryAuditLogsArgs = {
   id: Scalars['ID'];
   type: AuditLogType;
 };
@@ -496,7 +497,6 @@ export type ResolversParentTypes = {
 
 export type AuditLogResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuditLog'] = ResolversParentTypes['AuditLog']> = {
   arguments?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   objectId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['AuditLogType'], ParentType, ContextType>;
@@ -591,7 +591,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  cenoteAuditLogs?: Resolver<Maybe<Array<Maybe<ResolversTypes['AuditLog']>>>, ParentType, ContextType, RequireFields<QueryCenoteAuditLogsArgs, 'id' | 'type'>>;
+  auditLogs?: Resolver<Maybe<Array<Maybe<ResolversTypes['AuditLog']>>>, ParentType, ContextType, RequireFields<QueryAuditLogsArgs, 'id' | 'type'>>;
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
   cenotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Cenote']>>>, ParentType, ContextType>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;

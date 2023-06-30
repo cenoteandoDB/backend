@@ -10,12 +10,14 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
         const location = getCenoteLocation(args.new_cenote.coordinates)
         const cenote = await CenotesProvider.createCenote(args.new_cenote, location)
         cenoteCityDistances(cenote, args.new_cenote.coordinates)
-        AuditLogsProvider.save("NEW_CENOTE", cenote.id, args.new_cenote)
+        AuditLogsProvider.save(cenote.id, "NEW_CENOTE", args.new_cenote)
 
         return cenote
     },
-    updateCenote: (parent, args, contextValue, info) => {
-        return CenotesProvider.updateCenote(args.updated_cenote)
+    updateCenote: async (parent, args, contextValue, info) => {
+        const cenote = await CenotesProvider.updateCenote(args.updated_cenote)
+        AuditLogsProvider.save(args.updated_cenote.id, "UPDATED_CENOTE", args.updated_cenote)
+        return cenote
     }
 };
 

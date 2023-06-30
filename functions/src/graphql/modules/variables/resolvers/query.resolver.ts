@@ -2,7 +2,7 @@ import { VariablesModule } from "../generated-types/module-types";
 import { VariableProvider } from "../providers/variable.provider";
 
 export const QueryResolver: VariablesModule.Resolvers["Query"] = {
-    variables: (parent, args, contextValue, info) => {
+    variables: () => {
         return VariableProvider.getVariables()
     },
     variableById: (parent, args, contextValue, info) => {
