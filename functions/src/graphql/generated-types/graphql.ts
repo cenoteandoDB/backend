@@ -123,6 +123,7 @@ export type Mutation = {
   createCenote?: Maybe<Cenote>;
   createSpecies?: Maybe<Species>;
   createVariable?: Maybe<Variable>;
+  register?: Maybe<User>;
   updateCenote?: Maybe<Cenote>;
   updateEmail?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
@@ -142,6 +143,11 @@ export type MutationCreateSpeciesArgs = {
 
 export type MutationCreateVariableArgs = {
   new_variable: NewVariableInput;
+};
+
+
+export type MutationRegisterArgs = {
+  input: RegisterInput;
 };
 
 
@@ -200,7 +206,7 @@ export type Query = {
   speciesByINaturalistId?: Maybe<Species>;
   speciesById?: Maybe<Species>;
   speciesCsv?: Maybe<Scalars['String']>;
-  user?: Maybe<User>;
+  userById?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
   variableById?: Maybe<Variable>;
   variables?: Maybe<Array<Maybe<Variable>>>;
@@ -234,7 +240,7 @@ export type QuerySpeciesByIdArgs = {
 };
 
 
-export type QueryUserArgs = {
+export type QueryUserByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -246,6 +252,12 @@ export type QueryVariableByIdArgs = {
 
 export type QueryVariablesByThemeArgs = {
   theme: VariableTheme;
+};
+
+export type RegisterInput = {
+  email: Scalars['EmailAddress'];
+  name: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type Species = {
@@ -292,7 +304,6 @@ export type User = {
   email: Scalars['EmailAddress'];
   id: Scalars['ID'];
   name: Scalars['String'];
-  password: Scalars['String'];
   role: UserRole;
 };
 
@@ -446,6 +457,7 @@ export type ResolversTypes = {
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   Query: ResolverTypeWrapper<{}>;
+  RegisterInput: RegisterInput;
   Species: ResolverTypeWrapper<Species>;
   String: ResolverTypeWrapper<Scalars['String']>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
@@ -485,6 +497,7 @@ export type ResolversParentTypes = {
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   Query: {};
+  RegisterInput: RegisterInput;
   Species: Species;
   String: Scalars['String'];
   URL: Scalars['URL'];
@@ -584,6 +597,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
   createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
+  register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateEmailArgs, 'email' | 'id'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
@@ -601,7 +615,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalist'>>;
   speciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByIdArgs, 'id'>>;
   speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   variableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryVariableByIdArgs, 'id'>>;
   variables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType>;
@@ -625,7 +639,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

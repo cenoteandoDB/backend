@@ -3,15 +3,20 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
-    Mutation: 'updateEmail';
-    Query: 'users' | 'user';
-    User: 'id' | 'name' | 'email' | 'password' | 'role';
+    Mutation: 'register' | 'updateEmail';
+    Query: 'users' | 'userById';
+    User: 'id' | 'name' | 'email' | 'role';
   };
   
   interface DefinedEnumValues {
     UserRole: 'BASIC' | 'CENOTERO_ADVANCED' | 'ADMIN';
   };
   
+  interface DefinedInputFields {
+    RegisterInput: 'name' | 'email' | 'password';
+  };
+  
+  export type RegisterInput = Pick<Types.RegisterInput, DefinedInputFields['RegisterInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type User = Pick<Types.User, DefinedFields['User']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
@@ -37,19 +42,19 @@ export namespace UsersModule {
     };
     Mutation?: {
       '*'?: gm.Middleware[];
+      register?: gm.Middleware[];
       updateEmail?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];
       users?: gm.Middleware[];
-      user?: gm.Middleware[];
+      userById?: gm.Middleware[];
     };
     User?: {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
       name?: gm.Middleware[];
       email?: gm.Middleware[];
-      password?: gm.Middleware[];
       role?: gm.Middleware[];
     };
   };

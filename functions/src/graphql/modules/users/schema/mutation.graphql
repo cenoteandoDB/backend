@@ -1,6 +1,13 @@
 # From graphql-scalars
 scalar EmailAddress
 
+input RegisterInput {
+    name: String!
+    email: EmailAddress!
+    password: String!
+}
+
 type Mutation {
+    register(input: RegisterInput!): User
     updateEmail(id: ID!, email: EmailAddress!): User
 }
