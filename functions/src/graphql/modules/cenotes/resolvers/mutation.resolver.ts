@@ -4,18 +4,19 @@ import { AuditLogsProvider } from "../../auditLogs/providers/auditLogs.provider"
 import { CenotesModule } from "../generated-types/module-types";
 import { CenotesProvider } from "../providers/cenotes.provider";
 
-// TODO: Implement this
+const cenotesProvider = new CenotesProvider()
+
 export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
     createCenote: async (parent, args, contextValue, info) => {
         const location = getCenoteLocation(args.new_cenote.coordinates)
-        const cenote = await CenotesProvider.createCenote(args.new_cenote, location)
+        const cenote = await cenotesProvider.createCenote(args.new_cenote, location)
         cenoteCityDistances(cenote, args.new_cenote.coordinates)
         AuditLogsProvider.save(cenote.id, "NEW_CENOTE", args.new_cenote)
 
         return cenote
     },
     updateCenote: async (parent, args, contextValue, info) => {
-        const cenote = await CenotesProvider.updateCenote(args.updated_cenote)
+        const cenote = await cenotesProvider.updateCenote(args.updated_cenote)
         AuditLogsProvider.save(args.updated_cenote.id, "UPDATED_CENOTE", args.updated_cenote)
         return cenote
     }
@@ -37,7 +38,7 @@ const getCenoteLocation = (input: CoordinatesInput) => {
 
 const cenoteCityDistances = async (cenote: Cenote, coordinates: Coordinates) => {
     const distances = await DirectionsService.getDrivingDistance(coordinates)
-    CenotesProvider.setCenoteDistances(cenote, distances)
+    cenotesProvider.setCenoteDistances(cenote, distances)
 }
 
 

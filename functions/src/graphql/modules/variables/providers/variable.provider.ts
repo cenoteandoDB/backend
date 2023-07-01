@@ -4,23 +4,50 @@ import { db } from "../../database/db";
 
 const variableDB = db.variables
 
-export const VariableProvider = {
-    getVariables: async () => {
+export class VariableProvider {
+
+    /**
+     * Get all variables.
+     *
+     * @returns {Promise<Variable[]>} list with all variables
+     */
+    async getVariables(): Promise<Variable[]> {
         const variables = await variableDB.get()
         return variables.docs.map(doc => doc.data() as Variable)
-    },
+    }
 
-    getVariableById: async (id: ID) => {
+    /**
+     * Get a variable by id.
+     *
+     * @param id the id of the variable to get 
+     *
+     * @returns {Promise<Variable>} the variable
+     */
+    async getVariableById(id: ID): Promise<Variable> {
         const snapshot = await variableDB.doc(id).get()
         return snapshot.data() as Variable
-    },
+    }
 
-    getVariablesByTheme: async (theme: VariableTheme) => {
+    /**
+     * Get all variables of a given theme.
+     *
+     * @param theme the variable theme to get
+     *
+     * @returns {Promise<Variable[]>} list of variables of a given theme
+     */
+    async getVariablesByTheme(theme: VariableTheme): Promise<Variable[]> {
         const variables = await variableDB.where("theme", "==", theme).get()
         return variables.docs.map(doc => doc.data() as Variable)
-    },
+    }
 
-    createVariable: async (new_variable: NewVariableInput) => {
+    /**
+     * Creates a varaible.
+     *
+     * @param new_variable the variable input to be created
+     *
+     * @returns {Promise<Variable>} the created variable
+     */
+    async createVariable(new_variable: NewVariableInput): Promise<Variable> {
         const docRef = variableDB.doc();
         await docRef.set({
             id: docRef.id,
@@ -30,8 +57,16 @@ export const VariableProvider = {
         
         const snapshot = await variableDB.doc(docRef.id).get()
         return snapshot.data() as Variable
-    },
-    updateVariable: async (updated_variable: UpdateVariableInput) => {
+    }
+
+    /**
+     * Updates a variable.
+     *
+     * @param updated_variable the information to update the variable
+     *
+     * @returns {Promise<Variable>} the updated variable
+     */
+    async updateVariable(updated_variable: UpdateVariableInput): Promise<Variable> {
         await variableDB.doc(updated_variable.id).update({
             updatedAt: new Date().toISOString(),
             ...updated_variable
