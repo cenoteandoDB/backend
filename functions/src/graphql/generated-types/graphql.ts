@@ -118,9 +118,16 @@ export type CoordinatesInput = {
   longitude: Scalars['Longitude'];
 };
 
+export type MeasurementOrFact = {
+  __typename?: 'MeasurementOrFact';
+  timestamp: Scalars['DateTime'];
+  value: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCenote?: Maybe<Cenote>;
+  createMof?: Maybe<VariableWithData>;
   createSpecies?: Maybe<Species>;
   createVariable?: Maybe<Variable>;
   register?: Maybe<User>;
@@ -133,6 +140,11 @@ export type Mutation = {
 
 export type MutationCreateCenoteArgs = {
   new_cenote: NewCenoteInput;
+};
+
+
+export type MutationCreateMofArgs = {
+  new_mof: NewMeasurementOrFactInput;
 };
 
 
@@ -175,6 +187,13 @@ export type NewCenoteInput = {
   coordinates: CoordinatesInput;
 };
 
+export type NewMeasurementOrFactInput = {
+  cenote: Scalars['ID'];
+  timestamp: Scalars['DateTime'];
+  value: Scalars['Int'];
+  variable: Scalars['ID'];
+};
+
 export type NewSpeciesInput = {
   aphiaId?: InputMaybe<Scalars['String']>;
   iNaturalistId?: InputMaybe<Scalars['String']>;
@@ -198,6 +217,8 @@ export type Query = {
   __typename?: 'Query';
   auditLogs?: Maybe<Array<Maybe<AuditLog>>>;
   cenoteById?: Maybe<Cenote>;
+  cenoteDataByTheme?: Maybe<Array<VariableWithData>>;
+  cenoteDataByVariable?: Maybe<VariableWithData>;
   cenotes?: Maybe<Array<Maybe<Cenote>>>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
@@ -222,6 +243,18 @@ export type QueryAuditLogsArgs = {
 
 export type QueryCenoteByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryCenoteDataByThemeArgs = {
+  cenote: Scalars['ID'];
+  theme: VariableTheme;
+};
+
+
+export type QueryCenoteDataByVariableArgs = {
+  cenote: Scalars['ID'];
+  variable: Scalars['ID'];
 };
 
 
@@ -359,6 +392,16 @@ export type VariableType =
   | 'TIME'
   | 'UNITLESS_NUMBER';
 
+export type VariableWithData = {
+  __typename?: 'VariableWithData';
+  cenote: Scalars['ID'];
+  data: Array<MeasurementOrFact>;
+  firstTimestamp: Scalars['DateTime'];
+  id: Scalars['ID'];
+  lastTimestamp: Scalars['DateTime'];
+  variable: Scalars['ID'];
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -452,8 +495,10 @@ export type ResolversTypes = {
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
+  MeasurementOrFact: ResolverTypeWrapper<MeasurementOrFact>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
+  NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   Query: ResolverTypeWrapper<{}>;
@@ -470,6 +515,7 @@ export type ResolversTypes = {
   VariableOrigin: VariableOrigin;
   VariableTheme: VariableTheme;
   VariableType: VariableType;
+  VariableWithData: ResolverTypeWrapper<VariableWithData>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -492,8 +538,10 @@ export type ResolversParentTypes = {
   JSON: Scalars['JSON'];
   Latitude: Scalars['Latitude'];
   Longitude: Scalars['Longitude'];
+  MeasurementOrFact: MeasurementOrFact;
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
+  NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   Query: {};
@@ -506,6 +554,7 @@ export type ResolversParentTypes = {
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: User;
   Variable: Variable;
+  VariableWithData: VariableWithData;
 };
 
 export type AuditLogResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuditLog'] = ResolversParentTypes['AuditLog']> = {
@@ -593,8 +642,15 @@ export interface LongitudeScalarConfig extends GraphQLScalarTypeConfig<Resolvers
   name: 'Longitude';
 }
 
+export type MeasurementOrFactResolvers<ContextType = any, ParentType extends ResolversParentTypes['MeasurementOrFact'] = ResolversParentTypes['MeasurementOrFact']> = {
+  timestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
+  createMof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<MutationCreateMofArgs, 'new_mof'>>;
   createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
   register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
@@ -607,6 +663,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   auditLogs?: Resolver<Maybe<Array<Maybe<ResolversTypes['AuditLog']>>>, ParentType, ContextType, RequireFields<QueryAuditLogsArgs, 'id' | 'type'>>;
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
+  cenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryCenoteDataByThemeArgs, 'cenote' | 'theme'>>;
+  cenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryCenoteDataByVariableArgs, 'cenote' | 'variable'>>;
   cenotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Cenote']>>>, ParentType, ContextType>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -661,6 +719,16 @@ export type VariableResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type VariableWithDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['VariableWithData'] = ResolversParentTypes['VariableWithData']> = {
+  cenote?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  data?: Resolver<Array<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
+  firstTimestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  lastTimestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  variable?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   AuditLog?: AuditLogResolvers<ContextType>;
   Cenote?: CenoteResolvers<ContextType>;
@@ -675,12 +743,14 @@ export type Resolvers<ContextType = any> = {
   JSON?: GraphQLScalarType;
   Latitude?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
+  MeasurementOrFact?: MeasurementOrFactResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Species?: SpeciesResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   Variable?: VariableResolvers<ContextType>;
+  VariableWithData?: VariableWithDataResolvers<ContextType>;
 };
 
 

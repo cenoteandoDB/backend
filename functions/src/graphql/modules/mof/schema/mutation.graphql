@@ -1,0 +1,13 @@
+# From graphql-scalars
+scalar DateTime
+
+input NewMeasurementOrFactInput {
+    variable: ID!
+    cenote: ID!
+	timestamp: DateTime!
+    value: Int!
+}
+
+type Mutation {
+    createMof(new_mof: NewMeasurementOrFactInput!): VariableWithData
+}

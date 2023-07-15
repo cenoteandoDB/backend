@@ -1,0 +1,18 @@
+# From graphql-scalars
+scalar DateTime
+
+# union VariableTypeUnion = Int | String | Boolean | Float
+
+type MeasurementOrFact {
+	timestamp: DateTime!
+	value: Int!
+}
+
+type VariableWithData {
+	id: ID!
+	cenote: ID!
+	variable: ID!
+	data: [MeasurementOrFact!]!
+	firstTimestamp: DateTime!
+	lastTimestamp: DateTime!
+}

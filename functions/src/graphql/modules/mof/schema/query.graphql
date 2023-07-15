@@ -1,0 +1,4 @@
+type Query {
+	cenoteDataByTheme(cenote: ID!, theme: VariableTheme!): [VariableWithData!]
+	cenoteDataByVariable(cenote: ID!, variable: ID!): VariableWithData
+}

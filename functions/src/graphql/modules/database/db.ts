@@ -8,5 +8,6 @@ export const db = {
     species: admin.firestore().collection('species'),
     variables: admin.firestore().collection('variables'),
     references: admin.firestore().collection('references'),
+    mofs: admin.firestore().collection('mofs'),
     audit_logs: admin.firestore().collection('audit_logs')
 }

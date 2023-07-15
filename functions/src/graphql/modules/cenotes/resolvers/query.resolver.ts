@@ -1,4 +1,4 @@
-import {CenotesModule} from "../generated-types/module-types";
+import { CenotesModule } from "../generated-types/module-types";
 import { CenotesProvider } from "../providers/cenotes.provider";
 
 const cenotesProvider = new CenotesProvider()

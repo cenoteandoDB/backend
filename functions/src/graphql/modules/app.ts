@@ -4,6 +4,7 @@ import { UsersModule } from "./users";
 import { SpeciesModule } from "./species";
 import { AuditLogsModule } from "./auditLogs";
 import { VariablesModule } from "./variables";
+import { MofModule } from "./mof";
 
 export const CenoteandoApp = createApplication({
     modules: [
@@ -11,6 +12,7 @@ export const CenoteandoApp = createApplication({
         CenotesModule,
         SpeciesModule,
         VariablesModule,
+        MofModule,
         AuditLogsModule
     ],
     providers: [],
