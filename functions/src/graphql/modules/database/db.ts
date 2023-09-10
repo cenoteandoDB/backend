@@ -1,5 +1,4 @@
 import * as admin from "firebase-admin"
-
 admin.initializeApp();
 
 export const db = {
@@ -8,6 +7,7 @@ export const db = {
     species: admin.firestore().collection('species'),
     variables: admin.firestore().collection('variables'),
     references: admin.firestore().collection('references'),
+    map_layers: admin.firestore().collection('map_layers'),
     mofs: admin.firestore().collection('mofs'),
     audit_logs: admin.firestore().collection('audit_logs')
 }

@@ -5,6 +5,8 @@ import { SpeciesModule } from "./species";
 import { AuditLogsModule } from "./auditLogs";
 import { VariablesModule } from "./variables";
 import { MofModule } from "./mof";
+import { MapLayersModule } from "./map-layers";
+import { LayersProvider } from "./gcp/gcp.dataSource";
 
 export const CenoteandoApp = createApplication({
     modules: [
@@ -13,9 +15,10 @@ export const CenoteandoApp = createApplication({
         SpeciesModule,
         VariablesModule,
         MofModule,
-        AuditLogsModule
+        AuditLogsModule,
+        MapLayersModule
     ],
-    providers: [],
+    providers: [LayersProvider],
     middlewares: {},
 //   schemaBuilder: (typedefs, resolvers) => GraphQLSchema,
 });

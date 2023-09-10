@@ -1,8 +1,9 @@
 import { Storage, GetSignedUrlConfig } from '@google-cloud/storage';
 
-const storage = new Storage()
-//TODO get from env file
-const bucketName = 'your-bucket-name';
+const storage = new Storage({
+    keyFilename: "credentials/cenoteando.json"
+})
+const bucketName = process.env.BUCKET_NAME!;
 
 export const StorageProvider = { 
 
@@ -12,12 +13,19 @@ export const StorageProvider = {
 
     getMaps: (cenoteId: String) => {
         return getSignedUrls(`maps/${cenoteId}/`)
+    },
+
+    getThumbnail: async (name: String): Promise<string> => {
+        console.log("I'm here")
+        console.log(name)
+        const result = await getSignedUrls(`capas/${name}/thumbnail.jpg`)
+        return result.at(0)!
     }
 
 }
 
 
-const getSignedUrls = async (prefix: string) => {
+const getSignedUrls = async (prefix: string): Promise<string[]> => {
     const [files] = await storage.bucket(bucketName).getFiles({prefix})
     
     const signedUrls = []

@@ -118,6 +118,21 @@ export type CoordinatesInput = {
   longitude: Scalars['Longitude'];
 };
 
+export type MapLayer = {
+  __typename?: 'MapLayer';
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  json?: Maybe<Scalars['String']>;
+  layer?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  thumbnail?: Maybe<Scalars['String']>;
+};
+
+export type MapLayerInput = {
+  description?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
 export type MeasurementOrFact = {
   __typename?: 'MeasurementOrFact';
   timestamp: Scalars['DateTime'];
@@ -126,6 +141,7 @@ export type MeasurementOrFact = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  create?: Maybe<MapLayer>;
   createCenote?: Maybe<Cenote>;
   createMof?: Maybe<VariableWithData>;
   createSpecies?: Maybe<Species>;
@@ -135,6 +151,11 @@ export type Mutation = {
   updateEmail?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
   updateVariable?: Maybe<Variable>;
+};
+
+
+export type MutationCreateArgs = {
+  input: MapLayerInput;
 };
 
 
@@ -222,6 +243,8 @@ export type Query = {
   cenotes?: Maybe<Array<Maybe<Cenote>>>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
+  layer?: Maybe<MapLayer>;
+  layers?: Maybe<Array<Maybe<MapLayer>>>;
   species?: Maybe<Array<Maybe<Species>>>;
   speciesByAphiaId?: Maybe<Species>;
   speciesByINaturalistId?: Maybe<Species>;
@@ -255,6 +278,11 @@ export type QueryCenoteDataByThemeArgs = {
 export type QueryCenoteDataByVariableArgs = {
   cenote: Scalars['ID'];
   variable: Scalars['ID'];
+};
+
+
+export type QueryLayerArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -495,6 +523,8 @@ export type ResolversTypes = {
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
+  MapLayer: ResolverTypeWrapper<MapLayer>;
+  MapLayerInput: MapLayerInput;
   MeasurementOrFact: ResolverTypeWrapper<MeasurementOrFact>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
@@ -538,6 +568,8 @@ export type ResolversParentTypes = {
   JSON: Scalars['JSON'];
   Latitude: Scalars['Latitude'];
   Longitude: Scalars['Longitude'];
+  MapLayer: MapLayer;
+  MapLayerInput: MapLayerInput;
   MeasurementOrFact: MeasurementOrFact;
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
@@ -642,6 +674,16 @@ export interface LongitudeScalarConfig extends GraphQLScalarTypeConfig<Resolvers
   name: 'Longitude';
 }
 
+export type MapLayerResolvers<ContextType = any, ParentType extends ResolversParentTypes['MapLayer'] = ResolversParentTypes['MapLayer']> = {
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  json?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  layer?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  thumbnail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MeasurementOrFactResolvers<ContextType = any, ParentType extends ResolversParentTypes['MeasurementOrFact'] = ResolversParentTypes['MeasurementOrFact']> = {
   timestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -649,6 +691,7 @@ export type MeasurementOrFactResolvers<ContextType = any, ParentType extends Res
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  create?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<MutationCreateArgs, 'input'>>;
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
   createMof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<MutationCreateMofArgs, 'new_mof'>>;
   createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
@@ -668,6 +711,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Cenote']>>>, ParentType, ContextType>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
+  layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
   species?: Resolver<Maybe<Array<Maybe<ResolversTypes['Species']>>>, ParentType, ContextType>;
   speciesByAphiaId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByAphiaIdArgs, 'aphiaId'>>;
   speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalist'>>;
@@ -743,6 +788,7 @@ export type Resolvers<ContextType = any> = {
   JSON?: GraphQLScalarType;
   Latitude?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
+  MapLayer?: MapLayerResolvers<ContextType>;
   MeasurementOrFact?: MeasurementOrFactResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

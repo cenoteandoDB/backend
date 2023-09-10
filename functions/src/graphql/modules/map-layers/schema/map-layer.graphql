@@ -1,0 +1,11 @@
+# From graphql-scalars
+# None
+
+type MapLayer {
+    id: ID!
+    name: String!
+    description: String
+    thumbnail: String
+    json: String
+    layer: String
+}

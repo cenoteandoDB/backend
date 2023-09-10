@@ -70,3 +70,6 @@ compose-dev.yaml
 
 # VSCode files
 .vscode/
+
+# Google Storage credentials
+functions/credentials/

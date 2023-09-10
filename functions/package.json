@@ -29,6 +29,7 @@
     "graphql": "^16.6.0",
     "graphql-modules": "^2.1.2",
     "graphql-scalars": "^1.21.3",
+    "node-cache": "^5.1.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

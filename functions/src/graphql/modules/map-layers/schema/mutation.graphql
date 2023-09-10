@@ -1,0 +1,11 @@
+# From graphql-scalars
+# None
+
+input MapLayerInput {
+    name: String!
+    description: String
+}
+
+type Mutation {
+    create(input: MapLayerInput!): MapLayer
+}
