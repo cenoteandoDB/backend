@@ -16,9 +16,13 @@ export const StorageProvider = {
     },
 
     getThumbnail: async (name: String): Promise<string> => {
-        console.log("I'm here")
-        console.log(name)
         const result = await getSignedUrls(`capas/${name}/thumbnail.jpg`)
+        return result.at(0)!
+    },
+
+    getMetadados: async (name: String): Promise<string> => {
+        const result = await getSignedUrls(`capas/${name}/metadatos.pdf`)
+        console.log("Metadados: " + result)
         return result.at(0)!
     }
 

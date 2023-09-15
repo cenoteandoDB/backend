@@ -124,6 +124,7 @@ export type MapLayer = {
   id: Scalars['ID'];
   json?: Maybe<Scalars['String']>;
   layer?: Maybe<Scalars['String']>;
+  metadados?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   thumbnail?: Maybe<Scalars['String']>;
 };
@@ -679,6 +680,7 @@ export type MapLayerResolvers<ContextType = any, ParentType extends ResolversPar
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   json?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   layer?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadados?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   thumbnail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

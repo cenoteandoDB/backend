@@ -3,7 +3,7 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace MapLayersModule {
   interface DefinedFields {
-    MapLayer: 'id' | 'name' | 'description' | 'thumbnail' | 'json' | 'layer';
+    MapLayer: 'id' | 'name' | 'description' | 'thumbnail' | 'metadados' | 'json' | 'layer';
     Mutation: 'create';
     Query: 'layers' | 'layer';
   };
@@ -37,6 +37,7 @@ export namespace MapLayersModule {
       name?: gm.Middleware[];
       description?: gm.Middleware[];
       thumbnail?: gm.Middleware[];
+      metadados?: gm.Middleware[];
       json?: gm.Middleware[];
       layer?: gm.Middleware[];
     };
