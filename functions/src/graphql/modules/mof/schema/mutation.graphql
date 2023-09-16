@@ -5,7 +5,7 @@ input NewMeasurementOrFactInput {
     variable: ID!
     cenote: ID!
 	timestamp: DateTime!
-    value: Int!
+    value: String!
 }
 
 type Mutation {

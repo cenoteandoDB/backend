@@ -16,15 +16,16 @@ export class MofProvider {
      */
     async cenoteDataByTheme(cenote: ID, theme: VariableTheme): Promise<VariableWithData[]>  {
         let data: VariableWithData[] = []
-        const snapshot = await mofDB.where("_to", "==", cenote).where("theme", "==", theme).get()
+        const snapshot = await mofDB.where("_to", "==", cenote).get()
         const mofs = snapshot.docs.map(doc => doc.data() as VariableWithData)
-        mofs.forEach(async variableWithData => {
-            const variable_snapshot = await variableDB.where("_id", "==", variableWithData._from).get()
+        
+        for(const mof of mofs) {
+            const variable_snapshot = await variableDB.where("_id", "==", mof._from).get()
             const variable = variable_snapshot.docs[0].data() as Variable
             if (variable.theme == theme) {
-                data.push(variableWithData)
+                data.push(mof)
             }
-        })
+        }
         return data;
     }
 

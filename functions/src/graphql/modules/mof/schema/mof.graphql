@@ -5,7 +5,7 @@ scalar DateTime
 
 type MeasurementOrFact {
 	timestamp: DateTime!
-	value: Int!
+	value: String!
 }
 
 type VariableWithData {

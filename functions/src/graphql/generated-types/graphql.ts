@@ -141,7 +141,7 @@ export type MapLayerInput = {
 export type MeasurementOrFact = {
   __typename?: 'MeasurementOrFact';
   timestamp: Scalars['DateTime'];
-  value: Scalars['Int'];
+  value: Scalars['String'];
 };
 
 export type Mutation = {
@@ -216,7 +216,7 @@ export type NewCenoteInput = {
 export type NewMeasurementOrFactInput = {
   cenote: Scalars['ID'];
   timestamp: Scalars['DateTime'];
-  value: Scalars['Int'];
+  value: Scalars['String'];
   variable: Scalars['ID'];
 };
 
@@ -695,7 +695,7 @@ export type MapLayerResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type MeasurementOrFactResolvers<ContextType = any, ParentType extends ResolversParentTypes['MeasurementOrFact'] = ResolversParentTypes['MeasurementOrFact']> = {
   timestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

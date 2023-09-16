@@ -24,8 +24,8 @@ export class VariableProvider {
      * @returns {Promise<Variable>} the variable
      */
     async getVariableById(id: ID): Promise<Variable> {
-        const snapshot = await variableDB.doc(id).get()
-        return snapshot.data() as Variable
+        const snapshot = await variableDB.where("_id", "==", id).get()
+        return snapshot.docs[0].data() as Variable
     }
 
     /**
