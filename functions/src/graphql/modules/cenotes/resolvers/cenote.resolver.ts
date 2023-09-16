@@ -5,6 +5,17 @@ export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
     name: (parent) => parent.name != null ? parent.name : "no-name",
     touristic: (parent) => parent.touristic != null ? parent.touristic : false,
     type: (parent) => parent.type != null ? parent.type : 'NO_TYPE',
-    photos: (parent) => StorageProvider.getPhotos(parent._id),
-    maps: (parent) => StorageProvider.getMaps(parent._id),
+    photos: (parent) => StorageProvider.getPhotos(parent._key),
+    maps: (parent) => StorageProvider.getMaps(parent._key),
+    location: (parent) => {
+        return {
+            coordinates: {
+                latitude: parent.geojson.geometry.coordinates[1],
+                longitude: parent.geojson.geometry.coordinates[0],
+            },
+            country: "Mexico",
+            state: "...",
+            municipality: "...",
+        };
+    },
 };

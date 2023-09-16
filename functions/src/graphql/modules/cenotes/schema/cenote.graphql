@@ -23,8 +23,14 @@ type CityDistances {
 # TODO: Reference, Species, VariableWithData
 
 type Cenote {
+	id: ID!
+
 	# NOTE: Required
 	_id: ID!
+	_key: ID!
+
+	geojson: JSON!
+
 	touristic: Boolean!
 	location: CenoteLocation!
 	type: CenoteType!
