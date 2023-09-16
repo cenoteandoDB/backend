@@ -424,12 +424,12 @@ export type VariableType =
 
 export type VariableWithData = {
   __typename?: 'VariableWithData';
-  cenote: Scalars['ID'];
-  data: Array<MeasurementOrFact>;
+  _from: Scalars['ID'];
+  _id: Scalars['ID'];
+  _to: Scalars['ID'];
   firstTimestamp: Scalars['DateTime'];
-  id: Scalars['ID'];
   lastTimestamp: Scalars['DateTime'];
-  variable: Scalars['ID'];
+  measurements: Array<MeasurementOrFact>;
 };
 
 
@@ -768,12 +768,12 @@ export type VariableResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type VariableWithDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['VariableWithData'] = ResolversParentTypes['VariableWithData']> = {
-  cenote?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  data?: Resolver<Array<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
+  _from?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  _to?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   firstTimestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastTimestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  variable?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  measurements?: Resolver<Array<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

@@ -1,8 +1,9 @@
 import { ID } from "graphql-modules/shared/types";
 import { db } from "../../database/db";
-import { VariableTheme, VariableWithData, NewMeasurementOrFactInput, MeasurementOrFact } from "../../../generated-types/graphql";
+import { VariableTheme, VariableWithData, NewMeasurementOrFactInput, MeasurementOrFact, Variable } from "../../../generated-types/graphql";
 
 const mofDB = db.mofs
+const variableDB = db.variables
 
 export class MofProvider {
     
@@ -14,8 +15,17 @@ export class MofProvider {
      * @returns {Promise<VariableWithData[]>} list of MoF
      */
     async cenoteDataByTheme(cenote: ID, theme: VariableTheme): Promise<VariableWithData[]>  {
-        const mofs = await mofDB.where("cenote", "==", cenote).where("theme", "==", theme).get()
-        return mofs.docs.map(doc => doc.data() as VariableWithData)
+        let data: VariableWithData[] = []
+        const snapshot = await mofDB.where("_to", "==", cenote).where("theme", "==", theme).get()
+        const mofs = snapshot.docs.map(doc => doc.data() as VariableWithData)
+        mofs.forEach(async variableWithData => {
+            const variable_snapshot = await variableDB.where("_id", "==", variableWithData._from).get()
+            const variable = variable_snapshot.docs[0].data() as Variable
+            if (variable.theme == theme) {
+                data.push(variableWithData)
+            }
+        })
+        return data;
     }
 
     /**
@@ -26,7 +36,7 @@ export class MofProvider {
      * @returns {Promise<VariableWithData>} MoFs of given cenote and variable
      */
     async cenoteDataByVariable(cenote: ID, variable: ID): Promise<VariableWithData>  {
-        const mof = await mofDB.where("cenote", "==", cenote).where("variable", "==", variable).get()
+        const mof = await mofDB.where("_to", "==", cenote).where("_from", "==", variable).get()
         return mof.docs[0].data() as VariableWithData
     }
 
@@ -39,7 +49,7 @@ export class MofProvider {
      * @returns {Promise<VariableWithData>} the new MoF
      */
     async createMoF(new_mof: NewMeasurementOrFactInput): Promise<VariableWithData> {
-        const doc = await mofDB.where("cenote", "==", new_mof.cenote).where("variable", "==", new_mof.variable).get()
+        const doc = await mofDB.where("_to", "==", new_mof.cenote).where("_from", "==", new_mof.variable).get()
 
         const mof: MeasurementOrFact = {
             value: new_mof.value,
@@ -57,10 +67,10 @@ export class MofProvider {
     private async createMofBucket(mof: MeasurementOrFact, input: NewMeasurementOrFactInput): Promise<VariableWithData> {
         const docRef = mofDB.doc()
         const data : VariableWithData = {
-            id: docRef.id,
-            cenote: input.cenote,
-            variable: input.variable,
-            data: [mof],
+            _id: docRef.id,
+            _to: input.cenote,
+            _from: input.variable,
+            measurements: [mof],
             firstTimestamp: new Date(input.timestamp).toISOString(),
             lastTimestamp: new Date(input.timestamp).toISOString()
         }
@@ -72,17 +82,17 @@ export class MofProvider {
     }
 
     private async addMof(bucket: VariableWithData, mof: MeasurementOrFact): Promise<VariableWithData> {
-        bucket.data.push(mof)
+        bucket.measurements.push(mof)
         const firstTimestamp = bucket.firstTimestamp < mof.timestamp ? bucket.firstTimestamp : mof.timestamp
         const lastTimestamp = bucket.lastTimestamp > mof.timestamp ? bucket.lastTimestamp : mof.timestamp
 
-        await mofDB.doc(bucket.id).update({
-            data: bucket.data,
+        await mofDB.doc(bucket._id).update({
+            data: bucket.measurements,
             firstTimestamp,
             lastTimestamp
         })
         
-        const snapshot = await mofDB.doc(bucket.id).get()
+        const snapshot = await mofDB.doc(bucket._id).get()
         return snapshot.data() as VariableWithData
     }
 

@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace MofModule {
   interface DefinedFields {
     MeasurementOrFact: 'timestamp' | 'value';
-    VariableWithData: 'id' | 'cenote' | 'variable' | 'data' | 'firstTimestamp' | 'lastTimestamp';
+    VariableWithData: '_id' | '_to' | '_from' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
     Mutation: 'createMof';
     Query: 'cenoteDataByTheme' | 'cenoteDataByVariable';
   };
@@ -47,10 +47,10 @@ export namespace MofModule {
     };
     VariableWithData?: {
       '*'?: gm.Middleware[];
-      id?: gm.Middleware[];
-      cenote?: gm.Middleware[];
-      variable?: gm.Middleware[];
-      data?: gm.Middleware[];
+      _id?: gm.Middleware[];
+      _to?: gm.Middleware[];
+      _from?: gm.Middleware[];
+      measurements?: gm.Middleware[];
       firstTimestamp?: gm.Middleware[];
       lastTimestamp?: gm.Middleware[];
     };

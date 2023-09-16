@@ -9,10 +9,10 @@ type MeasurementOrFact {
 }
 
 type VariableWithData {
-	id: ID!
-	cenote: ID!
-	variable: ID!
-	data: [MeasurementOrFact!]!
+	_id: ID!
+	_to: ID!
+	_from: ID!
+	measurements: [MeasurementOrFact!]!
 	firstTimestamp: DateTime!
 	lastTimestamp: DateTime!
 }
