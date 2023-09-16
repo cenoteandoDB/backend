@@ -5,7 +5,7 @@ export namespace VariablesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
     Query: 'variables' | 'variableById' | 'variablesByTheme';
-    Variable: 'id' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology' | 'createdAt' | 'updatedAt';
+    Variable: '_id' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
@@ -61,7 +61,7 @@ export namespace VariablesModule {
     };
     Variable?: {
       '*'?: gm.Middleware[];
-      id?: gm.Middleware[];
+      _id?: gm.Middleware[];
       name?: gm.Middleware[];
       description?: gm.Middleware[];
       type?: gm.Middleware[];

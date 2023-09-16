@@ -24,7 +24,7 @@ type CityDistances {
 
 type Cenote {
 	# NOTE: Required
-	id: ID!
+	_id: ID!
 	touristic: Boolean!
 	location: CenoteLocation!
 	type: CenoteType!

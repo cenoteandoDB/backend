@@ -2,6 +2,7 @@
 # None
 
 input MapLayerInput {
+    id: String!
     name: String!
     description: String
 }

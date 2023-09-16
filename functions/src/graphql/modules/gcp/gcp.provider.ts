@@ -22,7 +22,6 @@ export const StorageProvider = {
 
     getMetadados: async (name: String): Promise<string> => {
         const result = await getSignedUrls(`capas/${name}/metadatos.pdf`)
-        console.log("Metadados: " + result)
         return result.at(0)!
     }
 

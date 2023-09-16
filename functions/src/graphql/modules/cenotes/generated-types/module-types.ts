@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'distances' | 'createdAt' | 'updatedAt';
+    Cenote: '_id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'distances' | 'createdAt' | 'updatedAt';
     CenoteLocation: 'coordinates' | 'country' | 'state' | 'municipality';
     Coordinates: 'latitude' | 'longitude';
     CenoteBounds: 'top_left' | 'bottom_right';
@@ -87,7 +87,7 @@ export namespace CenotesModule {
     };
     Cenote?: {
       '*'?: gm.Middleware[];
-      id?: gm.Middleware[];
+      _id?: gm.Middleware[];
       touristic?: gm.Middleware[];
       location?: gm.Middleware[];
       type?: gm.Middleware[];

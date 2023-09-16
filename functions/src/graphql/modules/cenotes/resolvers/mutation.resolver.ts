@@ -11,7 +11,7 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
         const location = getCenoteLocation(args.new_cenote.coordinates)
         const cenote = await cenotesProvider.createCenote(args.new_cenote, location)
         cenoteCityDistances(cenote, args.new_cenote.coordinates)
-        AuditLogsProvider.save(cenote.id, "NEW_CENOTE", args.new_cenote)
+        AuditLogsProvider.save(cenote._id, "NEW_CENOTE", args.new_cenote)
 
         return cenote
     },

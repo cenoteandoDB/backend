@@ -6,14 +6,14 @@ import { MapLayersModule } from "../generated-types/module-types";
 export const MapLayerResolver: MapLayersModule.Resolvers["MapLayer"] = {
     name: (parent) => parent.name != null ? parent.name : "no-name",
     description: (parent) => parent.description != null ? parent.description : "no-description",
-    thumbnail: (parent) => StorageProvider.getThumbnail(parent.name),
+    thumbnail: (parent) => StorageProvider.getThumbnail(parent.id),
     json: (parent, args, contextValue, info) => {
         const mapLayerProvider = contextValue.injector.get(LayersProvider)
-        return mapLayerProvider.getJson(parent.name)
+        return mapLayerProvider.getJson(parent.id)
     },
-    metadados: (parent) => StorageProvider.getMetadados(parent.name),
+    metadados: (parent) => StorageProvider.getMetadados(parent.id),
     layer: (parent, args, contextValue, info) => {
         const mapLayerProvider = contextValue.injector.get(LayersProvider)
-        return mapLayerProvider.getLayer(parent.name)
+        return mapLayerProvider.getLayer(parent.id)
     },
 };

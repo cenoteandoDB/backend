@@ -44,11 +44,11 @@ export type AuditLogType =
 
 export type Cenote = {
   __typename?: 'Cenote';
+  _id: Scalars['ID'];
   alternativeNames?: Maybe<Array<Scalars['String']>>;
   createdAt?: Maybe<Scalars['DateTime']>;
   creator?: Maybe<User>;
   distances?: Maybe<Array<Maybe<CityDistances>>>;
-  id: Scalars['ID'];
   issues?: Maybe<Array<Maybe<CenoteIssue>>>;
   location: CenoteLocation;
   maps?: Maybe<Array<Scalars['URL']>>;
@@ -131,6 +131,7 @@ export type MapLayer = {
 
 export type MapLayerInput = {
   description?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -324,10 +325,10 @@ export type RegisterInput = {
 
 export type Species = {
   __typename?: 'Species';
+  _id: Scalars['ID'];
   aphiaId?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   iNaturalistId?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -376,11 +377,11 @@ export type UserRole =
 
 export type Variable = {
   __typename?: 'Variable';
+  _id: Scalars['ID'];
   accessLevel?: Maybe<AccessLevel>;
   createdAt?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   enumValues?: Maybe<Array<Maybe<Scalars['String']>>>;
-  id: Scalars['ID'];
   methodology?: Maybe<Scalars['String']>;
   multiple?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
@@ -599,11 +600,11 @@ export type AuditLogResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type CenoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cenote'] = ResolversParentTypes['Cenote']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   alternativeNames?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   creator?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   distances?: Resolver<Maybe<Array<Maybe<ResolversTypes['CityDistances']>>>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   issues?: Resolver<Maybe<Array<Maybe<ResolversTypes['CenoteIssue']>>>, ParentType, ContextType>;
   location?: Resolver<ResolversTypes['CenoteLocation'], ParentType, ContextType>;
   maps?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
@@ -728,10 +729,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type SpeciesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Species'] = ResolversParentTypes['Species']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   aphiaId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   iNaturalistId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -749,11 +750,11 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   accessLevel?: Resolver<Maybe<ResolversTypes['AccessLevel']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   enumValues?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   methodology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   multiple?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

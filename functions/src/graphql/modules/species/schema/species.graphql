@@ -2,7 +2,7 @@
 scalar DateTime
 
 type Species {
-	id: ID!
+	_id: ID!
 
 	aphiaId: String
 	iNaturalistId: String

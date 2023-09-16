@@ -40,7 +40,7 @@ enum VariableOrigin {
 }
 
 type Variable {
-	id: ID!
+	_id: ID!
 
 	name: String
 	description: String

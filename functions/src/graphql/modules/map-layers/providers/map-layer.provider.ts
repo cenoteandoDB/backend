@@ -41,7 +41,6 @@ export class MapLayerProvider {
         //TODO encrypt password
         const docRef = mapLayerDB.doc();
         await docRef.set({
-            id: docRef.id,
             createdAt: new Date().toISOString(),
             ...input
         })

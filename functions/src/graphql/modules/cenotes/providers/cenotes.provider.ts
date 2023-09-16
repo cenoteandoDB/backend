@@ -103,7 +103,7 @@ export class CenotesProvider {
      * @param distances the distances to the cities
      */
     async setCenoteDistances (cenote: Cenote, distances: CityDistances[]): Promise<void> {
-        cenotesDB.doc(cenote.id).update({
+        cenotesDB.doc(cenote._id).update({
             ...cenote,
             updatedAt: new Date().toISOString(),
             distances

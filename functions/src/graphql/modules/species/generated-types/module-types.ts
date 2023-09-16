@@ -5,7 +5,7 @@ export namespace SpeciesModule {
   interface DefinedFields {
     Mutation: 'createSpecies' | 'updateSpecies';
     Query: 'species' | 'speciesById' | 'speciesByAphiaId' | 'speciesByINaturalistId' | 'speciesCsv';
-    Species: 'id' | 'aphiaId' | 'iNaturalistId' | 'createdAt' | 'updatedAt';
+    Species: '_id' | 'aphiaId' | 'iNaturalistId' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedInputFields {
@@ -52,7 +52,7 @@ export namespace SpeciesModule {
     };
     Species?: {
       '*'?: gm.Middleware[];
-      id?: gm.Middleware[];
+      _id?: gm.Middleware[];
       aphiaId?: gm.Middleware[];
       iNaturalistId?: gm.Middleware[];
       createdAt?: gm.Middleware[];

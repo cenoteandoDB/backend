@@ -9,7 +9,7 @@ export namespace MapLayersModule {
   };
   
   interface DefinedInputFields {
-    MapLayerInput: 'name' | 'description';
+    MapLayerInput: 'id' | 'name' | 'description';
   };
   
   export type MapLayer = Pick<Types.MapLayer, DefinedFields['MapLayer']>;
