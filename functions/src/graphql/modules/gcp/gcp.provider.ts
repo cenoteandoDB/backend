@@ -20,8 +20,8 @@ export const StorageProvider = {
         return result.at(0)!
     },
 
-    getMetadados: async (name: String): Promise<string> => {
-        const result = await getSignedUrls(`capas/${name}/metadatos.pdf`)
+    getMetadata: async (name: String): Promise<string> => {
+        const result = await getSignedUrls(`capas/${name}/metadata.pdf`)
         return result.at(0)!
     }
 

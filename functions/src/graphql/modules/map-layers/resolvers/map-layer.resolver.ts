@@ -11,7 +11,7 @@ export const MapLayerResolver: MapLayersModule.Resolvers["MapLayer"] = {
         const mapLayerProvider = contextValue.injector.get(LayersProvider)
         return mapLayerProvider.getJson(parent.id)
     },
-    metadados: (parent) => StorageProvider.getMetadados(parent.id),
+    metadata: (parent) => StorageProvider.getMetadata(parent.id),
     layer: (parent, args, contextValue, info) => {
         const mapLayerProvider = contextValue.injector.get(LayersProvider)
         return mapLayerProvider.getLayer(parent.id)
