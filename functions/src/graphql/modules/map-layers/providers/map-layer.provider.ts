@@ -26,8 +26,8 @@ export class MapLayerProvider {
      * @return {Promise<MapLayer>}
      */
     async getMapLayer(id: string): Promise<MapLayer> {
-        const snapshot = await mapLayerDB.doc(id).get()
-        return snapshot.data() as MapLayer
+        const snapshot = await mapLayerDB.where("id", "==", id).get()
+        return snapshot.docs[0].data() as MapLayer
     }
 
     /**
