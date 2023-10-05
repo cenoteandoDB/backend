@@ -120,6 +120,12 @@ export type CoordinatesInput = {
   longitude: Scalars['Longitude'];
 };
 
+export type DeleteMofInput = {
+  cenote: Scalars['ID'];
+  timestamp: Scalars['DateTime'];
+  variable: Scalars['ID'];
+};
+
 export type MapLayer = {
   __typename?: 'MapLayer';
   description?: Maybe<Scalars['String']>;
@@ -150,6 +156,7 @@ export type Mutation = {
   createMof?: Maybe<VariableWithData>;
   createSpecies?: Maybe<Species>;
   createVariable?: Maybe<Variable>;
+  deleteMof?: Maybe<Scalars['Boolean']>;
   register?: Maybe<User>;
   updateCenote?: Maybe<Cenote>;
   updateEmail?: Maybe<User>;
@@ -180,6 +187,11 @@ export type MutationCreateSpeciesArgs = {
 
 export type MutationCreateVariableArgs = {
   new_variable: NewVariableInput;
+};
+
+
+export type MutationDeleteMofArgs = {
+  delete_mof_input: DeleteMofInput;
 };
 
 
@@ -520,6 +532,7 @@ export type ResolversTypes = {
   Coordinates: ResolverTypeWrapper<Coordinates>;
   CoordinatesInput: CoordinatesInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+  DeleteMofInput: DeleteMofInput;
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
@@ -565,6 +578,7 @@ export type ResolversParentTypes = {
   Coordinates: Coordinates;
   CoordinatesInput: CoordinatesInput;
   DateTime: Scalars['DateTime'];
+  DeleteMofInput: DeleteMofInput;
   EmailAddress: Scalars['EmailAddress'];
   Float: Scalars['Float'];
   ID: Scalars['ID'];
@@ -703,6 +717,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createMof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<MutationCreateMofArgs, 'new_mof'>>;
   createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
+  deleteMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMofArgs, 'delete_mof_input'>>;
   register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateEmailArgs, 'email' | 'id'>>;

@@ -1,6 +1,6 @@
 import { ID } from "graphql-modules/shared/types";
 import { db } from "../../database/db";
-import { VariableTheme, VariableWithData, NewMeasurementOrFactInput, MeasurementOrFact, Variable } from "../../../generated-types/graphql";
+import { VariableTheme, VariableWithData, NewMeasurementOrFactInput, MeasurementOrFact, Variable, DeleteMofInput } from "../../../generated-types/graphql";
 
 const mofDB = db.mofs
 const variableDB = db.variables
@@ -70,16 +70,14 @@ export class MofProvider {
 
     private async createMofBucket(mof: MeasurementOrFact, input: NewMeasurementOrFactInput): Promise<VariableWithData> {
         const docRef = mofDB.doc()
-        const data : VariableWithData = {
+        await docRef.set({
             _id: docRef.id,
-            _to: input.cenote,
-            _from: input.variable,
+            _to: this.getCenoteId(input.cenote),
+            _from: this.getVariableId(input.variable),
             measurements: [mof],
             firstTimestamp: new Date(input.timestamp).toISOString(),
             lastTimestamp: new Date(input.timestamp).toISOString()
-        }
-
-        await docRef.set(data)
+        })
 
         const snapshot = await mofDB.doc(docRef.id).get()
         return snapshot.data() as VariableWithData
@@ -87,11 +85,12 @@ export class MofProvider {
 
     private async addMof(bucket: VariableWithData, mof: MeasurementOrFact): Promise<VariableWithData> {
         bucket.measurements.push(mof)
+        console.log(bucket.measurements)
         const firstTimestamp = bucket.firstTimestamp < mof.timestamp ? bucket.firstTimestamp : mof.timestamp
         const lastTimestamp = bucket.lastTimestamp > mof.timestamp ? bucket.lastTimestamp : mof.timestamp
 
         await mofDB.doc(bucket._id).update({
-            data: bucket.measurements,
+            measurements: bucket.measurements,
             firstTimestamp,
             lastTimestamp
         })
@@ -100,11 +99,55 @@ export class MofProvider {
         return snapshot.data() as VariableWithData
     }
 
-    private getCenoteId(cenoteId: String): String {
+    /**
+     * Deletes a Measurement or Fact given cenote, variable and timestamp of measure. 
+     *
+     * @param new_mof new MoF with value and timestamp
+     *
+     * @returns {Promise<VariableWithData>} the new MoF
+     */
+    async deleteMoF(deletMofInput: DeleteMofInput): Promise<boolean> {
+        const doc = await mofDB.where("_to", "==", this.getCenoteId(deletMofInput.cenote))
+                               .where("_from", "==", this.getVariableId(deletMofInput.variable)).get()
+
+        if (!doc.empty) {
+            const bucket = doc.docs[0].data() as VariableWithData
+            const docId = doc.docs[0].id
+
+            const mofs = bucket.measurements.filter(mof => mof.timestamp !== deletMofInput.timestamp.toISOString())
+
+            if(mofs.length == 0) {
+                mofDB.doc(doc.docs[0].id).delete()
+            } else {
+                this.updateMofAfterDelete(docId, bucket, mofs)
+            }
+        }
+        
+        return true;
+    }
+
+    private async updateMofAfterDelete(docId: string, mof: VariableWithData, measurements: MeasurementOrFact[]): Promise<void> {
+        const firstTimestamp = measurements.reduce((min: MeasurementOrFact | null, current: MeasurementOrFact) => {
+            return !min || current.timestamp < min.timestamp ? current : min
+          }, null);
+
+        const lastTimestamp = measurements.reduce((max: MeasurementOrFact | null, current: MeasurementOrFact) => {
+            return !max || current.timestamp > max.timestamp ? current : max
+        }, null);
+
+        await mofDB.doc(docId).update({
+            firstTimestamp: firstTimestamp?.timestamp,
+            lastTimestamp: lastTimestamp?.timestamp,
+            measurements
+        })
+
+    }
+
+    private getCenoteId(cenoteId: string): string {
         return `Cenotes/${cenoteId}`
     }
 
-    private getVariableId(variableId: String): String {
+    private getVariableId(variableId: string): string {
         return `Variables/${variableId}`
     }
 
