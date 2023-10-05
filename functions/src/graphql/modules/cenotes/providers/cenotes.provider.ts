@@ -1,10 +1,12 @@
 import { ID } from "graphql-modules/shared/types";
 import { db } from "../../database/db";
-import { Cenote, CenoteBounds, CenoteLocation, CityDistances, NewCenoteInput, UpdatedCenoteInput } from "../../../generated-types/graphql";
+import { Cenote, CenoteBounds, CenoteLocation, CoordinatesInput, NewCenoteInput, UpdatedCenoteInput } from "../../../generated-types/graphql";
+import { DirectionsService } from "../../../../api/googleAPI/directions";
 
 const cenotesDB = db.cenotes
 
 export class CenotesProvider {
+    
     /**
      * Get all cenotes.
      *
@@ -23,8 +25,8 @@ export class CenotesProvider {
      * @returns {Promise<Cenote>} the cenote
      */
     async getCenoteById(id: ID): Promise<Cenote>  {
-        const snapshot = await cenotesDB.doc(id).get()
-        return snapshot.data() as Cenote
+        const snapshot = await cenotesDB.where("_key", "==", id).get()
+        return snapshot.docs[0].data() as Cenote
     }
 
     /**
@@ -66,12 +68,16 @@ export class CenotesProvider {
      *
      * @returns {Promise<Cenote>} the new cenote
      */
-    async createCenote(new_cenote: NewCenoteInput, location: CenoteLocation): Promise<Cenote> {
+    async createCenote(new_cenote: NewCenoteInput, coordinates: CoordinatesInput): Promise<Cenote> {
+        const distances = await DirectionsService.getDrivingDistance(coordinates)
+        const location = this.getCenoteLocation(coordinates)
+
         const docRef = cenotesDB.doc();
         await docRef.set({
             id: docRef.id,
             createdAt: new Date().toISOString(),
             location,
+            distances,
             ...new_cenote
         })
         
@@ -97,16 +103,23 @@ export class CenotesProvider {
     }
 
     /**
-     * Set cenote distances into the 3 major cities in Yucatan.
+     * Get Cenote Location information.
      *
-     * @param cenote the cenote to be set the distances
-     * @param distances the distances to the cities
+     * @param input the cenote coordinates
+     *
+     * @returns {CenoteLocation} with Cenote's coordinates, country, state and municipality
      */
-    async setCenoteDistances (cenote: Cenote, distances: CityDistances[]): Promise<void> {
-        cenotesDB.doc(cenote._id).update({
-            ...cenote,
-            updatedAt: new Date().toISOString(),
-            distances
-        })
+    private getCenoteLocation (input: CoordinatesInput): CenoteLocation {
+        const location : CenoteLocation = {
+            coordinates: {
+                latitude: input.latitude,
+                longitude: input.longitude,
+            },
+            country: "Mexico",
+            state: "State",
+            municipality: "Municipality"
+        }
+    
+        return location
     }
 };

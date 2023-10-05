@@ -14,9 +14,9 @@ export class MofProvider {
      * 
      * @returns {Promise<VariableWithData[]>} list of MoF
      */
-    async cenoteDataByTheme(cenote: ID, theme: VariableTheme): Promise<VariableWithData[]>  {
+    async cenoteDataByTheme(id: ID, theme: VariableTheme): Promise<VariableWithData[]>  {
         let data: VariableWithData[] = []
-        const snapshot = await mofDB.where("_to", "==", cenote).get()
+        const snapshot = await mofDB.where("_to", "==", this.getCenoteId(id)).get()
         const mofs = snapshot.docs.map(doc => doc.data() as VariableWithData)
         
         for(const mof of mofs) {
@@ -32,12 +32,14 @@ export class MofProvider {
     /**
      * Get cenote measurements or facts by variable.
      *
-     * @param id of the cenote to get MoF
+     * @param cenoteId of the cenote to get MoF
+     * @param variableId of the variable to get MoF
      * 
      * @returns {Promise<VariableWithData>} MoFs of given cenote and variable
      */
-    async cenoteDataByVariable(cenote: ID, variable: ID): Promise<VariableWithData>  {
-        const mof = await mofDB.where("_to", "==", cenote).where("_from", "==", variable).get()
+    async cenoteDataByVariable(cenoteId: ID, variableId: ID): Promise<VariableWithData>  {
+        const mof = await mofDB.where("_to", "==", this.getCenoteId(cenoteId))
+                               .where("_from", "==", this.getVariableId(variableId)).get()
         return mof.docs[0].data() as VariableWithData
     }
 
@@ -50,7 +52,8 @@ export class MofProvider {
      * @returns {Promise<VariableWithData>} the new MoF
      */
     async createMoF(new_mof: NewMeasurementOrFactInput): Promise<VariableWithData> {
-        const doc = await mofDB.where("_to", "==", new_mof.cenote).where("_from", "==", new_mof.variable).get()
+        const doc = await mofDB.where("_to", "==", this.getCenoteId(new_mof.cenote))
+                               .where("_from", "==", this.getVariableId(new_mof.variable)).get()
 
         const mof: MeasurementOrFact = {
             value: new_mof.value,
@@ -95,6 +98,14 @@ export class MofProvider {
         
         const snapshot = await mofDB.doc(bucket._id).get()
         return snapshot.data() as VariableWithData
+    }
+
+    private getCenoteId(cenoteId: String): String {
+        return `Cenotes/${cenoteId}`
+    }
+
+    private getVariableId(variableId: String): String {
+        return `Variables/${variableId}`
     }
 
 };

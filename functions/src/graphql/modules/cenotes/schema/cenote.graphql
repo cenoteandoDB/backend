@@ -26,7 +26,6 @@ type Cenote {
 	id: ID!
 
 	# NOTE: Required
-	_id: ID!
 	_key: ID!
 
 	geojson: JSON!

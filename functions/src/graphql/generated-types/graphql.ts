@@ -44,7 +44,6 @@ export type AuditLogType =
 
 export type Cenote = {
   __typename?: 'Cenote';
-  _id: Scalars['ID'];
   _key: Scalars['ID'];
   alternativeNames?: Maybe<Array<Scalars['String']>>;
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -603,7 +602,6 @@ export type AuditLogResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type CenoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cenote'] = ResolversParentTypes['Cenote']> = {
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   _key?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   alternativeNames?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
