@@ -126,6 +126,177 @@ export type DeleteMofInput = {
   variable: Scalars['ID'];
 };
 
+export type GbifNameType =
+  | 'BLACKLISTED'
+  | 'CANDIDATUS'
+  | 'CULTIVAR'
+  | 'DOUBTFUL'
+  | 'HYBRID'
+  | 'INFORMAL'
+  | 'NO_NAME'
+  | 'OTU'
+  | 'PLACEHOLDER'
+  | 'SCIENTIFIC'
+  | 'VIRUS';
+
+export type GbifNameUsage = {
+  __typename?: 'GBIFNameUsage';
+  authorship?: Maybe<Scalars['String']>;
+  basionym?: Maybe<Scalars['String']>;
+  basionymKey?: Maybe<Scalars['Int']>;
+  canonicalName?: Maybe<Scalars['String']>;
+  class?: Maybe<Scalars['String']>;
+  classKey?: Maybe<Scalars['Int']>;
+  constituentKey?: Maybe<Scalars['String']>;
+  datasetKey?: Maybe<Scalars['String']>;
+  family?: Maybe<Scalars['String']>;
+  familyKey?: Maybe<Scalars['Int']>;
+  genus?: Maybe<Scalars['String']>;
+  genusKey?: Maybe<Scalars['Int']>;
+  issues?: Maybe<Array<Scalars['String']>>;
+  key?: Maybe<Scalars['Int']>;
+  kingdom?: Maybe<Scalars['String']>;
+  kingdomKey?: Maybe<Scalars['Int']>;
+  lastCrawled?: Maybe<Scalars['String']>;
+  lastInterpreted?: Maybe<Scalars['String']>;
+  nameKey?: Maybe<Scalars['Int']>;
+  nameType?: Maybe<GbifNameType>;
+  nomenclaturalStatus?: Maybe<Array<Scalars['String']>>;
+  nubKey?: Maybe<Scalars['Int']>;
+  numDescendants?: Maybe<Scalars['Int']>;
+  order?: Maybe<Scalars['String']>;
+  orderKey?: Maybe<Scalars['Int']>;
+  origin?: Maybe<GbifOrigin>;
+  parent?: Maybe<Scalars['String']>;
+  parentKey?: Maybe<Scalars['Int']>;
+  phylum?: Maybe<Scalars['String']>;
+  phylumKey?: Maybe<Scalars['Int']>;
+  publishedIn?: Maybe<Scalars['String']>;
+  rank?: Maybe<GbifTaxonomicRank>;
+  remarks?: Maybe<Scalars['String']>;
+  scientificName?: Maybe<Scalars['String']>;
+  sourceTaxonKey?: Maybe<Scalars['Int']>;
+  species?: Maybe<Scalars['String']>;
+  speciesKey?: Maybe<Scalars['Int']>;
+  taxonID?: Maybe<Scalars['String']>;
+  taxonomicStatus?: Maybe<GbifTaxonomicStatus>;
+  vernacularName?: Maybe<Scalars['String']>;
+};
+
+export type GbifOrigin =
+  | 'AUTONYM'
+  | 'BASIONYM_PLACEHOLDER'
+  | 'DENORMED_CLASSIFICATION'
+  | 'EX_AUTHOR_SYNONYM'
+  | 'IMPLICIT_NAME'
+  | 'MISSING_ACCEPTED'
+  | 'OTHER'
+  | 'PROPARTE'
+  | 'SOURCE'
+  | 'VERBATIM_ACCEPTED'
+  | 'VERBATIM_BASIONYM'
+  | 'VERBATIM_PARENT';
+
+export type GbifSuggestion = {
+  __typename?: 'GBIFSuggestion';
+  canonicalName?: Maybe<Scalars['String']>;
+  class?: Maybe<Scalars['String']>;
+  family?: Maybe<Scalars['String']>;
+  genus?: Maybe<Scalars['String']>;
+  key: Scalars['ID'];
+  kingdom?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['String']>;
+  phylum?: Maybe<Scalars['String']>;
+  rank?: Maybe<GbifTaxonomicRank>;
+  species?: Maybe<Scalars['String']>;
+};
+
+export type GbifTaxonomicRank =
+  | 'ABERRATION'
+  | 'BIOVAR'
+  | 'CHEMOFORM'
+  | 'CHEMOVAR'
+  | 'CLASS'
+  | 'COHORT'
+  | 'CONVARIETY'
+  | 'CULTIVAR'
+  | 'CULTIVAR_GROUP'
+  | 'DOMAIN'
+  | 'FAMILY'
+  | 'FORM'
+  | 'FORMA_SPECIALIS'
+  | 'GENUS'
+  | 'GRANDORDER'
+  | 'GREX'
+  | 'INFRACLASS'
+  | 'INFRACOHORT'
+  | 'INFRAFAMILY'
+  | 'INFRAGENERIC_NAME'
+  | 'INFRAGENUS'
+  | 'INFRAKINGDOM'
+  | 'INFRALEGION'
+  | 'INFRAORDER'
+  | 'INFRAPHYLUM'
+  | 'INFRASPECIFIC_NAME'
+  | 'INFRASUBSPECIFIC_NAME'
+  | 'INFRATRIBE'
+  | 'KINGDOM'
+  | 'LEGION'
+  | 'MAGNORDER'
+  | 'MORPH'
+  | 'MORPHOVAR'
+  | 'NATIO'
+  | 'ORDER'
+  | 'OTHER'
+  | 'PARVCLASS'
+  | 'PARVORDER'
+  | 'PATHOVAR'
+  | 'PHAGOVAR'
+  | 'PHYLUM'
+  | 'PROLES'
+  | 'RACE'
+  | 'SECTION'
+  | 'SERIES'
+  | 'SEROVAR'
+  | 'SPECIES'
+  | 'SPECIES_AGGREGATE'
+  | 'STRAIN'
+  | 'SUBCLASS'
+  | 'SUBCOHORT'
+  | 'SUBFAMILY'
+  | 'SUBFORM'
+  | 'SUBGENUS'
+  | 'SUBKINGDOM'
+  | 'SUBLEGION'
+  | 'SUBORDER'
+  | 'SUBPHYLUM'
+  | 'SUBSECTION'
+  | 'SUBSERIES'
+  | 'SUBSPECIES'
+  | 'SUBTRIBE'
+  | 'SUBVARIETY'
+  | 'SUPERCLASS'
+  | 'SUPERCOHORT'
+  | 'SUPERFAMILY'
+  | 'SUPERKINGDOM'
+  | 'SUPERLEGION'
+  | 'SUPERORDER'
+  | 'SUPERPHYLUM'
+  | 'SUPERTRIBE'
+  | 'SUPRAGENERIC_NAME'
+  | 'TRIBE'
+  | 'UNRANKED'
+  | 'VARIETY';
+
+export type GbifTaxonomicStatus =
+  | 'ACCEPTED'
+  | 'DOUBTFUL'
+  | 'HETEROTYPIC_SYNONYM'
+  | 'HOMOTYPIC_SYNONYM'
+  | 'MISAPPLIED'
+  | 'PROPARTE_SYNONYM'
+  | 'SYNONYM';
+
 export type MapLayer = {
   __typename?: 'MapLayer';
   description?: Maybe<Scalars['String']>;
@@ -232,8 +403,8 @@ export type NewMeasurementOrFactInput = {
 };
 
 export type NewSpeciesInput = {
-  aphiaId?: InputMaybe<Scalars['String']>;
-  iNaturalistId?: InputMaybe<Scalars['String']>;
+  gbifId?: InputMaybe<Scalars['ID']>;
+  iNaturalistId?: InputMaybe<Scalars['ID']>;
 };
 
 export type NewVariableInput = {
@@ -259,10 +430,12 @@ export type Query = {
   cenotes?: Maybe<Array<Maybe<Cenote>>>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
+  gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
+  iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
   species?: Maybe<Array<Maybe<Species>>>;
-  speciesByAphiaId?: Maybe<Species>;
+  speciesByGBIFId?: Maybe<Species>;
   speciesByINaturalistId?: Maybe<Species>;
   speciesById?: Maybe<Species>;
   speciesCsv?: Maybe<Scalars['String']>;
@@ -297,18 +470,30 @@ export type QueryCenoteDataByVariableArgs = {
 };
 
 
+export type QueryGbifSpeciesSuggestionArgs = {
+  q: Scalars['String'];
+  rank?: InputMaybe<GbifTaxonomicRank>;
+};
+
+
+export type QueryINaturalistSearchArgs = {
+  perPage?: InputMaybe<Scalars['Int']>;
+  q: Scalars['String'];
+};
+
+
 export type QueryLayerArgs = {
   id: Scalars['ID'];
 };
 
 
-export type QuerySpeciesByAphiaIdArgs = {
-  aphiaId: Scalars['String'];
+export type QuerySpeciesByGbifIdArgs = {
+  gbifId: Scalars['ID'];
 };
 
 
 export type QuerySpeciesByINaturalistIdArgs = {
-  iNaturalist: Scalars['String'];
+  iNaturalistId: Scalars['ID'];
 };
 
 
@@ -340,15 +525,17 @@ export type RegisterInput = {
 export type Species = {
   __typename?: 'Species';
   _id: Scalars['ID'];
-  aphiaId?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
-  iNaturalistId?: Maybe<Scalars['String']>;
+  gbifDetails?: Maybe<GbifNameUsage>;
+  gbifId?: Maybe<Scalars['ID']>;
+  iNaturalistDetails?: Maybe<INaturalistTaxonRecord>;
+  iNaturalistId?: Maybe<Scalars['ID']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type UpdateSpeciesInput = {
-  aphiaId?: InputMaybe<Scalars['String']>;
-  iNaturalistId?: InputMaybe<Scalars['String']>;
+  gbifId?: InputMaybe<Scalars['ID']>;
+  iNaturalistId?: InputMaybe<Scalars['ID']>;
   id: Scalars['ID'];
 };
 
@@ -446,6 +633,87 @@ export type VariableWithData = {
   measurements: Array<MeasurementOrFact>;
 };
 
+export type INaturalistFlagCounts = {
+  __typename?: 'iNaturalistFlagCounts';
+  resolved?: Maybe<Scalars['Int']>;
+  unresolved?: Maybe<Scalars['Int']>;
+};
+
+export type INaturalistPhoto = {
+  __typename?: 'iNaturalistPhoto';
+  attribution?: Maybe<Scalars['String']>;
+  flags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  id?: Maybe<Scalars['Int']>;
+  large_url?: Maybe<Scalars['String']>;
+  license_code?: Maybe<Scalars['String']>;
+  medium_url?: Maybe<Scalars['String']>;
+  original_dimensions?: Maybe<INaturalistPhotoDimensions>;
+  original_url?: Maybe<Scalars['String']>;
+  small_url?: Maybe<Scalars['String']>;
+  square_url?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+};
+
+export type INaturalistPhotoDimensions = {
+  __typename?: 'iNaturalistPhotoDimensions';
+  height?: Maybe<Scalars['Int']>;
+  width?: Maybe<Scalars['Int']>;
+};
+
+export type INaturalistSearchTaxonResponse = {
+  __typename?: 'iNaturalistSearchTaxonResponse';
+  page?: Maybe<Scalars['Int']>;
+  per_page?: Maybe<Scalars['Int']>;
+  results?: Maybe<Array<Maybe<INaturalistTaxonResult>>>;
+  total_results?: Maybe<Scalars['Int']>;
+};
+
+export type INaturalistTaxonPhoto = {
+  __typename?: 'iNaturalistTaxonPhoto';
+  photo?: Maybe<INaturalistPhoto>;
+  taxon_id?: Maybe<Scalars['Int']>;
+};
+
+export type INaturalistTaxonRecord = {
+  __typename?: 'iNaturalistTaxonRecord';
+  ancestor_ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ancestry?: Maybe<Scalars['String']>;
+  atlas_id?: Maybe<Scalars['Int']>;
+  complete_species_count?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['String']>;
+  current_synonymous_taxon_ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  default_photo?: Maybe<INaturalistPhoto>;
+  extinct?: Maybe<Scalars['Boolean']>;
+  flag_counts?: Maybe<INaturalistFlagCounts>;
+  iconic_taxon_id?: Maybe<Scalars['Int']>;
+  iconic_taxon_name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  is_active?: Maybe<Scalars['Boolean']>;
+  matched_term?: Maybe<Scalars['String']>;
+  min_species_ancestry?: Maybe<Scalars['String']>;
+  min_species_taxon_id?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  observations_count?: Maybe<Scalars['Int']>;
+  parent_id?: Maybe<Scalars['Int']>;
+  photos_locked?: Maybe<Scalars['Boolean']>;
+  preferred_common_name?: Maybe<Scalars['String']>;
+  rank?: Maybe<Scalars['String']>;
+  rank_level?: Maybe<Scalars['Int']>;
+  taxon_changes_count?: Maybe<Scalars['Int']>;
+  taxon_photos?: Maybe<Array<Maybe<INaturalistTaxonPhoto>>>;
+  taxon_schemes_count?: Maybe<Scalars['Int']>;
+  universal_search_rank?: Maybe<Scalars['Int']>;
+  wikipedia_url?: Maybe<Scalars['String']>;
+};
+
+export type INaturalistTaxonResult = {
+  __typename?: 'iNaturalistTaxonResult';
+  matches?: Maybe<Array<Maybe<Scalars['String']>>>;
+  record?: Maybe<INaturalistTaxonRecord>;
+  score?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -535,6 +803,12 @@ export type ResolversTypes = {
   DeleteMofInput: DeleteMofInput;
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  GBIFNameType: GbifNameType;
+  GBIFNameUsage: ResolverTypeWrapper<GbifNameUsage>;
+  GBIFOrigin: GbifOrigin;
+  GBIFSuggestion: ResolverTypeWrapper<GbifSuggestion>;
+  GBIFTaxonomicRank: GbifTaxonomicRank;
+  GBIFTaxonomicStatus: GbifTaxonomicStatus;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
@@ -563,6 +837,13 @@ export type ResolversTypes = {
   VariableTheme: VariableTheme;
   VariableType: VariableType;
   VariableWithData: ResolverTypeWrapper<VariableWithData>;
+  iNaturalistFlagCounts: ResolverTypeWrapper<INaturalistFlagCounts>;
+  iNaturalistPhoto: ResolverTypeWrapper<INaturalistPhoto>;
+  iNaturalistPhotoDimensions: ResolverTypeWrapper<INaturalistPhotoDimensions>;
+  iNaturalistSearchTaxonResponse: ResolverTypeWrapper<INaturalistSearchTaxonResponse>;
+  iNaturalistTaxonPhoto: ResolverTypeWrapper<INaturalistTaxonPhoto>;
+  iNaturalistTaxonRecord: ResolverTypeWrapper<INaturalistTaxonRecord>;
+  iNaturalistTaxonResult: ResolverTypeWrapper<INaturalistTaxonResult>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -581,6 +862,8 @@ export type ResolversParentTypes = {
   DeleteMofInput: DeleteMofInput;
   EmailAddress: Scalars['EmailAddress'];
   Float: Scalars['Float'];
+  GBIFNameUsage: GbifNameUsage;
+  GBIFSuggestion: GbifSuggestion;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   JSON: Scalars['JSON'];
@@ -605,6 +888,13 @@ export type ResolversParentTypes = {
   User: User;
   Variable: Variable;
   VariableWithData: VariableWithData;
+  iNaturalistFlagCounts: INaturalistFlagCounts;
+  iNaturalistPhoto: INaturalistPhoto;
+  iNaturalistPhotoDimensions: INaturalistPhotoDimensions;
+  iNaturalistSearchTaxonResponse: INaturalistSearchTaxonResponse;
+  iNaturalistTaxonPhoto: INaturalistTaxonPhoto;
+  iNaturalistTaxonRecord: INaturalistTaxonRecord;
+  iNaturalistTaxonResult: INaturalistTaxonResult;
 };
 
 export type AuditLogResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuditLog'] = ResolversParentTypes['AuditLog']> = {
@@ -682,6 +972,64 @@ export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<Resolv
   name: 'EmailAddress';
 }
 
+export type GbifNameUsageResolvers<ContextType = any, ParentType extends ResolversParentTypes['GBIFNameUsage'] = ResolversParentTypes['GBIFNameUsage']> = {
+  authorship?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  basionym?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  basionymKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  canonicalName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  classKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  constituentKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  datasetKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  family?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  familyKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  genus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  genusKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  issues?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  key?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  kingdom?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  kingdomKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  lastCrawled?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastInterpreted?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  nameKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  nameType?: Resolver<Maybe<ResolversTypes['GBIFNameType']>, ParentType, ContextType>;
+  nomenclaturalStatus?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  nubKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  numDescendants?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  order?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  orderKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  origin?: Resolver<Maybe<ResolversTypes['GBIFOrigin']>, ParentType, ContextType>;
+  parent?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  parentKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  phylum?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phylumKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  publishedIn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  rank?: Resolver<Maybe<ResolversTypes['GBIFTaxonomicRank']>, ParentType, ContextType>;
+  remarks?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  scientificName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sourceTaxonKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  species?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  speciesKey?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  taxonID?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  taxonomicStatus?: Resolver<Maybe<ResolversTypes['GBIFTaxonomicStatus']>, ParentType, ContextType>;
+  vernacularName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GbifSuggestionResolvers<ContextType = any, ParentType extends ResolversParentTypes['GBIFSuggestion'] = ResolversParentTypes['GBIFSuggestion']> = {
+  canonicalName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  family?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  genus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  key?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  kingdom?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  order?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phylum?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  rank?: Resolver<Maybe<ResolversTypes['GBIFTaxonomicRank']>, ParentType, ContextType>;
+  species?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
@@ -733,11 +1081,13 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Cenote']>>>, ParentType, ContextType>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  gbifSpeciesSuggestion?: Resolver<Maybe<Array<ResolversTypes['GBIFSuggestion']>>, ParentType, ContextType, RequireFields<QueryGbifSpeciesSuggestionArgs, 'q'>>;
+  iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
   species?: Resolver<Maybe<Array<Maybe<ResolversTypes['Species']>>>, ParentType, ContextType>;
-  speciesByAphiaId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByAphiaIdArgs, 'aphiaId'>>;
-  speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalist'>>;
+  speciesByGBIFId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByGbifIdArgs, 'gbifId'>>;
+  speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalistId'>>;
   speciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByIdArgs, 'id'>>;
   speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>;
@@ -749,9 +1099,11 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type SpeciesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Species'] = ResolversParentTypes['Species']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  aphiaId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  iNaturalistId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  gbifDetails?: Resolver<Maybe<ResolversTypes['GBIFNameUsage']>, ParentType, ContextType>;
+  gbifId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  iNaturalistDetails?: Resolver<Maybe<ResolversTypes['iNaturalistTaxonRecord']>, ParentType, ContextType>;
+  iNaturalistId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -796,6 +1148,87 @@ export type VariableWithDataResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type INaturalistFlagCountsResolvers<ContextType = any, ParentType extends ResolversParentTypes['iNaturalistFlagCounts'] = ResolversParentTypes['iNaturalistFlagCounts']> = {
+  resolved?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  unresolved?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type INaturalistPhotoResolvers<ContextType = any, ParentType extends ResolversParentTypes['iNaturalistPhoto'] = ResolversParentTypes['iNaturalistPhoto']> = {
+  attribution?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  flags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  large_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  license_code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  medium_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  original_dimensions?: Resolver<Maybe<ResolversTypes['iNaturalistPhotoDimensions']>, ParentType, ContextType>;
+  original_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  small_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  square_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type INaturalistPhotoDimensionsResolvers<ContextType = any, ParentType extends ResolversParentTypes['iNaturalistPhotoDimensions'] = ResolversParentTypes['iNaturalistPhotoDimensions']> = {
+  height?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  width?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type INaturalistSearchTaxonResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['iNaturalistSearchTaxonResponse'] = ResolversParentTypes['iNaturalistSearchTaxonResponse']> = {
+  page?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  per_page?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  results?: Resolver<Maybe<Array<Maybe<ResolversTypes['iNaturalistTaxonResult']>>>, ParentType, ContextType>;
+  total_results?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type INaturalistTaxonPhotoResolvers<ContextType = any, ParentType extends ResolversParentTypes['iNaturalistTaxonPhoto'] = ResolversParentTypes['iNaturalistTaxonPhoto']> = {
+  photo?: Resolver<Maybe<ResolversTypes['iNaturalistPhoto']>, ParentType, ContextType>;
+  taxon_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type INaturalistTaxonRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['iNaturalistTaxonRecord'] = ResolversParentTypes['iNaturalistTaxonRecord']> = {
+  ancestor_ids?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>;
+  ancestry?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  atlas_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  complete_species_count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  created_at?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  current_synonymous_taxon_ids?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>;
+  default_photo?: Resolver<Maybe<ResolversTypes['iNaturalistPhoto']>, ParentType, ContextType>;
+  extinct?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  flag_counts?: Resolver<Maybe<ResolversTypes['iNaturalistFlagCounts']>, ParentType, ContextType>;
+  iconic_taxon_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  iconic_taxon_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  is_active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  matched_term?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  min_species_ancestry?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  min_species_taxon_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  observations_count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  parent_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  photos_locked?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  preferred_common_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  rank?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  rank_level?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  taxon_changes_count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  taxon_photos?: Resolver<Maybe<Array<Maybe<ResolversTypes['iNaturalistTaxonPhoto']>>>, ParentType, ContextType>;
+  taxon_schemes_count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  universal_search_rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  wikipedia_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type INaturalistTaxonResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['iNaturalistTaxonResult'] = ResolversParentTypes['iNaturalistTaxonResult']> = {
+  matches?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  record?: Resolver<Maybe<ResolversTypes['iNaturalistTaxonRecord']>, ParentType, ContextType>;
+  score?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   AuditLog?: AuditLogResolvers<ContextType>;
   Cenote?: CenoteResolvers<ContextType>;
@@ -807,6 +1240,8 @@ export type Resolvers<ContextType = any> = {
   Coordinates?: CoordinatesResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
+  GBIFNameUsage?: GbifNameUsageResolvers<ContextType>;
+  GBIFSuggestion?: GbifSuggestionResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   Latitude?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
@@ -819,6 +1254,13 @@ export type Resolvers<ContextType = any> = {
   User?: UserResolvers<ContextType>;
   Variable?: VariableResolvers<ContextType>;
   VariableWithData?: VariableWithDataResolvers<ContextType>;
+  iNaturalistFlagCounts?: INaturalistFlagCountsResolvers<ContextType>;
+  iNaturalistPhoto?: INaturalistPhotoResolvers<ContextType>;
+  iNaturalistPhotoDimensions?: INaturalistPhotoDimensionsResolvers<ContextType>;
+  iNaturalistSearchTaxonResponse?: INaturalistSearchTaxonResponseResolvers<ContextType>;
+  iNaturalistTaxonPhoto?: INaturalistTaxonPhotoResolvers<ContextType>;
+  iNaturalistTaxonRecord?: INaturalistTaxonRecordResolvers<ContextType>;
+  iNaturalistTaxonResult?: INaturalistTaxonResultResolvers<ContextType>;
 };
 
 

@@ -1,12 +1,12 @@
 input NewSpeciesInput {
-    aphiaId: String
-	iNaturalistId: String
+    gbifId: ID
+	iNaturalistId: ID
 }
 
 input UpdateSpeciesInput {
     id: ID!
-    aphiaId: String
-	iNaturalistId: String
+    gbifId: ID
+	iNaturalistId: ID
 }
 
 type Mutation {

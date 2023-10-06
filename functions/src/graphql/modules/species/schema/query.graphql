@@ -1,7 +1,9 @@
 type Query {
 	species: [Species]
 	speciesById(id: ID!): Species
-	speciesByAphiaId(aphiaId: String!): Species
-	speciesByINaturalistId(iNaturalist: String!): Species
+	speciesByGBIFId(gbifId: ID!): Species
+	speciesByINaturalistId(iNaturalistId: ID!): Species
 	speciesCsv: String
+	gbifSpeciesSuggestion(q: String!, rank: GBIFTaxonomicRank): [GBIFSuggestion!]
+	iNaturalistSearch(q: String!, perPage: Int): iNaturalistSearchTaxonResponse!
 }

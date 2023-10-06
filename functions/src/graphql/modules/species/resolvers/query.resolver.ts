@@ -8,11 +8,17 @@ export const QueryResolver: SpeciesModule.Resolvers["Query"] = {
     speciesById: (parent, args, contextValue, info) => {
         return SpeciesProvider.getSpeciesById(args.id);
     },
-    speciesByAphiaId: (parent, args, contextValue, info) => {
-        return SpeciesProvider.getSpeciesById(args.aphiaId);
+    speciesByGBIFId: (parent, args, contextValue, info) => {
+        return SpeciesProvider.getSpeciesByGBIFId(args.gbifId);
     },
     speciesByINaturalistId: (parent, args, contextValue, info) => {
-        return SpeciesProvider.getSpeciesById(args.iNaturalist);
+        return SpeciesProvider.getSpeciesByINaturalistId(args.iNaturalistId);
     },
     speciesCsv: () => "",
+    gbifSpeciesSuggestion: (parent, args, contextValue, info) => {
+        return SpeciesProvider.getGBIFSpeciesSuggestions(args.q, args.rank);
+    },
+    iNaturalistSearch: (parent, args, contextValue, info) => {
+        return SpeciesProvider.getINaturalistSearch(args.q, args.perPage);
+    }
 };

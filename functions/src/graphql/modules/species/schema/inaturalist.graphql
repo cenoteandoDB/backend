@@ -1,0 +1,73 @@
+type iNaturalistSearchTaxonResponse {
+    total_results: Int
+    page: Int
+    per_page: Int
+    results: [iNaturalistTaxonResult]
+}
+
+type iNaturalistTaxonResult {
+    score: Float
+    type: String
+    matches: [String]
+    record: iNaturalistTaxonRecord
+}
+
+type iNaturalistTaxonRecord {
+    id: Int
+    rank: String
+    rank_level: Int
+    iconic_taxon_id: Int
+    ancestor_ids: [Int]
+    is_active: Boolean
+    min_species_taxon_id: Int
+    name: String
+    parent_id: Int
+    ancestry: String
+    min_species_ancestry: String
+    extinct: Boolean
+    created_at: String
+    default_photo: iNaturalistPhoto
+    taxon_changes_count: Int
+    taxon_schemes_count: Int
+    observations_count: Int
+    photos_locked: Boolean
+    universal_search_rank: Int
+    flag_counts: iNaturalistFlagCounts
+    current_synonymous_taxon_ids: [Int]
+    taxon_photos: [iNaturalistTaxonPhoto]
+    atlas_id: Int
+    complete_species_count: Int
+    wikipedia_url: String
+    matched_term: String
+    iconic_taxon_name: String
+    preferred_common_name: String
+}
+
+type iNaturalistPhoto {
+    id: Int
+    license_code: String
+    attribution: String
+    url: String
+    original_dimensions: iNaturalistPhotoDimensions
+    flags: [String]
+    square_url: String
+    medium_url: String
+    small_url: String
+    large_url: String
+    original_url: String
+}
+
+type iNaturalistPhotoDimensions {
+    height: Int
+    width: Int
+}
+
+type iNaturalistFlagCounts {
+    resolved: Int
+    unresolved: Int
+}
+
+type iNaturalistTaxonPhoto {
+    taxon_id: Int
+    photo: iNaturalistPhoto
+}
