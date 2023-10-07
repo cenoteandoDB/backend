@@ -6,8 +6,8 @@ import {
     ContextFunction,
     HeaderMap,
 } from "@apollo/server";
-import { parse } from "url";
-import { CenoteandoApp } from "./graphql/modules/app";
+import {parse} from "url";
+import {CenoteandoApp} from "./graphql/modules/app";
 
 const server = new ApolloServer({
     gateway: {

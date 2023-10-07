@@ -1,6 +1,6 @@
-import { loadFilesSync } from "@graphql-tools/load-files";
-import { createModule } from "graphql-modules";
-import { MofResolvers } from "./resolvers";
+import {loadFilesSync} from "@graphql-tools/load-files";
+import {createModule} from "graphql-modules";
+import {MofResolvers} from "./resolvers";
 
 export const MofModule = createModule({
     id: "mof",

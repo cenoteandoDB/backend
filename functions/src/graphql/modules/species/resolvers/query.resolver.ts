@@ -1,9 +1,9 @@
 import {SpeciesModule} from "../generated-types/module-types";
-import { SpeciesProvider } from "../providers/species.provider";
+import {SpeciesProvider} from "../providers/species.provider";
 
 export const QueryResolver: SpeciesModule.Resolvers["Query"] = {
     species: () => {
-        return SpeciesProvider.getSpecies()
+        return SpeciesProvider.getSpecies();
     },
     speciesById: (parent, args, contextValue, info) => {
         return SpeciesProvider.getSpeciesById(args.id);
@@ -20,5 +20,5 @@ export const QueryResolver: SpeciesModule.Resolvers["Query"] = {
     },
     iNaturalistSearch: (parent, args, contextValue, info) => {
         return SpeciesProvider.getINaturalistSearch(args.q, args.perPage);
-    }
+    },
 };

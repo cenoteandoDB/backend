@@ -1,7 +1,7 @@
-import { UsersModule } from "../generated-types/module-types";
-import { MutationResolver } from "./mutation.resolver";
-import { QueryResolver } from "./query.resolver";
-import { EmailAddressResolver } from "graphql-scalars";
+import {UsersModule} from "../generated-types/module-types";
+import {MutationResolver} from "./mutation.resolver";
+import {QueryResolver} from "./query.resolver";
+import {EmailAddressResolver} from "graphql-scalars";
 
 export const UsersResolvers: UsersModule.Resolvers = {
     Mutation: MutationResolver,
