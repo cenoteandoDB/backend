@@ -333,6 +333,8 @@ export type Mutation = {
   updateEmail?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
   updateVariable?: Maybe<Variable>;
+  uploadMap?: Maybe<Scalars['Boolean']>;
+  uploadPhoto?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -391,6 +393,16 @@ export type MutationUpdateVariableArgs = {
   updated_variable: UpdateVariableInput;
 };
 
+
+export type MutationUploadMapArgs = {
+  mapInput: PhotoOrMapUploadInput;
+};
+
+
+export type MutationUploadPhotoArgs = {
+  photoInput: PhotoOrMapUploadInput;
+};
+
 export type NewCenoteInput = {
   coordinates: CoordinatesInput;
 };
@@ -419,6 +431,13 @@ export type NewVariableInput = {
   timeseries?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<VariableType>;
   units?: InputMaybe<Scalars['String']>;
+};
+
+export type PhotoOrMapUploadInput = {
+  cenoteId: Scalars['ID'];
+  content: Scalars['String'];
+  extension: Scalars['String'];
+  filename: Scalars['String'];
 };
 
 export type Query = {
@@ -822,6 +841,7 @@ export type ResolversTypes = {
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
+  PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   Query: ResolverTypeWrapper<{}>;
   RegisterInput: RegisterInput;
   Species: ResolverTypeWrapper<Species>;
@@ -877,6 +897,7 @@ export type ResolversParentTypes = {
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
+  PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   Query: {};
   RegisterInput: RegisterInput;
   Species: Species;
@@ -1071,6 +1092,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateEmailArgs, 'email' | 'id'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
   updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'updated_variable'>>;
+  uploadMap?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadMapArgs, 'mapInput'>>;
+  uploadPhoto?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'photoInput'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {

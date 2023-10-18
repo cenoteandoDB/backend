@@ -1,4 +1,5 @@
 import {Storage, GetSignedUrlConfig} from "@google-cloud/storage";
+import {PhotoOrMapUploadInput} from "../../generated-types/graphql";
 
 const storage = new Storage({
     keyFilename: "credentials/cenoteando.json",
@@ -25,6 +26,16 @@ export const StorageProvider = {
         return result.at(0)!;
     },
 
+    uploadPhoto: async (photo: PhotoOrMapUploadInput): Promise<boolean> => {
+        const filename = `photos/${photo.cenoteId}/${photo.filename}`;
+        return uploadFile(filename, photo.content);
+    },
+
+    uploadMap: async (map: PhotoOrMapUploadInput): Promise<boolean> => {
+        const filename = `mapas/${map.cenoteId}/${map.filename}`;
+        return uploadFile(filename, map.content);
+    },
+
 };
 
 
@@ -45,4 +56,23 @@ const getSignedUrls = async (prefix: string): Promise<string[]> => {
     }
 
     return signedUrls;
+};
+
+const uploadFile = async (filename: string, content: string)
+    : Promise<boolean> => {
+    const decodedBytes = Buffer.from(content, "base64");
+
+    try {
+        const file = storage.bucket(bucketName).file(filename);
+        const stream = file.createWriteStream({
+            metadata: {
+                contentType: "application/octet-stream",
+            },
+        });
+        stream.end(decodedBytes);
+    } catch (error) {
+        return false;
+    }
+
+    return true;
 };
