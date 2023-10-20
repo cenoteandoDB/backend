@@ -1,5 +1,7 @@
 import "reflect-metadata";
-import * as functions from "firebase-functions";
+import * as express from "express";
+import {onRequest, Request} from "firebase-functions/v2/https";
+import {setGlobalOptions} from "firebase-functions/v2";
 import {
     ApolloServer,
     BaseContext,
@@ -8,6 +10,8 @@ import {
 } from "@apollo/server";
 import {parse} from "url";
 import {CenoteandoApp} from "./graphql/modules/app";
+
+setGlobalOptions({maxInstances: 10});
 
 const server = new ApolloServer({
     gateway: {
@@ -28,8 +32,9 @@ const context: ContextFunction<[], BaseContext> = async () => ({});
 
 server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
-export const graphql = functions.https.onRequest(
-    async (req: functions.Request, res: functions.Response) => {
+export const graphql = onRequest(
+    {cors: true},
+    async (req: Request, res: express.Response) => {
         const headers = new HeaderMap();
 
         for (const [key, value] of Object.entries(req.headers)) {
