@@ -15,8 +15,8 @@ export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
                 longitude: parent.geojson.geometry.coordinates[0],
             },
             country: "Mexico",
-            state: "...",
-            municipality: "...",
+            state: "Yucatán",
+            municipality: "Hunucmá",
         };
     },
 };

@@ -427,7 +427,7 @@ export type Query = {
   cenoteById?: Maybe<Cenote>;
   cenoteDataByTheme?: Maybe<Array<VariableWithData>>;
   cenoteDataByVariable?: Maybe<VariableWithData>;
-  cenotes?: Maybe<Array<Maybe<Cenote>>>;
+  cenotes: Array<Cenote>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
   gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
@@ -1078,7 +1078,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
   cenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryCenoteDataByThemeArgs, 'cenote' | 'theme'>>;
   cenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryCenoteDataByVariableArgs, 'cenote' | 'variable'>>;
-  cenotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Cenote']>>>, ParentType, ContextType>;
+  cenotes?: Resolver<Array<ResolversTypes['Cenote']>, ParentType, ContextType>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   gbifSpeciesSuggestion?: Resolver<Maybe<Array<ResolversTypes['GBIFSuggestion']>>, ParentType, ContextType, RequireFields<QueryGbifSpeciesSuggestionArgs, 'q'>>;
