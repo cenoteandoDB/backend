@@ -10,7 +10,7 @@ export namespace CenotesModule {
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
     Comment: 'commenter' | 'comment' | 'review';
-    Mutation: 'createCenote' | 'updateCenote';
+    Mutation: 'createCenote' | 'updateCenote' | 'uploadPhoto' | 'uploadMap';
     Query: 'cenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds';
   };
   
@@ -23,6 +23,7 @@ export namespace CenotesModule {
     CoordinatesInput: 'latitude' | 'longitude';
     NewCenoteInput: 'coordinates';
     UpdatedCenoteInput: 'id' | 'touristic' | 'type' | 'name' | 'alternativeNames' | 'issues';
+    PhotoOrMapUploadInput: 'cenoteId' | 'filename' | 'content' | 'extension';
   };
   
   export type CenoteType = DefinedEnumValues['CenoteType'];
@@ -38,6 +39,7 @@ export namespace CenotesModule {
   export type CoordinatesInput = Pick<Types.CoordinatesInput, DefinedInputFields['CoordinatesInput']>;
   export type NewCenoteInput = Pick<Types.NewCenoteInput, DefinedInputFields['NewCenoteInput']>;
   export type UpdatedCenoteInput = Pick<Types.UpdatedCenoteInput, DefinedInputFields['UpdatedCenoteInput']>;
+  export type PhotoOrMapUploadInput = Pick<Types.PhotoOrMapUploadInput, DefinedInputFields['PhotoOrMapUploadInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   
@@ -135,6 +137,8 @@ export namespace CenotesModule {
       '*'?: gm.Middleware[];
       createCenote?: gm.Middleware[];
       updateCenote?: gm.Middleware[];
+      uploadPhoto?: gm.Middleware[];
+      uploadMap?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];

@@ -1,4 +1,5 @@
 import {AuditLogsProvider} from "../../auditLogs/providers/auditLogs.provider";
+import {StorageProvider} from "../../gcp/gcp.provider";
 import {CenotesModule} from "../generated-types/module-types";
 import {CenotesProvider} from "../providers/cenotes.provider";
 
@@ -22,6 +23,12 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
             args.updated_cenote
         );
         return cenote;
+    },
+    uploadPhoto: async (parent, args, contextValue, info) => {
+        return StorageProvider.uploadPhoto(args.photoInput);
+    },
+    uploadMap: async (parent, args, contextValue, info) => {
+        return StorageProvider.uploadMap(args.mapInput);
     },
 };
 

@@ -25,10 +25,19 @@ input UpdatedCenoteInput {
 	# species: [Species!]
 }
 
+input PhotoOrMapUploadInput {
+    cenoteId: ID!
+    filename: String!
+    content: String!
+    extension: String!
+}
+
 type Mutation {
     # Mutation fields go here
     createCenote(new_cenote: NewCenoteInput!): Cenote
     updateCenote(updated_cenote: UpdatedCenoteInput!): Cenote
+    uploadPhoto(photoInput: PhotoOrMapUploadInput!): Boolean
+    uploadMap(mapInput: PhotoOrMapUploadInput!): Boolean    
 
     # TODO: Curation Pipeline
     # -> Curation mutations (create new cenote, update cenote details, )
