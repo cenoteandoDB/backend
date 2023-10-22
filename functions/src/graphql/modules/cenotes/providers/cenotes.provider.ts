@@ -136,7 +136,9 @@ export class CenotesProvider {
      * @return {Promise<Cenote>} the updated cenote
      */
     async updateCenote(updatedCenote: UpdatedCenoteInput): Promise<Cenote> {
-        const snapshot = await cenotesDB.where("_key", "==", updatedCenote.id).get();
+        const snapshot = await cenotesDB
+            .where("_key", "==", updatedCenote.id)
+            .get();
         const docId = snapshot.docs[0].id;
 
         await cenotesDB.doc(docId).update({
