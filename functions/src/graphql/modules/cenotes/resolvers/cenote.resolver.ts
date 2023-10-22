@@ -11,12 +11,12 @@ export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
     location: (parent) => {
         return {
             coordinates: {
-                latitude: parent.geojson.geometry.coordinates[1],
-                longitude: parent.geojson.geometry.coordinates[0],
+                latitude: parent.geojson == null ? 20.533333 : parent.geojson.geometry.coordinates[1],
+                longitude: parent.geojson == null ? -87.972222 : parent.geojson.geometry.coordinates[0],
             },
             country: "Mexico",
-            state: "...",
-            municipality: "...",
+            state: "Yucatán",
+            municipality: "Hunucmá",
         };
     },
 };

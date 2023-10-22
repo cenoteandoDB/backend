@@ -1,5 +1,5 @@
 type Query {
-	cenotes: [Cenote]
+	cenotes: [Cenote!]!
 	cenoteById(id: ID!): Cenote
 	cenotesCsv: String
 	cenotesBounds: CenoteBounds

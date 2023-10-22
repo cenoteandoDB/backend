@@ -115,6 +115,7 @@ export class CenotesProvider {
 
         const docRef = cenotesDB.doc();
         await docRef.set({
+            _key: docRef.id,
             id: docRef.id,
             createdAt: new Date().toISOString(),
             location,
@@ -135,13 +136,16 @@ export class CenotesProvider {
      * @return {Promise<Cenote>} the updated cenote
      */
     async updateCenote(updatedCenote: UpdatedCenoteInput): Promise<Cenote> {
-        await cenotesDB.doc(updatedCenote.id).update({
+        const snapshot = await cenotesDB.where("_key", "==", updatedCenote.id).get();
+        const docId = snapshot.docs[0].id;
+
+        await cenotesDB.doc(docId).update({
             ...updatedCenote,
             updatedAt: new Date().toISOString(),
         });
 
-        const snapshot = await cenotesDB.doc(updatedCenote.id).get();
-        return snapshot.data() as Cenote;
+        const cenote = await cenotesDB.doc(docId).get();
+        return cenote.data() as Cenote;
     }
 
     /**
