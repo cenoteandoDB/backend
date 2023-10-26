@@ -36,6 +36,7 @@ type Mutation {
     # Mutation fields go here
     createCenote(new_cenote: NewCenoteInput!): Cenote
     updateCenote(updated_cenote: UpdatedCenoteInput!): Cenote
+    deleteCenote(id: ID!): Boolean
     uploadPhoto(photoInput: PhotoOrMapUploadInput!): Boolean
     uploadMap(mapInput: PhotoOrMapUploadInput!): Boolean    
 

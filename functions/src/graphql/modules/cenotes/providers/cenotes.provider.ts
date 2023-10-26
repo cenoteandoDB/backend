@@ -151,6 +151,19 @@ export class CenotesProvider {
     }
 
     /**
+     * Delete a cenote by id.
+     *
+     * @param {ID} id of the cenote to delete
+     *
+     * @return {Promise<Boolean>} true if deleted, false otherwise
+     */
+    async deleteCenote(id: ID): Promise<boolean> {
+        const snapshot = await cenotesDB.where("_key", "==", id).get();
+        cenotesDB.doc(snapshot.docs[0].id).delete();
+        return true;
+    }
+
+    /**
      * Get Cenote Location information.
      *
      * @param {CoordinatesInput} input the cenote coordinates

@@ -35,6 +35,7 @@ export type AuditLog = {
 };
 
 export type AuditLogType =
+  | 'DELETE_CENOTE'
   | 'NEW_CENOTE'
   | 'NEW_REFERENCE'
   | 'NEW_VARIABLE'
@@ -327,6 +328,7 @@ export type Mutation = {
   createMof?: Maybe<VariableWithData>;
   createSpecies?: Maybe<Species>;
   createVariable?: Maybe<Variable>;
+  deleteCenote?: Maybe<Scalars['Boolean']>;
   deleteMof?: Maybe<Scalars['Boolean']>;
   register?: Maybe<User>;
   updateCenote?: Maybe<Cenote>;
@@ -360,6 +362,11 @@ export type MutationCreateSpeciesArgs = {
 
 export type MutationCreateVariableArgs = {
   new_variable: NewVariableInput;
+};
+
+
+export type MutationDeleteCenoteArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -1086,6 +1093,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createMof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<MutationCreateMofArgs, 'new_mof'>>;
   createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
+  deleteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCenoteArgs, 'id'>>;
   deleteMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMofArgs, 'delete_mof_input'>>;
   register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;

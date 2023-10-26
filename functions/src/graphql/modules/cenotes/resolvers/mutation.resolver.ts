@@ -24,6 +24,15 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
         );
         return cenote;
     },
+    deleteCenote: async (parent, args, contextValue, info) => {
+        const cenote = await cenotesProvider.deleteCenote(args.id);
+        AuditLogsProvider.save(
+            args.id,
+            "DELETE_CENOTE",
+            args.id
+        );
+        return cenote;
+    },
     uploadPhoto: async (parent, args, contextValue, info) => {
         return StorageProvider.uploadPhoto(args.photoInput);
     },

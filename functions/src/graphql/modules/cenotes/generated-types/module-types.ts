@@ -10,7 +10,7 @@ export namespace CenotesModule {
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
     Comment: 'commenter' | 'comment' | 'review';
-    Mutation: 'createCenote' | 'updateCenote' | 'uploadPhoto' | 'uploadMap';
+    Mutation: 'createCenote' | 'updateCenote' | 'deleteCenote' | 'uploadPhoto' | 'uploadMap';
     Query: 'cenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds';
   };
   
@@ -137,6 +137,7 @@ export namespace CenotesModule {
       '*'?: gm.Middleware[];
       createCenote?: gm.Middleware[];
       updateCenote?: gm.Middleware[];
+      deleteCenote?: gm.Middleware[];
       uploadPhoto?: gm.Middleware[];
       uploadMap?: gm.Middleware[];
     };
