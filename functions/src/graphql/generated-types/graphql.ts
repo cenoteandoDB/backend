@@ -297,15 +297,23 @@ export type GbifTaxonomicStatus =
   | 'PROPARTE_SYNONYM'
   | 'SYNONYM';
 
+export type LayerCategory =
+  | 'ANTROPOGENICA'
+  | 'CLIMA'
+  | 'GEO_ESTATISTICA'
+  | 'HIDROLOGIA'
+  | 'INTRINSECA';
+
 export type MapLayer = {
   __typename?: 'MapLayer';
+  category?: Maybe<LayerCategory>;
   description?: Maybe<Scalars['String']>;
+  geojson?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  json?: Maybe<Scalars['String']>;
-  layer?: Maybe<Scalars['String']>;
   metadata?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   thumbnail?: Maybe<Scalars['String']>;
+  zip?: Maybe<Scalars['String']>;
 };
 
 export type MapLayerInput = {
@@ -838,6 +846,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
+  LayerCategory: LayerCategory;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
   MapLayer: ResolverTypeWrapper<MapLayer>;
   MapLayerInput: MapLayerInput;
@@ -1069,13 +1078,14 @@ export interface LongitudeScalarConfig extends GraphQLScalarTypeConfig<Resolvers
 }
 
 export type MapLayerResolvers<ContextType = any, ParentType extends ResolversParentTypes['MapLayer'] = ResolversParentTypes['MapLayer']> = {
+  category?: Resolver<Maybe<ResolversTypes['LayerCategory']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  geojson?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  json?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  layer?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   thumbnail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  zip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

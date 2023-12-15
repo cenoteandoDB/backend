@@ -7,12 +7,12 @@ export const MapLayerResolver: MapLayersModule.Resolvers["MapLayer"] = {
     description: (parent: any) =>
         parent.description != null ? parent.description : "no-description",
     thumbnail: (parent: any) => StorageProvider.getThumbnail(parent.id),
-    json: (parent: any, args: any, contextValue: any, info: any) => {
+    geojson: (parent: any, args: any, contextValue: any, info: any) => {
         const mapLayerProvider = contextValue.injector.get(LayersProvider);
         return mapLayerProvider.getJson(parent.id);
     },
     metadata: (parent: any) => StorageProvider.getMetadata(parent.id),
-    layer: (parent: any, args: any, contextValue: any, info: any) => {
+    zip: (parent: any, args: any, contextValue: any, info: any) => {
         const mapLayerProvider = contextValue.injector.get(LayersProvider);
         return mapLayerProvider.getLayer(parent.id);
     },

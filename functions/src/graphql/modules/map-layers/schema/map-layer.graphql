@@ -1,12 +1,21 @@
 # From graphql-scalars
 # None
 
+enum LayerCategory {
+    ANTROPOGENICA
+    INTRINSECA
+    HIDROLOGIA
+    CLIMA
+    GEO_ESTATISTICA
+}
+
 type MapLayer {
     id: ID!
     name: String!
+    category: LayerCategory
     description: String
     thumbnail: String
     metadata: String
-    json: String
-    layer: String
+    geojson: String
+    zip: String
 }

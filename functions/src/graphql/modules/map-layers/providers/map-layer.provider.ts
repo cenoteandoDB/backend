@@ -26,6 +26,10 @@ export class MapLayerProvider {
      */
     async getMapLayer(id: string): Promise<MapLayer> {
         const snapshot = await mapLayerDB.where("id", "==", id).get();
+
+        if (snapshot.size == 0) {
+            throw new Error(`Map layer not found.`);
+        }
         return snapshot.docs[0].data() as MapLayer;
     }
 
