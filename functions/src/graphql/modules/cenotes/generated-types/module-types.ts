@@ -4,8 +4,8 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'id' | '_key' | 'geojson' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'distances' | 'createdAt' | 'updatedAt';
-    CenoteLocation: 'coordinates' | 'country' | 'state' | 'municipality';
+    Cenote: 'id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'distances' | 'createdAt' | 'updatedAt';
+    CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'municipality';
     Coordinates: 'latitude' | 'longitude';
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
@@ -90,8 +90,6 @@ export namespace CenotesModule {
     Cenote?: {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
-      _key?: gm.Middleware[];
-      geojson?: gm.Middleware[];
       touristic?: gm.Middleware[];
       location?: gm.Middleware[];
       type?: gm.Middleware[];
@@ -109,6 +107,7 @@ export namespace CenotesModule {
     CenoteLocation?: {
       '*'?: gm.Middleware[];
       coordinates?: gm.Middleware[];
+      geojson?: gm.Middleware[];
       country?: gm.Middleware[];
       state?: gm.Middleware[];
       municipality?: gm.Middleware[];

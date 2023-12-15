@@ -6,10 +6,8 @@ scalar Longitude
 # TODO: Implement scalar GeoJSON (check: https://github.com/ghengeveld/graphql-geojson)
 
 type CenoteLocation {
-	# QUESTION: What other location information is required? 
-	# -> Maybe instead of gadm we should include only country, state, and municipality information
 	coordinates: Coordinates!
-	# geojson: JSON! # TODO: Use GeoJSON PointObject
+	geojson: JSON!
     country: String!
     state: String!
     municipality: String!

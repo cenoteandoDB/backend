@@ -9,7 +9,6 @@ import {
     NewCenoteInput,
     UpdatedCenoteInput,
 } from "../../../generated-types/graphql";
-import {DirectionsService} from "../../../../api/googleAPI/directions";
 
 const cenotesDB = db.cenotes;
 
@@ -32,8 +31,8 @@ export class CenotesProvider {
      * @return {Promise<Cenote>} the cenote
      */
     async getCenoteById(id: ID): Promise<Cenote> {
-        const snapshot = await cenotesDB.where("_key", "==", id).get();
-        return snapshot.docs[0].data() as Cenote;
+        const cenoteDoc = await this.getCenoteDocument(id);
+        return cenoteDoc.data() as Cenote;
     }
 
     /**
@@ -104,22 +103,20 @@ export class CenotesProvider {
      *
      * @return {Promise<Cenote>} the new cenote
      */
-    async createCenote(
-        newCenote: NewCenoteInput,
-        coordinates: CoordinatesInput
-    ): Promise<Cenote> {
+    async createCenote(newCenote: NewCenoteInput,coordinates: CoordinatesInput): Promise<Cenote> {
+        /*
         const distances = await DirectionsService.getDrivingDistance(
             coordinates
         );
+        */
+
         const location = this.getCenoteLocation(coordinates);
 
         const docRef = cenotesDB.doc();
         await docRef.set({
-            _key: docRef.id,
             id: docRef.id,
             createdAt: new Date().toISOString(),
             location,
-            distances,
             ...newCenote,
         });
 
@@ -130,23 +127,19 @@ export class CenotesProvider {
     /**
      * Updates a cenote.
      *
-     * @param {UpdatedCenoteInput} updatedCenote the information
-     * to update the cenote
+     * @param {UpdatedCenoteInput} updatedCenote the information to update the cenote
      *
      * @return {Promise<Cenote>} the updated cenote
      */
     async updateCenote(updatedCenote: UpdatedCenoteInput): Promise<Cenote> {
-        const snapshot = await cenotesDB
-            .where("_key", "==", updatedCenote.id)
-            .get();
-        const docId = snapshot.docs[0].id;
+        const cenoteDoc = await this.getCenoteDocument(updatedCenote.id);
 
-        await cenotesDB.doc(docId).update({
+        await cenotesDB.doc(cenoteDoc.id).update({
             ...updatedCenote,
             updatedAt: new Date().toISOString(),
         });
 
-        const cenote = await cenotesDB.doc(docId).get();
+        const cenote = await cenotesDB.doc(cenoteDoc.id).get();
         return cenote.data() as Cenote;
     }
 
@@ -155,7 +148,7 @@ export class CenotesProvider {
      *
      * @param {ID} id of the cenote to delete
      *
-     * @return {Promise<Boolean>} true if deleted, false otherwise
+     * @return {Promise<Boolean>} true if deleted
      */
     async deleteCenote(id: ID): Promise<boolean> {
         const snapshot = await cenotesDB.where("_key", "==", id).get();
@@ -168,11 +161,11 @@ export class CenotesProvider {
      *
      * @param {CoordinatesInput} input the cenote coordinates
      *
-     * @return {CenoteLocation} with Cenote's coordinates, country,
-     * state and municipality
+     * @return {CenoteLocation} with Cenote's coordinates, country, state and municipality
      */
     private getCenoteLocation(input: CoordinatesInput): CenoteLocation {
         const location: CenoteLocation = {
+            geojson: "",
             coordinates: {
                 latitude: input.latitude,
                 longitude: input.longitude,
@@ -183,5 +176,23 @@ export class CenotesProvider {
         };
 
         return location;
+    }
+
+    /**
+     * Gets Cenote Firestore Document by id. If it doesn't exist, throws an error.
+     * 
+     * @param id the Cenote id
+     *
+     * @returns the Cenote Firestore Document
+     */
+    private async getCenoteDocument(id: string): Promise<
+    FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>> {
+        const doc = await cenotesDB.doc(id).get();
+
+        if (!doc.exists) {
+            throw new Error(`Cenote ${id} not found.`);
+        }
+
+        return doc;
     }
 }

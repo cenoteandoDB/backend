@@ -45,12 +45,10 @@ export type AuditLogType =
 
 export type Cenote = {
   __typename?: 'Cenote';
-  _key: Scalars['ID'];
   alternativeNames?: Maybe<Array<Scalars['String']>>;
   createdAt?: Maybe<Scalars['DateTime']>;
   creator?: Maybe<User>;
   distances?: Maybe<Array<Maybe<CityDistances>>>;
-  geojson: Scalars['JSON'];
   id: Scalars['ID'];
   issues?: Maybe<Array<Maybe<CenoteIssue>>>;
   location: CenoteLocation;
@@ -80,6 +78,7 @@ export type CenoteLocation = {
   __typename?: 'CenoteLocation';
   coordinates: Coordinates;
   country: Scalars['String'];
+  geojson: Scalars['JSON'];
   municipality: Scalars['String'];
   state: Scalars['String'];
 };
@@ -934,12 +933,10 @@ export type AuditLogResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type CenoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cenote'] = ResolversParentTypes['Cenote']> = {
-  _key?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   alternativeNames?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   creator?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   distances?: Resolver<Maybe<Array<Maybe<ResolversTypes['CityDistances']>>>, ParentType, ContextType>;
-  geojson?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   issues?: Resolver<Maybe<Array<Maybe<ResolversTypes['CenoteIssue']>>>, ParentType, ContextType>;
   location?: Resolver<ResolversTypes['CenoteLocation'], ParentType, ContextType>;
@@ -962,6 +959,7 @@ export type CenoteBoundsResolvers<ContextType = any, ParentType extends Resolver
 export type CenoteLocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['CenoteLocation'] = ResolversParentTypes['CenoteLocation']> = {
   coordinates?: Resolver<ResolversTypes['Coordinates'], ParentType, ContextType>;
   country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  geojson?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   municipality?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   state?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

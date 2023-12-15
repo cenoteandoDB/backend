@@ -27,6 +27,7 @@ module.exports = {
         "import",
     ],
     rules: {
+        "max-len": ["error", {code: 100}],
         "quotes": ["error", "double"],
         "import/no-unresolved": 0,
         "indent": ["error", 4],

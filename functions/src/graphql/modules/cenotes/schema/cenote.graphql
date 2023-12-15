@@ -25,11 +25,6 @@ type CityDistances {
 type Cenote {
 	id: ID!
 
-	# NOTE: Required
-	_key: ID!
-
-	geojson: JSON!
-
 	touristic: Boolean!
 	location: CenoteLocation!
 	type: CenoteType!
@@ -43,6 +38,10 @@ type Cenote {
 
 	# references: [Reference!]
 	# species: [Species!]
+	# variable_count: Number!
+	# reference_count: Number!
+	# species_count: Number!
+
 	photos: [URL!]
 	maps: [URL!]
 

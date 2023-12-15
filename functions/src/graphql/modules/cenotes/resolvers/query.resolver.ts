@@ -14,5 +14,7 @@ export const QueryResolver: CenotesModule.Resolvers["Query"] = {
         return cenotesProvider.getCenotesBounds();
     },
 
-    cenotesCsv: () => "",
+    cenotesCsv: () => {
+        return cenotesProvider.cenotesToCsv();
+    }
 };
