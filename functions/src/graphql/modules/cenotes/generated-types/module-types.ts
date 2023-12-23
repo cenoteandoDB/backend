@@ -4,8 +4,8 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'distances' | 'createdAt' | 'updatedAt';
-    CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'municipality';
+    Cenote: 'id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'creator' | 'distances' | 'reviewed' | 'createdAt' | 'updatedAt';
+    CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'county';
     Coordinates: 'latitude' | 'longitude';
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
@@ -43,12 +43,13 @@ export namespace CenotesModule {
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   
-  export type Scalars = Pick<Types.Scalars, 'DateTime' | 'URL' | 'JSON' | 'Latitude' | 'Longitude'>;
+  export type Scalars = Pick<Types.Scalars, 'DateTime' | 'URL' | 'JSON' | 'Latitude' | 'Longitude' | 'Coordinate'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
   export type UrlScalarConfig = Types.UrlScalarConfig;
   export type JsonScalarConfig = Types.JsonScalarConfig;
   export type LatitudeScalarConfig = Types.LatitudeScalarConfig;
   export type LongitudeScalarConfig = Types.LongitudeScalarConfig;
+  export type CoordinateScalarConfig = Types.CoordinateScalarConfig;
   
   export type CityDistancesResolvers = Pick<Types.CityDistancesResolvers, DefinedFields['CityDistances'] | '__isTypeOf'>;
   export type CenoteResolvers = Pick<Types.CenoteResolvers, DefinedFields['Cenote'] | '__isTypeOf'>;
@@ -75,6 +76,7 @@ export namespace CenotesModule {
     JSON?: Types.Resolvers['JSON'];
     Latitude?: Types.Resolvers['Latitude'];
     Longitude?: Types.Resolvers['Longitude'];
+    Coordinate?: Types.Resolvers['Coordinate'];
   };
   
   export interface MiddlewareMap {
@@ -97,10 +99,13 @@ export namespace CenotesModule {
       alternativeNames?: gm.Middleware[];
       issues?: gm.Middleware[];
       social?: gm.Middleware[];
+      reference_count?: gm.Middleware[];
+      species_count?: gm.Middleware[];
       photos?: gm.Middleware[];
       maps?: gm.Middleware[];
       creator?: gm.Middleware[];
       distances?: gm.Middleware[];
+      reviewed?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };
@@ -110,7 +115,7 @@ export namespace CenotesModule {
       geojson?: gm.Middleware[];
       country?: gm.Middleware[];
       state?: gm.Middleware[];
-      municipality?: gm.Middleware[];
+      county?: gm.Middleware[];
     };
     Coordinates?: {
       '*'?: gm.Middleware[];

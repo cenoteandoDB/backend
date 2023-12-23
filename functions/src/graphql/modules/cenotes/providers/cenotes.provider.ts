@@ -151,8 +151,8 @@ export class CenotesProvider {
      * @return {Promise<Boolean>} true if deleted
      */
     async deleteCenote(id: ID): Promise<boolean> {
-        const snapshot = await cenotesDB.where("_key", "==", id).get();
-        cenotesDB.doc(snapshot.docs[0].id).delete();
+        this.getCenoteDocument(id);
+        await cenotesDB.doc(id).delete();
         return true;
     }
 
@@ -166,13 +166,10 @@ export class CenotesProvider {
     private getCenoteLocation(input: CoordinatesInput): CenoteLocation {
         const location: CenoteLocation = {
             geojson: "",
-            coordinates: {
-                latitude: input.latitude,
-                longitude: input.longitude,
-            },
+            coordinates: [input.latitude,input.longitude],
             country: "Mexico",
             state: "State",
-            municipality: "Municipality",
+            county: "County",
         };
 
         return location;

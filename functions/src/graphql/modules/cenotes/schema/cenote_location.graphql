@@ -2,15 +2,16 @@
 scalar JSON
 scalar Latitude
 scalar Longitude
+scalar Coordinate
 
 # TODO: Implement scalar GeoJSON (check: https://github.com/ghengeveld/graphql-geojson)
 
 type CenoteLocation {
-	coordinates: Coordinates!
+	coordinates: Coordinate!
 	geojson: JSON!
     country: String!
     state: String!
-    municipality: String!
+    county: String!
 }
 
 type Coordinates {

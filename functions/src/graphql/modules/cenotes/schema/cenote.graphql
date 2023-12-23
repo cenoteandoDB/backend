@@ -38,9 +38,9 @@ type Cenote {
 
 	# references: [Reference!]
 	# species: [Species!]
-	# variable_count: Number!
-	# reference_count: Number!
-	# species_count: Number!
+	# variable_count: Int!
+	reference_count: Int!
+	species_count: Int!
 
 	photos: [URL!]
 	maps: [URL!]
@@ -53,6 +53,7 @@ type Cenote {
 
 	distances: [CityDistances]
 
+	reviewed: Boolean
 	createdAt: DateTime
 	updatedAt: DateTime
 

@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Coordinate: any;
   DateTime: any;
   EmailAddress: any;
   JSON: any;
@@ -55,7 +56,10 @@ export type Cenote = {
   maps?: Maybe<Array<Scalars['URL']>>;
   name: Scalars['String'];
   photos?: Maybe<Array<Scalars['URL']>>;
+  reference_count: Scalars['Int'];
+  reviewed?: Maybe<Scalars['Boolean']>;
   social?: Maybe<CenoteSocialData>;
+  species_count: Scalars['Int'];
   touristic: Scalars['Boolean'];
   type: CenoteType;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -76,10 +80,10 @@ export type CenoteIssue =
 
 export type CenoteLocation = {
   __typename?: 'CenoteLocation';
-  coordinates: Coordinates;
+  coordinates: Scalars['Coordinate'];
   country: Scalars['String'];
+  county: Scalars['String'];
   geojson: Scalars['JSON'];
-  municipality: Scalars['String'];
   state: Scalars['String'];
 };
 
@@ -830,6 +834,7 @@ export type ResolversTypes = {
   CenoteType: CenoteType;
   CityDistances: ResolverTypeWrapper<CityDistances>;
   Comment: ResolverTypeWrapper<Comment>;
+  Coordinate: ResolverTypeWrapper<Scalars['Coordinate']>;
   Coordinates: ResolverTypeWrapper<Coordinates>;
   CoordinatesInput: CoordinatesInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
@@ -891,6 +896,7 @@ export type ResolversParentTypes = {
   CenoteSocialData: CenoteSocialData;
   CityDistances: CityDistances;
   Comment: Comment;
+  Coordinate: Scalars['Coordinate'];
   Coordinates: Coordinates;
   CoordinatesInput: CoordinatesInput;
   DateTime: Scalars['DateTime'];
@@ -952,7 +958,10 @@ export type CenoteResolvers<ContextType = any, ParentType extends ResolversParen
   maps?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   photos?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
+  reference_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  reviewed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   social?: Resolver<Maybe<ResolversTypes['CenoteSocialData']>, ParentType, ContextType>;
+  species_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   touristic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['CenoteType'], ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -966,10 +975,10 @@ export type CenoteBoundsResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type CenoteLocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['CenoteLocation'] = ResolversParentTypes['CenoteLocation']> = {
-  coordinates?: Resolver<ResolversTypes['Coordinates'], ParentType, ContextType>;
+  coordinates?: Resolver<ResolversTypes['Coordinate'], ParentType, ContextType>;
   country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  county?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   geojson?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
-  municipality?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   state?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -992,6 +1001,10 @@ export type CommentResolvers<ContextType = any, ParentType extends ResolversPare
   review?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export interface CoordinateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Coordinate'], any> {
+  name: 'Coordinate';
+}
 
 export type CoordinatesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Coordinates'] = ResolversParentTypes['Coordinates']> = {
   latitude?: Resolver<ResolversTypes['Latitude'], ParentType, ContextType>;
@@ -1276,6 +1289,7 @@ export type Resolvers<ContextType = any> = {
   CenoteSocialData?: CenoteSocialDataResolvers<ContextType>;
   CityDistances?: CityDistancesResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
+  Coordinate?: GraphQLScalarType;
   Coordinates?: CoordinatesResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
@@ -1303,6 +1317,7 @@ export type Resolvers<ContextType = any> = {
 };
 
 
+export type Coordinate = Scalars["Coordinate"];
 export type DateTime = Scalars["DateTime"];
 export type EmailAddress = Scalars["EmailAddress"];
 export type Json = Scalars["JSON"];
