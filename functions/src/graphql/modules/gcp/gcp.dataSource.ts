@@ -12,7 +12,7 @@ export class LayersProvider {
         keyFilename: "credentials/cenoteando.json",
     });
 
-    async getLayer(layer: string): Promise<string> {
+    async getZip(layer: string): Promise<string> {
         const layerName = `capas/${layer}/${layer}.zip`;
         const cachedContent = await this.cache.get(layerName);
         if (cachedContent) {
@@ -20,9 +20,10 @@ export class LayersProvider {
         }
 
         const file = this.storage.bucket(this.bucketName).file(layerName);
+
         const [fileExists] = await file.exists();
         if (!fileExists) {
-            // TODO throw exception
+            throw new Error("Zip file not found");
         }
 
         const [fileContents] = await file.download();
@@ -34,8 +35,8 @@ export class LayersProvider {
         return base64File;
     }
 
-    async getJson(layer: string): Promise<string> {
-        const layerName = `capas/${layer}/${layer}.json`;
+    async getGeojson(layer: string): Promise<string> {
+        const layerName = `capas/${layer}/${layer}.geojson`;
         const cachedContent = await this.cache.get(layerName);
 
         if (cachedContent) {
@@ -44,7 +45,7 @@ export class LayersProvider {
         const file = this.storage.bucket(this.bucketName).file(layerName);
         const [fileExists] = await file.exists();
         if (!fileExists) {
-            // TODO throw exception
+            throw new Error("Geojson not found");
         }
 
         const [fileContents] = await file.download();

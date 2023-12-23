@@ -9,11 +9,11 @@ export const MapLayerResolver: MapLayersModule.Resolvers["MapLayer"] = {
     thumbnail: (parent: any) => StorageProvider.getThumbnail(parent.id),
     geojson: (parent: any, args: any, contextValue: any, info: any) => {
         const mapLayerProvider = contextValue.injector.get(LayersProvider);
-        return mapLayerProvider.getJson(parent.id);
+        return mapLayerProvider.getGeojson(parent.id);
     },
     metadata: (parent: any) => StorageProvider.getMetadata(parent.id),
     zip: (parent: any, args: any, contextValue: any, info: any) => {
         const mapLayerProvider = contextValue.injector.get(LayersProvider);
-        return mapLayerProvider.getLayer(parent.id);
+        return mapLayerProvider.getZip(parent.id);
     },
 };
