@@ -28,7 +28,7 @@ export class MapLayerProvider {
         const snapshot = await mapLayerDB.where("id", "==", id).get();
 
         if (snapshot.size == 0) {
-            throw new Error(`Map layer not found.`);
+            throw new Error("Map layer not found.");
         }
         return snapshot.docs[0].data() as MapLayer;
     }

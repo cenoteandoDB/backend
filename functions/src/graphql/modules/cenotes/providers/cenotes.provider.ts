@@ -103,7 +103,7 @@ export class CenotesProvider {
      *
      * @return {Promise<Cenote>} the new cenote
      */
-    async createCenote(newCenote: NewCenoteInput,coordinates: CoordinatesInput): Promise<Cenote> {
+    async createCenote(newCenote: NewCenoteInput, coordinates: CoordinatesInput): Promise<Cenote> {
         /*
         const distances = await DirectionsService.getDrivingDistance(
             coordinates
@@ -166,7 +166,7 @@ export class CenotesProvider {
     private getCenoteLocation(input: CoordinatesInput): CenoteLocation {
         const location: CenoteLocation = {
             geojson: "",
-            coordinates: [input.latitude,input.longitude],
+            coordinates: [input.latitude, input.longitude],
             country: "Mexico",
             state: "State",
             county: "County",
@@ -177,10 +177,11 @@ export class CenotesProvider {
 
     /**
      * Gets Cenote Firestore Document by id. If it doesn't exist, throws an error.
-     * 
-     * @param id the Cenote id
      *
-     * @returns the Cenote Firestore Document
+     * @param {ID} id the Cenote id
+     *
+     * @return {Promise<FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>>}
+     * the Cenote Firestore Document
      */
     private async getCenoteDocument(id: string): Promise<
     FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>> {
