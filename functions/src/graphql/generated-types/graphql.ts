@@ -471,6 +471,8 @@ export type Query = {
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
+  referenceById?: Maybe<Reference>;
+  references?: Maybe<Array<Reference>>;
   species?: Maybe<Array<Maybe<Species>>>;
   speciesByGBIFId?: Maybe<Species>;
   speciesByINaturalistId?: Maybe<Species>;
@@ -524,6 +526,11 @@ export type QueryLayerArgs = {
 };
 
 
+export type QueryReferenceByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type QuerySpeciesByGbifIdArgs = {
   gbifId: Scalars['ID'];
 };
@@ -552,6 +559,43 @@ export type QueryVariableByIdArgs = {
 export type QueryVariablesByThemeArgs = {
   theme: VariableTheme;
 };
+
+export type Reference = {
+  __typename?: 'Reference';
+  authors: Array<Scalars['String']>;
+  book?: Maybe<Scalars['String']>;
+  cenoteando_id: Scalars['ID'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  date_primary: Scalars['Int'];
+  date_secondary?: Maybe<Scalars['Int']>;
+  doi?: Maybe<Scalars['String']>;
+  firestore_id: Scalars['ID'];
+  institution?: Maybe<Scalars['String']>;
+  issue?: Maybe<Scalars['String']>;
+  journal_name?: Maybe<Scalars['String']>;
+  keywords?: Maybe<Array<Scalars['String']>>;
+  mendeley: Scalars['Boolean'];
+  pages?: Maybe<Scalars['String']>;
+  pdf: Scalars['Boolean'];
+  pdf_name?: Maybe<Scalars['String']>;
+  short_name: Scalars['String'];
+  title: Scalars['String'];
+  type: ReferenceType;
+  unique_code: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  uploaded_gc: Scalars['Boolean'];
+  uploaded_mendeley: Scalars['Boolean'];
+  url?: Maybe<Scalars['String']>;
+  validated_mendeley: Scalars['Boolean'];
+};
+
+export type ReferenceType =
+  | 'BOOK'
+  | 'CHAPTER_OF_BOOK'
+  | 'JOURNAL'
+  | 'OTHER'
+  | 'REPORT'
+  | 'THESIS';
 
 export type RegisterInput = {
   email: Scalars['EmailAddress'];
@@ -863,6 +907,8 @@ export type ResolversTypes = {
   NewVariableInput: NewVariableInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   Query: ResolverTypeWrapper<{}>;
+  Reference: ResolverTypeWrapper<Reference>;
+  ReferenceType: ReferenceType;
   RegisterInput: RegisterInput;
   Species: ResolverTypeWrapper<Species>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -920,6 +966,7 @@ export type ResolversParentTypes = {
   NewVariableInput: NewVariableInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   Query: {};
+  Reference: Reference;
   RegisterInput: RegisterInput;
   Species: Species;
   String: Scalars['String'];
@@ -1137,6 +1184,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
+  referenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryReferenceByIdArgs, 'id'>>;
+  references?: Resolver<Maybe<Array<ResolversTypes['Reference']>>, ParentType, ContextType>;
   species?: Resolver<Maybe<Array<Maybe<ResolversTypes['Species']>>>, ParentType, ContextType>;
   speciesByGBIFId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByGbifIdArgs, 'gbifId'>>;
   speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalistId'>>;
@@ -1147,6 +1196,35 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   variableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryVariableByIdArgs, 'id'>>;
   variables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType>;
   variablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryVariablesByThemeArgs, 'theme'>>;
+};
+
+export type ReferenceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Reference'] = ResolversParentTypes['Reference']> = {
+  authors?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  book?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  cenoteando_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  date_primary?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  date_secondary?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  doi?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firestore_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  institution?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  issue?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  journal_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  keywords?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  mendeley?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  pages?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pdf?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  pdf_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  short_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['ReferenceType'], ParentType, ContextType>;
+  unique_code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  uploaded_gc?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  uploaded_mendeley?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  validated_mendeley?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SpeciesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Species'] = ResolversParentTypes['Species']> = {
@@ -1302,6 +1380,7 @@ export type Resolvers<ContextType = any> = {
   MeasurementOrFact?: MeasurementOrFactResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Reference?: ReferenceResolvers<ContextType>;
   Species?: SpeciesResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;

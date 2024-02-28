@@ -38,9 +38,9 @@ type Cenote {
 
 	# references: [Reference!]
 	# species: [Species!]
-	# variable_count: Int!
+	variable_count: Int!
 	reference_count: Int!
-	species_count: Int!
+	# species_count: Int!  -- Not working for now
 
 	photos: [URL!]
 	maps: [URL!]

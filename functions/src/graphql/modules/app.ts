@@ -7,6 +7,7 @@ import {VariablesModule} from "./variables";
 import {MofModule} from "./mof";
 import {MapLayersModule} from "./map-layers";
 import {LayersProvider} from "./gcp/gcp.dataSource";
+import {ReferencesModule} from "./references";
 
 export const CenoteandoApp = createApplication({
     modules: [
@@ -14,6 +15,7 @@ export const CenoteandoApp = createApplication({
         CenotesModule,
         SpeciesModule,
         VariablesModule,
+        ReferencesModule,
         MofModule,
         AuditLogsModule,
         MapLayersModule,
