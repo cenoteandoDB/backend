@@ -1,6 +1,6 @@
 import {loadFilesSync} from "@graphql-tools/load-files";
 import {createModule} from "graphql-modules";
-import { ReferencesResolvers } from "./resolvers";
+import {ReferencesResolvers} from "./resolvers";
 
 export const ReferencesModule = createModule({
     id: "references",

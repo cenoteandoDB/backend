@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {ID} from "graphql-modules/shared/types";
 import {db} from "../../database/db";
-import { Reference } from "../../../generated-types/graphql";
+import {Reference} from "../../../generated-types/graphql";
 
 const referenceDB = db.references;
 
@@ -27,5 +27,4 @@ export class ReferenceProvider {
         const snapshot = await referenceDB.where("firestore_id", "==", id).get();
         return snapshot.docs[0].data() as Reference;
     }
-
 }

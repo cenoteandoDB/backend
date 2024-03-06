@@ -59,10 +59,10 @@ export type Cenote = {
   reference_count: Scalars['Int'];
   reviewed?: Maybe<Scalars['Boolean']>;
   social?: Maybe<CenoteSocialData>;
-  species_count: Scalars['Int'];
   touristic: Scalars['Boolean'];
   type: CenoteType;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  variable_count: Scalars['Int'];
 };
 
 /**
@@ -1008,10 +1008,10 @@ export type CenoteResolvers<ContextType = any, ParentType extends ResolversParen
   reference_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   reviewed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   social?: Resolver<Maybe<ResolversTypes['CenoteSocialData']>, ParentType, ContextType>;
-  species_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   touristic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['CenoteType'], ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  variable_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
