@@ -6,19 +6,21 @@ enum ReferenceType {
 	JOURNAL
 	THESIS
 	BOOK
-	CHAPTER_OF_BOOK
+	BOOK_CHAPTER
+	WEB_PAGE
 	OTHER
 }
 
 type Reference {
+
 	cenoteando_id: ID! # Reference ID in Cenoteando project excel files
 	firestore_id: ID!  # Reference ID in Firestore
 
 	type: ReferenceType!
 	unique_code: String!
 	title: String!
-	short_name: String!
-	date_primary: Int!
+	short_name: String
+	date_primary: Int
 	authors: [String!]!
 	journal_name: String
 	issue: String
@@ -29,13 +31,18 @@ type Reference {
 	doi: String
 	url: String
 	keywords: [String!]
-	pdf: Boolean!
+
+	has_pdf: Boolean!
 	pdf_name: String
-	mendeley: Boolean!
+
+	mendeley_ref: Boolean!
 	uploaded_mendeley: Boolean!
 	validated_mendeley: Boolean!
-	# uploaded_dropbox: Boolean!   -- Needs fix in database
-	uploaded_gc: Boolean!
+	uploaded_dropbox: Boolean!
+	uploaded_gcp: Boolean!
+
+	cenotes_count: Int!
+	species_count: Int!
 
 	createdAt: DateTime
 	updatedAt: DateTime

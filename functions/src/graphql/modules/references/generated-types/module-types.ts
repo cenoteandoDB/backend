@@ -5,11 +5,11 @@ export namespace ReferencesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
     Query: 'references' | 'referenceById';
-    Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'pdf' | 'pdf_name' | 'mendeley' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_gc' | 'createdAt' | 'updatedAt';
+    Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'cenotes_count' | 'species_count' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
-    ReferenceType: 'REPORT' | 'JOURNAL' | 'THESIS' | 'BOOK' | 'CHAPTER_OF_BOOK' | 'OTHER';
+    ReferenceType: 'REPORT' | 'JOURNAL' | 'THESIS' | 'BOOK' | 'BOOK_CHAPTER' | 'WEB_PAGE' | 'OTHER';
   };
   
   interface DefinedInputFields {
@@ -76,12 +76,15 @@ export namespace ReferencesModule {
       doi?: gm.Middleware[];
       url?: gm.Middleware[];
       keywords?: gm.Middleware[];
-      pdf?: gm.Middleware[];
+      has_pdf?: gm.Middleware[];
       pdf_name?: gm.Middleware[];
-      mendeley?: gm.Middleware[];
+      mendeley_ref?: gm.Middleware[];
       uploaded_mendeley?: gm.Middleware[];
       validated_mendeley?: gm.Middleware[];
-      uploaded_gc?: gm.Middleware[];
+      uploaded_dropbox?: gm.Middleware[];
+      uploaded_gcp?: gm.Middleware[];
+      cenotes_count?: gm.Middleware[];
+      species_count?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };
