@@ -34,6 +34,7 @@ type Reference {
 
 	has_pdf: Boolean!
 	pdf_name: String
+	pdf_url: String
 
 	mendeley_ref: Boolean!
 	uploaded_mendeley: Boolean!

@@ -5,7 +5,7 @@ export namespace VariablesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
     Query: 'variables' | 'variableById' | 'variablesByTheme';
-    Variable: '_id' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology' | 'createdAt' | 'updatedAt';
+    Variable: 'firestore_id' | 'short_name' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology' | 'cenote_count' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
@@ -17,7 +17,7 @@ export namespace VariablesModule {
   
   interface DefinedInputFields {
     NewVariableInput: 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
-    UpdateVariableInput: 'id' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
+    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
   };
   
   export type NewVariableInput = Pick<Types.NewVariableInput, DefinedInputFields['NewVariableInput']>;
@@ -61,7 +61,8 @@ export namespace VariablesModule {
     };
     Variable?: {
       '*'?: gm.Middleware[];
-      _id?: gm.Middleware[];
+      firestore_id?: gm.Middleware[];
+      short_name?: gm.Middleware[];
       name?: gm.Middleware[];
       description?: gm.Middleware[];
       type?: gm.Middleware[];
@@ -73,6 +74,7 @@ export namespace VariablesModule {
       theme?: gm.Middleware[];
       origin?: gm.Middleware[];
       methodology?: gm.Middleware[];
+      cenote_count?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

@@ -579,6 +579,7 @@ export type Reference = {
   mendeley_ref: Scalars['Boolean'];
   pages?: Maybe<Scalars['String']>;
   pdf_name?: Maybe<Scalars['String']>;
+  pdf_url?: Maybe<Scalars['String']>;
   short_name?: Maybe<Scalars['String']>;
   species_count: Scalars['Int'];
   title: Scalars['String'];
@@ -628,6 +629,7 @@ export type UpdateVariableInput = {
   accessLevel?: InputMaybe<AccessLevel>;
   description?: InputMaybe<Scalars['String']>;
   enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  firestore_id: Scalars['ID'];
   id: Scalars['ID'];
   methodology?: InputMaybe<Scalars['String']>;
   multiple?: InputMaybe<Scalars['Boolean']>;
@@ -663,18 +665,20 @@ export type UserRole =
 
 export type Variable = {
   __typename?: 'Variable';
-  _id: Scalars['ID'];
   accessLevel?: Maybe<AccessLevel>;
+  cenote_count: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateTime']>;
-  description?: Maybe<Scalars['String']>;
-  enumValues?: Maybe<Array<Maybe<Scalars['String']>>>;
+  description: Scalars['String'];
+  enumValues?: Maybe<Array<Scalars['String']>>;
+  firestore_id: Scalars['ID'];
   methodology?: Maybe<Scalars['String']>;
-  multiple?: Maybe<Scalars['Boolean']>;
-  name?: Maybe<Scalars['String']>;
-  origin?: Maybe<VariableOrigin>;
-  theme?: Maybe<VariableTheme>;
-  timeseries?: Maybe<Scalars['Boolean']>;
-  type?: Maybe<VariableType>;
+  multiple: Scalars['Boolean'];
+  name: Scalars['String'];
+  origin: VariableOrigin;
+  short_name: Scalars['String'];
+  theme: VariableTheme;
+  timeseries: Scalars['Boolean'];
+  type: VariableType;
   units?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -1220,6 +1224,7 @@ export type ReferenceResolvers<ContextType = any, ParentType extends ResolversPa
   mendeley_ref?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   pages?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pdf_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pdf_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   short_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   species_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1258,18 +1263,20 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   accessLevel?: Resolver<Maybe<ResolversTypes['AccessLevel']>, ParentType, ContextType>;
+  cenote_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  enumValues?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  enumValues?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  firestore_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   methodology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  multiple?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  origin?: Resolver<Maybe<ResolversTypes['VariableOrigin']>, ParentType, ContextType>;
-  theme?: Resolver<Maybe<ResolversTypes['VariableTheme']>, ParentType, ContextType>;
-  timeseries?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  type?: Resolver<Maybe<ResolversTypes['VariableType']>, ParentType, ContextType>;
+  multiple?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  origin?: Resolver<ResolversTypes['VariableOrigin'], ParentType, ContextType>;
+  short_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  theme?: Resolver<ResolversTypes['VariableTheme'], ParentType, ContextType>;
+  timeseries?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['VariableType'], ParentType, ContextType>;
   units?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

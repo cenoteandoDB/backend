@@ -40,20 +40,23 @@ enum VariableOrigin {
 }
 
 type Variable {
-	_id: ID!
+	firestore_id: ID!
 
-	name: String
-	description: String
+	short_name: String!
+	name: String!
+	description: String!
 	
-	type: VariableType
+	type: VariableType!
 	units: String   			#SHOULD be an enum 
-	enumValues: [String]
-    timeseries: Boolean
-    multiple: Boolean
+	enumValues: [String!]
+    timeseries: Boolean!
+    multiple: Boolean!
     accessLevel: AccessLevel
-    theme: VariableTheme
-    origin: VariableOrigin
+    theme: VariableTheme!
+    origin: VariableOrigin!
     methodology: String
+
+	cenote_count: Int!
 
 	createdAt: DateTime
 	updatedAt: DateTime

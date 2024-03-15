@@ -9,7 +9,7 @@ export const MutationResolver: VariablesModule.Resolvers["Mutation"] = {
         const variable = await variablesProvider.createVariable(
             args.new_variable
         );
-        AuditLogsProvider.save(variable._id, "NEW_VARIABLE", args.new_variable);
+        AuditLogsProvider.save(variable.firestore_id, "NEW_VARIABLE", args.new_variable);
         return variable;
     },
     updateVariable: async (parent, args, contextValue, info) => {
@@ -17,7 +17,7 @@ export const MutationResolver: VariablesModule.Resolvers["Mutation"] = {
             args.updated_variable
         );
         AuditLogsProvider.save(
-            args.updated_variable.id,
+            args.updated_variable.firestore_id,
             "UPDATED_VARIABLE",
             args.updated_variable
         );

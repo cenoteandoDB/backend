@@ -5,7 +5,7 @@ export namespace ReferencesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
     Query: 'references' | 'referenceById';
-    Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'cenotes_count' | 'species_count' | 'createdAt' | 'updatedAt';
+    Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'pdf_url' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'cenotes_count' | 'species_count' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
@@ -78,6 +78,7 @@ export namespace ReferencesModule {
       keywords?: gm.Middleware[];
       has_pdf?: gm.Middleware[];
       pdf_name?: gm.Middleware[];
+      pdf_url?: gm.Middleware[];
       mendeley_ref?: gm.Middleware[];
       uploaded_mendeley?: gm.Middleware[];
       validated_mendeley?: gm.Middleware[];

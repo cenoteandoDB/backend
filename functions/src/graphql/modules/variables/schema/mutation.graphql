@@ -13,7 +13,7 @@ input NewVariableInput {
 }
 
 input UpdateVariableInput {
-	id: ID!
+	firestore_id: ID!
 	name: String
 	description: String
 	type: VariableType
