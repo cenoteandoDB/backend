@@ -5,6 +5,10 @@ const usersProvider = new UsersProvider();
 
 export const MutationResolver: UsersModule.Resolvers["Mutation"] = {
 
+    login: (parent, args, contextValue, info) => {
+        return "Some-token";
+    },
+
     register: (parent, args, contextValue, info) => {
         return usersProvider.register(args.input);
     },

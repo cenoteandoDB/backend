@@ -341,6 +341,7 @@ export type Mutation = {
   createVariable?: Maybe<Variable>;
   deleteCenote?: Maybe<Scalars['Boolean']>;
   deleteMof?: Maybe<Scalars['Boolean']>;
+  login: Scalars['String'];
   register?: Maybe<User>;
   updateCenote?: Maybe<Cenote>;
   updateEmail?: Maybe<User>;
@@ -383,6 +384,12 @@ export type MutationDeleteCenoteArgs = {
 
 export type MutationDeleteMofArgs = {
   delete_mof_input: DeleteMofInput;
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 
@@ -478,6 +485,7 @@ export type Query = {
   speciesByINaturalistId?: Maybe<Species>;
   speciesById?: Maybe<Species>;
   speciesCsv?: Maybe<Scalars['String']>;
+  userByEmail?: Maybe<User>;
   userById?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
   variableById?: Maybe<Variable>;
@@ -546,6 +554,11 @@ export type QuerySpeciesByIdArgs = {
 };
 
 
+export type QueryUserByEmailArgs = {
+  email: Scalars['String'];
+};
+
+
 export type QueryUserByIdArgs = {
   id: Scalars['ID'];
 };
@@ -603,9 +616,14 @@ export type ReferenceType =
   | 'WEB_PAGE';
 
 export type RegisterInput = {
+  companyName?: InputMaybe<Scalars['String']>;
+  companyWeb?: InputMaybe<Scalars['String']>;
   email: Scalars['EmailAddress'];
   name: Scalars['String'];
   password: Scalars['String'];
+  phoneNumber?: InputMaybe<Scalars['String']>;
+  surname: Scalars['String'];
+  tags: Array<Scalars['String']>;
 };
 
 export type Species = {
@@ -652,10 +670,15 @@ export type UpdatedCenoteInput = {
 
 export type User = {
   __typename?: 'User';
+  createdAt: Scalars['DateTime'];
   email: Scalars['EmailAddress'];
   id: Scalars['ID'];
   name: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
   role: UserRole;
+  surname: Scalars['String'];
+  tags: Array<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type UserRole =
@@ -1171,6 +1194,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
   deleteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCenoteArgs, 'id'>>;
   deleteMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMofArgs, 'delete_mof_input'>>;
+  login?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateEmailArgs, 'email' | 'id'>>;
@@ -1199,6 +1223,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalistId'>>;
   speciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByIdArgs, 'id'>>;
   speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByEmailArgs, 'email'>>;
   userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   variableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryVariableByIdArgs, 'id'>>;
@@ -1255,10 +1280,15 @@ export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 }
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
+  surname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

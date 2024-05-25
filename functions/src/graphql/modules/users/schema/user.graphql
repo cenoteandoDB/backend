@@ -1,5 +1,6 @@
 # From graphql-scalars
 scalar EmailAddress
+scalar DateTime
 
 enum UserRole {
     BASIC
@@ -9,7 +10,14 @@ enum UserRole {
 
 type User {
     id: ID!
+    
     name: String!
+    surname: String!
     email: EmailAddress!
     role: UserRole!
+    tags: [String!]!
+    password: String
+
+    createdAt: DateTime!
+	updatedAt: DateTime!
 }

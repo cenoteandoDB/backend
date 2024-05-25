@@ -3,11 +3,19 @@ scalar EmailAddress
 
 input RegisterInput {
     name: String!
+    surname: String!
     email: EmailAddress!
     password: String!
+
+    phoneNumber: String
+    tags: [String!]!
+
+    companyName: String
+    companyWeb: String
 }
 
 type Mutation {
+    login(email: String!, password: String!): String!  # Access token
     register(input: RegisterInput!): User
     updateEmail(id: ID!, email: EmailAddress!): User
 }

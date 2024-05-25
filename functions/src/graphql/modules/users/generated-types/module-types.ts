@@ -3,9 +3,9 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
-    Mutation: 'register' | 'updateEmail';
-    Query: 'users' | 'userById';
-    User: 'id' | 'name' | 'email' | 'role';
+    Mutation: 'login' | 'register' | 'updateEmail';
+    Query: 'users' | 'userById' | 'userByEmail';
+    User: 'id' | 'name' | 'surname' | 'email' | 'role' | 'tags' | 'password' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
@@ -13,7 +13,7 @@ export namespace UsersModule {
   };
   
   interface DefinedInputFields {
-    RegisterInput: 'name' | 'email' | 'password';
+    RegisterInput: 'name' | 'surname' | 'email' | 'password' | 'phoneNumber' | 'tags' | 'companyName' | 'companyWeb';
   };
   
   export type RegisterInput = Pick<Types.RegisterInput, DefinedInputFields['RegisterInput']>;
@@ -22,8 +22,9 @@ export namespace UsersModule {
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type UserRole = DefinedEnumValues['UserRole'];
   
-  export type Scalars = Pick<Types.Scalars, 'EmailAddress'>;
+  export type Scalars = Pick<Types.Scalars, 'EmailAddress' | 'DateTime'>;
   export type EmailAddressScalarConfig = Types.EmailAddressScalarConfig;
+  export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
   
   export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields['Mutation']>;
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
@@ -34,6 +35,7 @@ export namespace UsersModule {
     Query?: QueryResolvers;
     User?: UserResolvers;
     EmailAddress?: Types.Resolvers['EmailAddress'];
+    DateTime?: Types.Resolvers['DateTime'];
   };
   
   export interface MiddlewareMap {
@@ -42,6 +44,7 @@ export namespace UsersModule {
     };
     Mutation?: {
       '*'?: gm.Middleware[];
+      login?: gm.Middleware[];
       register?: gm.Middleware[];
       updateEmail?: gm.Middleware[];
     };
@@ -49,13 +52,19 @@ export namespace UsersModule {
       '*'?: gm.Middleware[];
       users?: gm.Middleware[];
       userById?: gm.Middleware[];
+      userByEmail?: gm.Middleware[];
     };
     User?: {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
       name?: gm.Middleware[];
+      surname?: gm.Middleware[];
       email?: gm.Middleware[];
       role?: gm.Middleware[];
+      tags?: gm.Middleware[];
+      password?: gm.Middleware[];
+      createdAt?: gm.Middleware[];
+      updatedAt?: gm.Middleware[];
     };
   };
 }

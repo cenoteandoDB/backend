@@ -3,6 +3,7 @@ import {
     RegisterInput,
     User,
 } from "../../../generated-types/graphql";
+import { comparePassword, encryptPassword } from "../../../utils/auth";
 import {db} from "../../database/db";
 import {UsersModule} from "../generated-types/module-types";
 
@@ -29,9 +30,30 @@ export class UsersProvider {
      *
      * @return {Promise<UsersModule.User>}
      */
-    async getUserById(id: string): Promise<UsersModule.User> {
+    static async getUserById(id: string): Promise<UsersModule.User> {
         const snapshot = await usersDB.doc(id).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`User ${id} not found.`);
+        }
+
         return snapshot.data() as User;
+    }
+
+    /**
+     * Get a user by email.
+     *
+     * @param {string} email - The email of the user to fetch.
+     *
+     * @return {Promise<UsersModule.User>}
+     */
+    async getUserByEmail(email: string): Promise<UsersModule.User> {
+        const snapshot = await usersDB.where("email", "==", email).get();
+        if (snapshot.docs.length == 0) {
+            throw new Error(`User with email ${email} not found.`);
+        }
+
+        return snapshot.docs[0].data() as User;
     }
 
     /**
@@ -42,17 +64,46 @@ export class UsersProvider {
      * @return {Promise<User>} the new user
      */
     async register(input: RegisterInput): Promise<User> {
-        // TODO encrypt password
+        const encryptedPassword = await encryptPassword(input.password);
+
         const docRef = usersDB.doc();
         await docRef.set({
             id: docRef.id,
-            createdAt: new Date().toISOString(),
             role: "BASIC",
-            ...input,
+            name: input.name,
+            surname: input.surname,
+            password: encryptedPassword,
+            email: input.email,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
         });
 
         const snapshot = await usersDB.doc(docRef.id).get();
         return snapshot.data() as User;
+    }
+
+    /**
+     * Login an user. Returns access token in case of success.
+     *
+     * @param {string} email the email of the user
+     * @param {string} password the user password
+     *
+     * @return {Promise<User>} the new user
+     */
+    async login(email: string, password: string): Promise<User> {
+        const snapshot = await usersDB.where("email", "==", email).get();
+        if (snapshot.docs.length == 0) {
+            throw new Error(`User with email ${email} not found.`);
+        }
+        
+        const user = snapshot.docs[0].data() as User
+
+        if (!user.password || !comparePassword(password, user.password)) {
+            throw new Error(`Password does not match.`);
+        }
+
+
+        return user;
     }
 
     /**
