@@ -10,7 +10,6 @@ import {
 } from "../../../generated-types/graphql";
 import { comparePassword, createToken, encryptPassword } from "../../../utils/auth";
 import {db} from "../../database/db";
-import {UsersModule} from "../generated-types/module-types";
 import { firestore } from "firebase-admin";
 
 const usersDB = db.users;
@@ -49,7 +48,7 @@ export class UsersProvider {
      *
      * @return {Promise<UsersModule.User>}
      */
-    static async getUserById(id: string): Promise<UsersModule.User> {
+    static async getUserById(id: string): Promise<User> {
         const snapshot = await usersDB.doc(id).get();
 
         if (!snapshot.exists) {
@@ -64,15 +63,31 @@ export class UsersProvider {
      *
      * @param {string} email - The email of the user to fetch.
      *
-     * @return {Promise<UsersModule.User>}
+     * @return {Promise<User>}
      */
-    async getUserByEmail(email: string): Promise<UsersModule.User> {
+    async getUserByEmail(email: string): Promise<User> {
         const snapshot = await usersDB.where("email", "==", email).get();
         if (snapshot.docs.length == 0) {
             throw new Error(`User with email ${email} not found.`);
         }
 
         return snapshot.docs[0].data() as User;
+    }
+
+    /**
+     * Get all users which name starts with the search parameter.
+     *
+     * @param {string} name - The name of user to retrieve
+     *
+     * @return {Promise<User>}
+     */
+    async getUserByName(name: string): Promise<User[]> {
+        const endSearch = name.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
+    
+        let query = usersDB.where('name', '>=', name).where('name', '<', endSearch);
+        
+        const usersSnapshot = await query.get();
+        return usersSnapshot.docs.map((doc) => doc.data() as User);
     }
 
     /**

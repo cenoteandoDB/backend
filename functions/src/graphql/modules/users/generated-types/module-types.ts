@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
     Mutation: 'login' | 'inviteUser' | 'saveUser' | 'updateUserInfo' | 'deleteUser';
-    Query: 'users' | 'userById' | 'userByEmail' | 'verifyCode';
+    Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode';
     User: 'id' | 'name' | 'surname' | 'email' | 'role' | 'tags' | 'password' | 'createdAt' | 'updatedAt';
   };
   
@@ -62,9 +62,10 @@ export namespace UsersModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
-      users?: gm.Middleware[];
-      userById?: gm.Middleware[];
-      userByEmail?: gm.Middleware[];
+      getUsers?: gm.Middleware[];
+      getUserById?: gm.Middleware[];
+      getUserByEmail?: gm.Middleware[];
+      getUserByName?: gm.Middleware[];
       verifyCode?: gm.Middleware[];
     };
     User?: {

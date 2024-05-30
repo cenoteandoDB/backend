@@ -511,6 +511,10 @@ export type Query = {
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
   gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
+  getUserByEmail?: Maybe<User>;
+  getUserById?: Maybe<User>;
+  getUserByName: Array<User>;
+  getUsers: Array<User>;
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
@@ -521,9 +525,6 @@ export type Query = {
   speciesByINaturalistId?: Maybe<Species>;
   speciesById?: Maybe<Species>;
   speciesCsv?: Maybe<Scalars['String']>;
-  userByEmail?: Maybe<User>;
-  userById?: Maybe<User>;
-  users?: Maybe<Array<Maybe<User>>>;
   variableById?: Maybe<Variable>;
   variables?: Maybe<Array<Maybe<Variable>>>;
   variablesByTheme?: Maybe<Array<Maybe<Variable>>>;
@@ -560,6 +561,27 @@ export type QueryGbifSpeciesSuggestionArgs = {
 };
 
 
+export type QueryGetUserByEmailArgs = {
+  email: Scalars['String'];
+};
+
+
+export type QueryGetUserByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetUserByNameArgs = {
+  name: Scalars['String'];
+};
+
+
+export type QueryGetUsersArgs = {
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<SortField>;
+};
+
+
 export type QueryINaturalistSearchArgs = {
   perPage?: InputMaybe<Scalars['Int']>;
   q: Scalars['String'];
@@ -588,22 +610,6 @@ export type QuerySpeciesByINaturalistIdArgs = {
 
 export type QuerySpeciesByIdArgs = {
   id: Scalars['ID'];
-};
-
-
-export type QueryUserByEmailArgs = {
-  email: Scalars['String'];
-};
-
-
-export type QueryUserByIdArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryUsersArgs = {
-  pagination?: InputMaybe<PaginationInput>;
-  sort?: InputMaybe<SortField>;
 };
 
 
@@ -1279,6 +1285,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   gbifSpeciesSuggestion?: Resolver<Maybe<Array<ResolversTypes['GBIFSuggestion']>>, ParentType, ContextType, RequireFields<QueryGbifSpeciesSuggestionArgs, 'q'>>;
+  getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
+  getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
+  getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
+  getUsers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryGetUsersArgs>>;
   iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
@@ -1289,9 +1299,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalistId'>>;
   speciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByIdArgs, 'id'>>;
   speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  userByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByEmailArgs, 'email'>>;
-  userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>;
-  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, Partial<QueryUsersArgs>>;
   variableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryVariableByIdArgs, 'id'>>;
   variables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType>;
   variablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryVariablesByThemeArgs, 'theme'>>;

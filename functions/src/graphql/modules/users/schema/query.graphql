@@ -11,8 +11,9 @@ input PaginationInput {
 }
 
 type Query {
-    users(sort: SortField, pagination: PaginationInput): [User]
-    userById(id: ID!): User
-    userByEmail(email: String!): User
+    getUsers(sort: SortField, pagination: PaginationInput): [User!]!
+    getUserById(id: ID!): User
+    getUserByEmail(email: String!): User
+    getUserByName(name: String!): [User!]!
     verifyCode(code: String!): Boolean!
 }
