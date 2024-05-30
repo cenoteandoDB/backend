@@ -72,4 +72,4 @@ compose-dev.yaml
 .vscode/
 
 # Google Storage credentials
-functions/credentials/
+functions/credentials/cenoteando.json

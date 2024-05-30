@@ -3,24 +3,34 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
-    Mutation: 'login' | 'register' | 'updateEmail';
-    Query: 'users' | 'userById' | 'userByEmail';
+    Mutation: 'login' | 'inviteUser' | 'saveUser' | 'updateUserInfo' | 'deleteUser';
+    Query: 'users' | 'userById' | 'userByEmail' | 'verifyCode';
     User: 'id' | 'name' | 'surname' | 'email' | 'role' | 'tags' | 'password' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
+    SortOrder: 'ASC' | 'DESC';
     UserRole: 'BASIC' | 'CENOTERO_ADVANCED' | 'ADMIN';
   };
   
   interface DefinedInputFields {
-    RegisterInput: 'name' | 'surname' | 'email' | 'password' | 'phoneNumber' | 'tags' | 'companyName' | 'companyWeb';
+    Permission: 'id' | 'edit' | 'delete';
+    PermissionsInput: 'name' | 'surname' | 'email' | 'password' | 'phoneNumber' | 'tags' | 'companyName' | 'companyWeb';
+    UpdateUserInfoInput: 'name' | 'surname' | 'email' | 'password' | 'phone';
+    SortField: 'field' | 'sortOrder';
+    PaginationInput: 'offset' | 'limit';
   };
   
-  export type RegisterInput = Pick<Types.RegisterInput, DefinedInputFields['RegisterInput']>;
+  export type Permission = Pick<Types.Permission, DefinedInputFields['Permission']>;
+  export type PermissionsInput = Pick<Types.PermissionsInput, DefinedInputFields['PermissionsInput']>;
+  export type UpdateUserInfoInput = Pick<Types.UpdateUserInfoInput, DefinedInputFields['UpdateUserInfoInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
-  export type User = Pick<Types.User, DefinedFields['User']>;
-  export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type UserRole = DefinedEnumValues['UserRole'];
+  export type User = Pick<Types.User, DefinedFields['User']>;
+  export type SortOrder = DefinedEnumValues['SortOrder'];
+  export type SortField = Pick<Types.SortField, DefinedInputFields['SortField']>;
+  export type PaginationInput = Pick<Types.PaginationInput, DefinedInputFields['PaginationInput']>;
+  export type Query = Pick<Types.Query, DefinedFields['Query']>;
   
   export type Scalars = Pick<Types.Scalars, 'EmailAddress' | 'DateTime'>;
   export type EmailAddressScalarConfig = Types.EmailAddressScalarConfig;
@@ -45,14 +55,17 @@ export namespace UsersModule {
     Mutation?: {
       '*'?: gm.Middleware[];
       login?: gm.Middleware[];
-      register?: gm.Middleware[];
-      updateEmail?: gm.Middleware[];
+      inviteUser?: gm.Middleware[];
+      saveUser?: gm.Middleware[];
+      updateUserInfo?: gm.Middleware[];
+      deleteUser?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];
       users?: gm.Middleware[];
       userById?: gm.Middleware[];
       userByEmail?: gm.Middleware[];
+      verifyCode?: gm.Middleware[];
     };
     User?: {
       '*'?: gm.Middleware[];

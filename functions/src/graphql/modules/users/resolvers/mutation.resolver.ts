@@ -6,14 +6,18 @@ const usersProvider = new UsersProvider();
 export const MutationResolver: UsersModule.Resolvers["Mutation"] = {
 
     login: (parent, args, contextValue, info) => {
-        return "Some-token";
+        return usersProvider.login(args.email, args.password);
     },
 
-    register: (parent, args, contextValue, info) => {
-        return usersProvider.register(args.input);
+    inviteUser: (parent, args, contextValue, info) => {
+        return usersProvider.inviteUser(args.email, args.name, args.userRole);
     },
 
-    updateEmail: (parent, args, contextValue, info) => {
-        return usersProvider.updateEmail(args.id, args.email);
+    saveUser: (parent, args, contextValue, info) => {
+        return usersProvider.register(args.userInfo);
+    },
+
+    updateUserInfo: (parent, args, contextValue, info) => {
+        return usersProvider.updateUserInfo(args.userId, args.userInfo);
     },
 };

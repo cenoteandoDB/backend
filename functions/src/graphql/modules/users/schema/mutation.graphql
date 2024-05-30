@@ -1,7 +1,14 @@
 # From graphql-scalars
 scalar EmailAddress
 
-input RegisterInput {
+input Permission {
+    id: String!
+    edit: Boolean!
+    delete: Boolean!
+
+}
+
+input PermissionsInput {
     name: String!
     surname: String!
     email: EmailAddress!
@@ -14,8 +21,19 @@ input RegisterInput {
     companyWeb: String
 }
 
+input UpdateUserInfoInput {
+    name: String!
+    surname: String!
+    email: String!
+    password: String!
+    phone: String
+}
+
 type Mutation {
-    login(email: String!, password: String!): String!  # Access token
-    register(input: RegisterInput!): User
-    updateEmail(id: ID!, email: EmailAddress!): User
+    login(email: EmailAddress!, password: String!): String!  # Access token
+    inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): Boolean!
+    saveUser(userInfo: UpdateUserInfoInput!): User!
+    updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
+    # savePermissions(savePermissionsData: PermissionsInput!): Boolean!
+    deleteUser(id: String!): Boolean!
 }

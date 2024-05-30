@@ -10,9 +10,12 @@ import {
 } from "@apollo/server";
 import {parse} from "url";
 import {CenoteandoApp} from "./graphql/modules/app";
-//import { validateAuth } from "./graphql/utils/auth";
 
 setGlobalOptions({maxInstances: 10});
+
+interface ContextParams {
+    req: Request;
+}
 
 const server = new ApolloServer({
     gateway: {
@@ -29,7 +32,10 @@ const server = new ApolloServer({
     },
 });
 
-const context: ContextFunction<[], BaseContext> = async () => ({});
+const context: ContextFunction<[ContextParams], BaseContext> = async ({ req }) => {
+    const token = req.headers.authorization || '';
+    return { token };
+};
 
 server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
@@ -43,14 +49,8 @@ export const graphql = onRequest(
                 headers.set(key, value);
             }
         }
-        /*
-        if (req.headers.authorization) {
-            const user = validateAuth(req.headers.authorization)
-            if (!user) req.context = user 
-        }
-        */
         const httpGraphQLResponse = await server.executeHTTPGraphQLRequest({
-            context,
+            context: () => context({req}),
             httpGraphQLRequest: {
                 body: req.body,
                 headers,

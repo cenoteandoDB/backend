@@ -341,11 +341,13 @@ export type Mutation = {
   createVariable?: Maybe<Variable>;
   deleteCenote?: Maybe<Scalars['Boolean']>;
   deleteMof?: Maybe<Scalars['Boolean']>;
+  deleteUser: Scalars['Boolean'];
+  inviteUser: Scalars['Boolean'];
   login: Scalars['String'];
-  register?: Maybe<User>;
+  saveUser: User;
   updateCenote?: Maybe<Cenote>;
-  updateEmail?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
+  updateUserInfo?: Maybe<User>;
   updateVariable?: Maybe<Variable>;
   uploadMap?: Maybe<Scalars['Boolean']>;
   uploadPhoto?: Maybe<Scalars['Boolean']>;
@@ -387,14 +389,26 @@ export type MutationDeleteMofArgs = {
 };
 
 
+export type MutationDeleteUserArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationInviteUserArgs = {
+  email: Scalars['EmailAddress'];
+  name: Scalars['String'];
+  userRole: UserRole;
+};
+
+
 export type MutationLoginArgs = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
   password: Scalars['String'];
 };
 
 
-export type MutationRegisterArgs = {
-  input: RegisterInput;
+export type MutationSaveUserArgs = {
+  userInfo: UpdateUserInfoInput;
 };
 
 
@@ -403,14 +417,14 @@ export type MutationUpdateCenoteArgs = {
 };
 
 
-export type MutationUpdateEmailArgs = {
-  email: Scalars['EmailAddress'];
-  id: Scalars['ID'];
+export type MutationUpdateSpeciesArgs = {
+  updated_species: UpdateSpeciesInput;
 };
 
 
-export type MutationUpdateSpeciesArgs = {
-  updated_species: UpdateSpeciesInput;
+export type MutationUpdateUserInfoArgs = {
+  userId: Scalars['String'];
+  userInfo: UpdateUserInfoInput;
 };
 
 
@@ -458,6 +472,28 @@ export type NewVariableInput = {
   units?: InputMaybe<Scalars['String']>;
 };
 
+export type PaginationInput = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+};
+
+export type Permission = {
+  delete: Scalars['Boolean'];
+  edit: Scalars['Boolean'];
+  id: Scalars['String'];
+};
+
+export type PermissionsInput = {
+  companyName?: InputMaybe<Scalars['String']>;
+  companyWeb?: InputMaybe<Scalars['String']>;
+  email: Scalars['EmailAddress'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  phoneNumber?: InputMaybe<Scalars['String']>;
+  surname: Scalars['String'];
+  tags: Array<Scalars['String']>;
+};
+
 export type PhotoOrMapUploadInput = {
   cenoteId: Scalars['ID'];
   content: Scalars['String'];
@@ -491,6 +527,7 @@ export type Query = {
   variableById?: Maybe<Variable>;
   variables?: Maybe<Array<Maybe<Variable>>>;
   variablesByTheme?: Maybe<Array<Maybe<Variable>>>;
+  verifyCode: Scalars['Boolean'];
 };
 
 
@@ -564,6 +601,12 @@ export type QueryUserByIdArgs = {
 };
 
 
+export type QueryUsersArgs = {
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<SortField>;
+};
+
+
 export type QueryVariableByIdArgs = {
   id: Scalars['ID'];
 };
@@ -571,6 +614,11 @@ export type QueryVariableByIdArgs = {
 
 export type QueryVariablesByThemeArgs = {
   theme: VariableTheme;
+};
+
+
+export type QueryVerifyCodeArgs = {
+  code: Scalars['String'];
 };
 
 export type Reference = {
@@ -615,16 +663,14 @@ export type ReferenceType =
   | 'THESIS'
   | 'WEB_PAGE';
 
-export type RegisterInput = {
-  companyName?: InputMaybe<Scalars['String']>;
-  companyWeb?: InputMaybe<Scalars['String']>;
-  email: Scalars['EmailAddress'];
-  name: Scalars['String'];
-  password: Scalars['String'];
-  phoneNumber?: InputMaybe<Scalars['String']>;
-  surname: Scalars['String'];
-  tags: Array<Scalars['String']>;
+export type SortField = {
+  field: Scalars['String'];
+  sortOrder: SortOrder;
 };
+
+export type SortOrder =
+  | 'ASC'
+  | 'DESC';
 
 export type Species = {
   __typename?: 'Species';
@@ -641,6 +687,14 @@ export type UpdateSpeciesInput = {
   gbifId?: InputMaybe<Scalars['ID']>;
   iNaturalistId?: InputMaybe<Scalars['ID']>;
   id: Scalars['ID'];
+};
+
+export type UpdateUserInfoInput = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+  surname: Scalars['String'];
 };
 
 export type UpdateVariableInput = {
@@ -936,15 +990,20 @@ export type ResolversTypes = {
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
+  PaginationInput: PaginationInput;
+  Permission: Permission;
+  PermissionsInput: PermissionsInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   Query: ResolverTypeWrapper<{}>;
   Reference: ResolverTypeWrapper<Reference>;
   ReferenceType: ReferenceType;
-  RegisterInput: RegisterInput;
+  SortField: SortField;
+  SortOrder: SortOrder;
   Species: ResolverTypeWrapper<Species>;
   String: ResolverTypeWrapper<Scalars['String']>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
   UpdateSpeciesInput: UpdateSpeciesInput;
+  UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: ResolverTypeWrapper<User>;
@@ -995,14 +1054,18 @@ export type ResolversParentTypes = {
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
+  PaginationInput: PaginationInput;
+  Permission: Permission;
+  PermissionsInput: PermissionsInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   Query: {};
   Reference: Reference;
-  RegisterInput: RegisterInput;
+  SortField: SortField;
   Species: Species;
   String: Scalars['String'];
   URL: Scalars['URL'];
   UpdateSpeciesInput: UpdateSpeciesInput;
+  UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: User;
@@ -1194,11 +1257,13 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
   deleteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCenoteArgs, 'id'>>;
   deleteMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMofArgs, 'delete_mof_input'>>;
+  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+  inviteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
   login?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
+  saveUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSaveUserArgs, 'userInfo'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
-  updateEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateEmailArgs, 'email' | 'id'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
+  updateUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, 'userId' | 'userInfo'>>;
   updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'updated_variable'>>;
   uploadMap?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadMapArgs, 'mapInput'>>;
   uploadPhoto?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'photoInput'>>;
@@ -1225,10 +1290,11 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByEmailArgs, 'email'>>;
   userById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserByIdArgs, 'id'>>;
-  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, Partial<QueryUsersArgs>>;
   variableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryVariableByIdArgs, 'id'>>;
   variables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType>;
   variablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryVariablesByThemeArgs, 'theme'>>;
+  verifyCode?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryVerifyCodeArgs, 'code'>>;
 };
 
 export type ReferenceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Reference'] = ResolversParentTypes['Reference']> = {
