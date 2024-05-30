@@ -1,3 +1,4 @@
+import { ID } from "graphql-modules/shared/types";
 import { EmailService } from "../../../email/EmailService";
 import {
     EmailAddress,
@@ -7,11 +8,13 @@ import {
     User,
     UserRole,
 } from "../../../generated-types/graphql";
-import { comparePassword, encryptPassword } from "../../../utils/auth";
+import { comparePassword, createToken, encryptPassword } from "../../../utils/auth";
 import {db} from "../../database/db";
 import {UsersModule} from "../generated-types/module-types";
+import { firestore } from "firebase-admin";
 
 const usersDB = db.users;
+const registrationCodeDB = db.registration_code
 
 /**
  * The UserProvider service is responsible for all user-related operations.
@@ -29,7 +32,13 @@ export class UsersProvider {
         sort: SortField|null|undefined = { field: "name", sortOrder: "ASC" },
         pagination: PaginationInput|null = { offset: 0, limit: 25 }
     ): Promise<User[]> {
-        const users = await usersDB.get();
+        let query = usersDB.orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+
+        if (pagination) {
+            query = query.offset(pagination.offset).limit(pagination.limit);
+        }
+
+        const users = await query.get();
         return users.docs.map((doc) => doc.data() as User);
     }
 
@@ -73,13 +82,13 @@ export class UsersProvider {
      *
      * @return {Promise<User>} the new user
      */
-    async register(userInfo: UpdateUserInfoInput): Promise<User> {
+    async saveUser(userInfo: UpdateUserInfoInput): Promise<User> {
         const encryptedPassword = await encryptPassword(userInfo.password);
 
         const docRef = usersDB.doc();
         await docRef.set({
             id: docRef.id,
-            role: "BASIC",
+            role: userInfo.role,
             name: userInfo.name,
             surname: userInfo.surname,
             phone: userInfo.phone,
@@ -113,32 +122,37 @@ export class UsersProvider {
             throw new Error(`Password does not match.`);
         }
 
-        //TODO generate jwt
-        return "some-token";
+        return createToken(user.id)
     }
 
-        /**
-     * Register an user.
+    /**
+     * Update user information.
      *
      * @param {string} userId the user id to be updated
      * @param {UpdateUserInfoInput} userInfo user info to be updated
      *
      * @return {Promise<User>} the new user
      */
-        async updateUserInfo(userId: string, userInfo: UpdateUserInfoInput): Promise<User> {
-            await usersDB.doc(userId).update({
-                name: userInfo.name,
-                surname: userInfo.surname,
-                phone: userInfo.phone,
-                updatedAt: new Date().toISOString(),
-            });
+    async updateUserInfo(userId: string, userInfo: UpdateUserInfoInput): Promise<User> {
+        const snapshot = await usersDB.doc(userId).get();
 
-            const snapshot = await usersDB.doc(userId).get();
-            return snapshot.data() as User;
+        if (!snapshot.exists) {
+            throw new Error(`User does not exist.`);
         }
 
+        await usersDB.doc(userId).update({
+            name: userInfo.name,
+            surname: userInfo.surname,
+            phone: userInfo.phone,
+            updatedAt: new Date().toISOString(),
+        });
+
+        const updatedUser = await usersDB.doc(userId).get();
+        return updatedUser.data() as User;
+    }
+
     /**
-     * Invites an user.
+     * Invites an user by sending an email with a registration code.
      *
      * @param {EmailAddress} email the email of the invitee
      * @param {string} name the name of the invitee
@@ -148,8 +162,23 @@ export class UsersProvider {
      */
     async inviteUser(email: EmailAddress, name: string, role: UserRole): Promise<boolean> {
         const emailService = new EmailService();
-        emailService.sendInvitationEmail(email);
+
+        const code = await this.generateCode(email, name, role);
+
+        emailService.sendInvitationEmail(email, name, code);
         return true;
+    }
+
+    private async generateCode(email: EmailAddress, name: string, role: UserRole): Promise<string> {
+        const docRef = registrationCodeDB.doc();
+        await docRef.set({
+            email: email,
+            name: name,
+            role: role,
+            createdAt: new Date().toISOString(),
+        });
+
+        return docRef.id
     }
 
     /**
@@ -159,6 +188,30 @@ export class UsersProvider {
      * @returns valid/invalid status
      */
     async verifyCode(code: string): Promise<boolean> {
+        const snapshot = await registrationCodeDB.doc(code).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`Invalid registration code.`);
+        }
+
+        return true;
+    }
+
+    /**
+     * Delete a user by id.
+     *
+     * @param {ID} userId of the user to delete
+     *
+     * @return {Promise<Boolean>} true if deleted
+     */
+    async deleteUser(userId: ID): Promise<boolean> {
+        const snapshot = await usersDB.doc(userId).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`User does not exist.`);
+        }
+
+        await usersDB.doc(userId).delete();
         return true;
     }
 }

@@ -8,7 +8,7 @@ const SECRET = process.env.JWT_SECRET!;
 const EXPIRATION_TIME = "15 minutes"
 
 interface DecodedToken {
-    _id: string
+    userId: string
 }
 
 export async function encryptPassword(password: string): Promise<string> {
@@ -20,8 +20,8 @@ export async function comparePassword(password: string, actualPassword: string):
 }
 
 
-export function createToken(id: string): string {
-    const payload = { id: id}
+export function createToken(userId: string): string {
+    const payload = { userId: userId }
 
     const token = jwt.sign(payload, SECRET, {expiresIn: EXPIRATION_TIME})
 
@@ -31,7 +31,7 @@ export function createToken(id: string): string {
 export function decodeToken(token: string): string {
     const decodedToken = jwt.verify(token, SECRET) as DecodedToken
 
-    return decodedToken._id
+    return decodedToken.userId
 }
 
 export function validateAuth(authorizationHeader: string): Promise<User>|null {

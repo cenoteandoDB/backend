@@ -16,7 +16,7 @@ export namespace UsersModule {
   interface DefinedInputFields {
     Permission: 'id' | 'edit' | 'delete';
     PermissionsInput: 'name' | 'surname' | 'email' | 'password' | 'phoneNumber' | 'tags' | 'companyName' | 'companyWeb';
-    UpdateUserInfoInput: 'name' | 'surname' | 'email' | 'password' | 'phone';
+    UpdateUserInfoInput: 'name' | 'surname' | 'email' | 'password' | 'role' | 'phone';
     SortField: 'field' | 'sortOrder';
     PaginationInput: 'offset' | 'limit';
   };
@@ -24,8 +24,8 @@ export namespace UsersModule {
   export type Permission = Pick<Types.Permission, DefinedInputFields['Permission']>;
   export type PermissionsInput = Pick<Types.PermissionsInput, DefinedInputFields['PermissionsInput']>;
   export type UpdateUserInfoInput = Pick<Types.UpdateUserInfoInput, DefinedInputFields['UpdateUserInfoInput']>;
-  export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type UserRole = DefinedEnumValues['UserRole'];
+  export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type User = Pick<Types.User, DefinedFields['User']>;
   export type SortOrder = DefinedEnumValues['SortOrder'];
   export type SortField = Pick<Types.SortField, DefinedInputFields['SortField']>;

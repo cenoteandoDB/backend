@@ -11,4 +11,5 @@ export const db = {
     mofs: admin.firestore().collection("measurements_or_facts_bronze"),
     audit_logs: admin.firestore().collection("audit_logs"),
     cenotes_species: admin.firestore().collection("audit_logs"),
+    registration_code: admin.firestore().collection("registration_code"),
 };

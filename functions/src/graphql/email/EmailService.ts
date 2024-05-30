@@ -3,8 +3,8 @@ import { readFileSync } from 'fs';
 
 export class EmailService {
 
-    async sendInvitationEmail(email: string): Promise<void> {
-        this.sendEmail(email, "subject", "templateName", {"key": "value"});
+    async sendInvitationEmail(email: string, name: string, code: string): Promise<void> {
+        this.sendEmail(email, "subject", "templateName", {name: name, code: code});
     }
 
     /**

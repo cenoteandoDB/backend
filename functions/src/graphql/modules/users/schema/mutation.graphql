@@ -26,6 +26,7 @@ input UpdateUserInfoInput {
     surname: String!
     email: String!
     password: String!
+    role: UserRole!
     phone: String
 }
 
@@ -35,5 +36,5 @@ type Mutation {
     saveUser(userInfo: UpdateUserInfoInput!): User!
     updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
     # savePermissions(savePermissionsData: PermissionsInput!): Boolean!
-    deleteUser(id: String!): Boolean!
+    deleteUser(userId: ID!): Boolean!
 }

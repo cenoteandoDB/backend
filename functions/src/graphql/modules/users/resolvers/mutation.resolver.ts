@@ -14,10 +14,14 @@ export const MutationResolver: UsersModule.Resolvers["Mutation"] = {
     },
 
     saveUser: (parent, args, contextValue, info) => {
-        return usersProvider.register(args.userInfo);
+        return usersProvider.saveUser(args.userInfo);
     },
 
     updateUserInfo: (parent, args, contextValue, info) => {
         return usersProvider.updateUserInfo(args.userId, args.userInfo);
+    },
+
+    deleteUser: (parent, args, contextValue, info) => {
+        return usersProvider.deleteUser(args.userId);
     },
 };

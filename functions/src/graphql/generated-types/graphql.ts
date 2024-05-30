@@ -390,7 +390,7 @@ export type MutationDeleteMofArgs = {
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 
@@ -694,6 +694,7 @@ export type UpdateUserInfoInput = {
   name: Scalars['String'];
   password: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
+  role: UserRole;
   surname: Scalars['String'];
 };
 
@@ -1257,7 +1258,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
   deleteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCenoteArgs, 'id'>>;
   deleteMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMofArgs, 'delete_mof_input'>>;
-  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'userId'>>;
   inviteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
   login?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   saveUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSaveUserArgs, 'userInfo'>>;
