@@ -3,8 +3,22 @@ import { readFileSync } from 'fs';
 
 export class EmailService {
 
+    private EMAIL = process.env.EMAIL!;
+    private EMAIL_PASSWORD = process.env.EMAIL_PASSWORD!;
+
+    /**
+     * Send an invitation code to a user.
+     *
+     * @param email the email of the user to invite 
+     * @param name the name of the invitee
+     * @param code the generated code
+     */
     async sendInvitationEmail(email: string, name: string, code: string): Promise<void> {
-        this.sendEmail(email, "subject", "templateName", {name: name, code: code});
+        let htmlEmail = readFileSync("templates/invitation.html", "utf-8");
+        htmlEmail = htmlEmail.replace("{{name}}", name)
+        htmlEmail = htmlEmail.replace("{{code}}", code);
+
+        this.sendEmail(email, "subject", htmlEmail);
     }
 
     /**
@@ -12,19 +26,13 @@ export class EmailService {
      */
     private async sendEmail(emailTo: string,
                             subject: string,
-                            template: string, 
-                            context: Record<string, string>): Promise<void> {
+                            htmlEmail: string): Promise<void> {
         const transporter = this.createTransporter()
 
-        const htmlEmail = readFileSync(".templates/invitation.html", "utf-8");
-        htmlEmail.replace("name", context.name); //TODO complete here
-
         const mailOptions = {
-            from: '<my_email>@gmail.com',
+            from: this.EMAIL,
             to: emailTo,
             subject: subject,
-            template: template,
-            context: context,
             html: htmlEmail
         };
 
@@ -40,12 +48,12 @@ export class EmailService {
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'your-email@gmail.com',
-                pass: 'your-email-password'
+                user: this.EMAIL,
+                pass: this.EMAIL_PASSWORD
             }
         });
 
-        return transporter
+        return transporter;
     }
 
 }
