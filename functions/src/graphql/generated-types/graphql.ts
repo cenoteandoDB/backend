@@ -5,6 +5,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -85,6 +86,12 @@ export type CenoteLocation = {
   county: Scalars['String'];
   geojson: Scalars['JSON'];
   state: Scalars['String'];
+};
+
+export type CenotePermission = {
+  cenoteId: Scalars['String'];
+  delete: Scalars['Boolean'];
+  edit: Scalars['Boolean'];
 };
 
 export type CenoteSocialData = {
@@ -301,6 +308,25 @@ export type GbifTaxonomicStatus =
   | 'PROPARTE_SYNONYM'
   | 'SYNONYM';
 
+export type Govern = {
+  __typename?: 'Govern';
+  institution: Scalars['String'];
+  type: GovernType;
+};
+
+export type GovernType =
+  | 'FEDERAL'
+  | 'MUNICIPAL'
+  | 'STATE';
+
+export type Investigator = {
+  __typename?: 'Investigator';
+  googleScholar: Scalars['String'];
+  linkedin?: Maybe<Scalars['String']>;
+  orchid: Scalars['String'];
+  researchGate: Scalars['String'];
+};
+
 export type LayerCategory =
   | 'ANTROPOGENICA'
   | 'CLIMA'
@@ -477,12 +503,6 @@ export type PaginationInput = {
   offset: Scalars['Int'];
 };
 
-export type Permission = {
-  delete: Scalars['Boolean'];
-  edit: Scalars['Boolean'];
-  id: Scalars['String'];
-};
-
 export type PermissionsInput = {
   companyName?: InputMaybe<Scalars['String']>;
   companyWeb?: InputMaybe<Scalars['String']>;
@@ -500,6 +520,8 @@ export type PhotoOrMapUploadInput = {
   extension: Scalars['String'];
   filename: Scalars['String'];
 };
+
+export type Profile = Student | Teacher;
 
 export type Query = {
   __typename?: 'Query';
@@ -689,6 +711,18 @@ export type Species = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type Student = {
+  __typename?: 'Student';
+  degree: Scalars['String'];
+  school: Scalars['String'];
+};
+
+export type Teacher = {
+  __typename?: 'Teacher';
+  school: Scalars['String'];
+  subject: Scalars['String'];
+};
+
 export type UpdateSpeciesInput = {
   gbifId?: InputMaybe<Scalars['ID']>;
   iNaturalistId?: InputMaybe<Scalars['ID']>;
@@ -731,21 +765,34 @@ export type UpdatedCenoteInput = {
 
 export type User = {
   __typename?: 'User';
+  cenoteEditBlackList: Array<Scalars['String']>;
+  cenoteEditWhiteList: Array<Scalars['String']>;
+  cenoteViewBlackList: Array<Scalars['String']>;
+  cenoteViewWhiteList: Array<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   email: Scalars['EmailAddress'];
   id: Scalars['ID'];
   name: Scalars['String'];
   password?: Maybe<Scalars['String']>;
+  profile: Scalars['String'];
+  profileData?: Maybe<Profile>;
   role: UserRole;
   surname: Scalars['String'];
-  tags: Array<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
+  variableViewBlackList: Array<Scalars['String']>;
+  variableViewWhiteList: Array<Scalars['String']>;
 };
+
+export type UserProfile =
+  | 'GOVERN'
+  | 'INVESTIGATOR'
+  | 'STUDENT'
+  | 'TEACHER';
 
 export type UserRole =
   | 'ADMIN'
   | 'BASIC'
-  | 'CENOTERO_ADVANCED';
+  | 'CURATOR';
 
 export type Variable = {
   __typename?: 'Variable';
@@ -771,6 +818,12 @@ export type VariableOrigin =
   | 'BOTH'
   | 'FIELD'
   | 'OFFICE';
+
+export type VariablePermission = {
+  delete: Scalars['Boolean'];
+  edit: Scalars['Boolean'];
+  variableId: Scalars['String'];
+};
 
 export type VariableTheme =
   | 'BIODIVERSITY'
@@ -954,7 +1007,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type ResolversUnionTypes = {
+  Profile: ( Student ) | ( Teacher );
+};
 
+/** Mapping of union parent types */
+export type ResolversUnionParentTypes = {
+  Profile: ( Student ) | ( Teacher );
+};
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
@@ -966,6 +1027,7 @@ export type ResolversTypes = {
   CenoteBounds: ResolverTypeWrapper<CenoteBounds>;
   CenoteIssue: CenoteIssue;
   CenoteLocation: ResolverTypeWrapper<CenoteLocation>;
+  CenotePermission: CenotePermission;
   CenoteSocialData: ResolverTypeWrapper<CenoteSocialData>;
   CenoteType: CenoteType;
   CityDistances: ResolverTypeWrapper<CityDistances>;
@@ -983,8 +1045,11 @@ export type ResolversTypes = {
   GBIFSuggestion: ResolverTypeWrapper<GbifSuggestion>;
   GBIFTaxonomicRank: GbifTaxonomicRank;
   GBIFTaxonomicStatus: GbifTaxonomicStatus;
+  Govern: ResolverTypeWrapper<Govern>;
+  GovernType: GovernType;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Investigator: ResolverTypeWrapper<Investigator>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
   LayerCategory: LayerCategory;
@@ -998,9 +1063,9 @@ export type ResolversTypes = {
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
-  Permission: Permission;
   PermissionsInput: PermissionsInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
+  Profile: ResolverTypeWrapper<ResolversUnionTypes['Profile']>;
   Query: ResolverTypeWrapper<{}>;
   Reference: ResolverTypeWrapper<Reference>;
   ReferenceType: ReferenceType;
@@ -1008,15 +1073,19 @@ export type ResolversTypes = {
   SortOrder: SortOrder;
   Species: ResolverTypeWrapper<Species>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Student: ResolverTypeWrapper<Student>;
+  Teacher: ResolverTypeWrapper<Teacher>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
   UpdateSpeciesInput: UpdateSpeciesInput;
   UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
   UpdatedCenoteInput: UpdatedCenoteInput;
-  User: ResolverTypeWrapper<User>;
+  User: ResolverTypeWrapper<Omit<User, 'profileData'> & { profileData?: Maybe<ResolversTypes['Profile']> }>;
+  UserProfile: UserProfile;
   UserRole: UserRole;
   Variable: ResolverTypeWrapper<Variable>;
   VariableOrigin: VariableOrigin;
+  VariablePermission: VariablePermission;
   VariableTheme: VariableTheme;
   VariableType: VariableType;
   VariableWithData: ResolverTypeWrapper<VariableWithData>;
@@ -1036,6 +1105,7 @@ export type ResolversParentTypes = {
   Cenote: Cenote;
   CenoteBounds: CenoteBounds;
   CenoteLocation: CenoteLocation;
+  CenotePermission: CenotePermission;
   CenoteSocialData: CenoteSocialData;
   CityDistances: CityDistances;
   Comment: Comment;
@@ -1048,8 +1118,10 @@ export type ResolversParentTypes = {
   Float: Scalars['Float'];
   GBIFNameUsage: GbifNameUsage;
   GBIFSuggestion: GbifSuggestion;
+  Govern: Govern;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  Investigator: Investigator;
   JSON: Scalars['JSON'];
   Latitude: Scalars['Latitude'];
   Longitude: Scalars['Longitude'];
@@ -1062,21 +1134,24 @@ export type ResolversParentTypes = {
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
-  Permission: Permission;
   PermissionsInput: PermissionsInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
+  Profile: ResolversUnionParentTypes['Profile'];
   Query: {};
   Reference: Reference;
   SortField: SortField;
   Species: Species;
   String: Scalars['String'];
+  Student: Student;
+  Teacher: Teacher;
   URL: Scalars['URL'];
   UpdateSpeciesInput: UpdateSpeciesInput;
   UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
   UpdatedCenoteInput: UpdatedCenoteInput;
-  User: User;
+  User: Omit<User, 'profileData'> & { profileData?: Maybe<ResolversParentTypes['Profile']> };
   Variable: Variable;
+  VariablePermission: VariablePermission;
   VariableWithData: VariableWithData;
   iNaturalistFlagCounts: INaturalistFlagCounts;
   iNaturalistPhoto: INaturalistPhoto;
@@ -1226,6 +1301,20 @@ export type GbifSuggestionResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GovernResolvers<ContextType = any, ParentType extends ResolversParentTypes['Govern'] = ResolversParentTypes['Govern']> = {
+  institution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['GovernType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type InvestigatorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Investigator'] = ResolversParentTypes['Investigator']> = {
+  googleScholar?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  linkedin?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  orchid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  researchGate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
@@ -1274,6 +1363,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'updated_variable'>>;
   uploadMap?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadMapArgs, 'mapInput'>>;
   uploadPhoto?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'photoInput'>>;
+};
+
+export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
+  __resolveType: TypeResolveFn<'Student' | 'Teacher', ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -1349,20 +1442,39 @@ export type SpeciesResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type StudentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Student'] = ResolversParentTypes['Student']> = {
+  degree?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  school?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TeacherResolvers<ContextType = any, ParentType extends ResolversParentTypes['Teacher'] = ResolversParentTypes['Teacher']> = {
+  school?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  subject?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['URL'], any> {
   name: 'URL';
 }
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  cenoteEditBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  cenoteEditWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  cenoteViewBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  cenoteViewWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  profile?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  profileData?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
   surname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  variableViewBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  variableViewWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1491,15 +1603,20 @@ export type Resolvers<ContextType = any> = {
   EmailAddress?: GraphQLScalarType;
   GBIFNameUsage?: GbifNameUsageResolvers<ContextType>;
   GBIFSuggestion?: GbifSuggestionResolvers<ContextType>;
+  Govern?: GovernResolvers<ContextType>;
+  Investigator?: InvestigatorResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   Latitude?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
   MapLayer?: MapLayerResolvers<ContextType>;
   MeasurementOrFact?: MeasurementOrFactResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Profile?: ProfileResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Reference?: ReferenceResolvers<ContextType>;
   Species?: SpeciesResolvers<ContextType>;
+  Student?: StudentResolvers<ContextType>;
+  Teacher?: TeacherResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   Variable?: VariableResolvers<ContextType>;

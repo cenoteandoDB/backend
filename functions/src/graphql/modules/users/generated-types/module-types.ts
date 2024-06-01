@@ -5,23 +5,31 @@ export namespace UsersModule {
   interface DefinedFields {
     Mutation: 'login' | 'inviteUser' | 'saveUser' | 'updateUserInfo' | 'deleteUser';
     Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode';
-    User: 'id' | 'name' | 'surname' | 'email' | 'role' | 'tags' | 'password' | 'createdAt' | 'updatedAt';
+    Teacher: 'school' | 'subject';
+    Student: 'school' | 'degree';
+    Govern: 'type' | 'institution';
+    Investigator: 'googleScholar' | 'orchid' | 'researchGate' | 'linkedin';
+    User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
     SortOrder: 'ASC' | 'DESC';
-    UserRole: 'BASIC' | 'CENOTERO_ADVANCED' | 'ADMIN';
+    UserRole: 'BASIC' | 'CURATOR' | 'ADMIN';
+    UserProfile: 'TEACHER' | 'STUDENT' | 'GOVERN' | 'INVESTIGATOR';
+    GovernType: 'FEDERAL' | 'STATE' | 'MUNICIPAL';
   };
   
   interface DefinedInputFields {
-    Permission: 'id' | 'edit' | 'delete';
+    CenotePermission: 'cenoteId' | 'edit' | 'delete';
+    VariablePermission: 'variableId' | 'edit' | 'delete';
     PermissionsInput: 'name' | 'surname' | 'email' | 'password' | 'phoneNumber' | 'tags' | 'companyName' | 'companyWeb';
     UpdateUserInfoInput: 'name' | 'surname' | 'email' | 'password' | 'role' | 'phone';
     SortField: 'field' | 'sortOrder';
     PaginationInput: 'offset' | 'limit';
   };
   
-  export type Permission = Pick<Types.Permission, DefinedInputFields['Permission']>;
+  export type CenotePermission = Pick<Types.CenotePermission, DefinedInputFields['CenotePermission']>;
+  export type VariablePermission = Pick<Types.VariablePermission, DefinedInputFields['VariablePermission']>;
   export type PermissionsInput = Pick<Types.PermissionsInput, DefinedInputFields['PermissionsInput']>;
   export type UpdateUserInfoInput = Pick<Types.UpdateUserInfoInput, DefinedInputFields['UpdateUserInfoInput']>;
   export type UserRole = DefinedEnumValues['UserRole'];
@@ -31,6 +39,13 @@ export namespace UsersModule {
   export type SortField = Pick<Types.SortField, DefinedInputFields['SortField']>;
   export type PaginationInput = Pick<Types.PaginationInput, DefinedInputFields['PaginationInput']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type UserProfile = DefinedEnumValues['UserProfile'];
+  export type Teacher = Pick<Types.Teacher, DefinedFields['Teacher']>;
+  export type Student = Pick<Types.Student, DefinedFields['Student']>;
+  export type GovernType = DefinedEnumValues['GovernType'];
+  export type Govern = Pick<Types.Govern, DefinedFields['Govern']>;
+  export type Investigator = Pick<Types.Investigator, DefinedFields['Investigator']>;
+  export type Profile = Types.Profile;
   
   export type Scalars = Pick<Types.Scalars, 'EmailAddress' | 'DateTime'>;
   export type EmailAddressScalarConfig = Types.EmailAddressScalarConfig;
@@ -38,11 +53,19 @@ export namespace UsersModule {
   
   export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields['Mutation']>;
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
+  export type TeacherResolvers = Pick<Types.TeacherResolvers, DefinedFields['Teacher'] | '__isTypeOf'>;
+  export type StudentResolvers = Pick<Types.StudentResolvers, DefinedFields['Student'] | '__isTypeOf'>;
+  export type GovernResolvers = Pick<Types.GovernResolvers, DefinedFields['Govern'] | '__isTypeOf'>;
+  export type InvestigatorResolvers = Pick<Types.InvestigatorResolvers, DefinedFields['Investigator'] | '__isTypeOf'>;
   export type UserResolvers = Pick<Types.UserResolvers, DefinedFields['User'] | '__isTypeOf'>;
   
   export interface Resolvers {
     Mutation?: MutationResolvers;
     Query?: QueryResolvers;
+    Teacher?: TeacherResolvers;
+    Student?: StudentResolvers;
+    Govern?: GovernResolvers;
+    Investigator?: InvestigatorResolvers;
     User?: UserResolvers;
     EmailAddress?: Types.Resolvers['EmailAddress'];
     DateTime?: Types.Resolvers['DateTime'];
@@ -68,15 +91,44 @@ export namespace UsersModule {
       getUserByName?: gm.Middleware[];
       verifyCode?: gm.Middleware[];
     };
+    Teacher?: {
+      '*'?: gm.Middleware[];
+      school?: gm.Middleware[];
+      subject?: gm.Middleware[];
+    };
+    Student?: {
+      '*'?: gm.Middleware[];
+      school?: gm.Middleware[];
+      degree?: gm.Middleware[];
+    };
+    Govern?: {
+      '*'?: gm.Middleware[];
+      type?: gm.Middleware[];
+      institution?: gm.Middleware[];
+    };
+    Investigator?: {
+      '*'?: gm.Middleware[];
+      googleScholar?: gm.Middleware[];
+      orchid?: gm.Middleware[];
+      researchGate?: gm.Middleware[];
+      linkedin?: gm.Middleware[];
+    };
     User?: {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
       name?: gm.Middleware[];
       surname?: gm.Middleware[];
       email?: gm.Middleware[];
-      role?: gm.Middleware[];
-      tags?: gm.Middleware[];
       password?: gm.Middleware[];
+      role?: gm.Middleware[];
+      profile?: gm.Middleware[];
+      profileData?: gm.Middleware[];
+      cenoteViewWhiteList?: gm.Middleware[];
+      cenoteViewBlackList?: gm.Middleware[];
+      cenoteEditWhiteList?: gm.Middleware[];
+      cenoteEditBlackList?: gm.Middleware[];
+      variableViewWhiteList?: gm.Middleware[];
+      variableViewBlackList?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

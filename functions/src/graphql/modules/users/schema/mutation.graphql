@@ -5,7 +5,7 @@ input Permission {
     id: String!
     edit: Boolean!
     delete: Boolean!
-
+    
 }
 
 input PermissionsInput {

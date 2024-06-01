@@ -4,9 +4,49 @@ scalar DateTime
 
 enum UserRole {
     BASIC
-    CENOTERO_ADVANCED
+    CURATOR
     ADMIN
 }
+
+enum UserProfile {
+    TEACHER
+    STUDENT
+    GOVERN
+    INVESTIGATOR
+}
+
+type Teacher {
+
+    school: String!
+    subject: String!
+}
+
+type Student {
+    school: String!
+    degree: String!
+}
+
+enum GovernType {
+    FEDERAL
+    STATE
+    MUNICIPAL
+}
+
+type Govern {
+
+    type: GovernType!
+    institution: String!
+}
+
+type Investigator {
+
+    googleScholar: String!
+    orchid: String!
+    researchGate: String!
+    linkedin: String
+}
+
+union Profile = Student | Teacher
 
 type User {
     id: ID!
@@ -14,9 +54,20 @@ type User {
     name: String!
     surname: String!
     email: EmailAddress!
-    role: UserRole!
-    tags: [String!]!
     password: String
+
+    role: UserRole!
+    profile: String!
+    profileData: Profile
+    
+    cenoteViewWhiteList: [String!]!
+    cenoteViewBlackList: [String!]!
+
+    cenoteEditWhiteList: [String!]!
+    cenoteEditBlackList: [String!]!
+
+    variableViewWhiteList: [String!]!
+    variableViewBlackList: [String!]!
 
     createdAt: DateTime!
 	updatedAt: DateTime!
