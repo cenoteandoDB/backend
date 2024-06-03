@@ -13,12 +13,20 @@ export const MutationResolver: UsersModule.Resolvers["Mutation"] = {
         return usersProvider.inviteUser(args.email, args.name, args.userRole);
     },
 
-    saveUser: (parent, args, contextValue, info) => {
-        return usersProvider.saveUser(args.userInfo);
+    register: (parent, args, contextValue, info) => {
+        return usersProvider.register(args.userInfo);
     },
 
     updateUserInfo: (parent, args, contextValue, info) => {
         return usersProvider.updateUserInfo(args.userId, args.userInfo);
+    },
+
+    updateCenotePermissions: (parent, args, contextValue, info) => {
+        return usersProvider.updateCenotePermissions(args.userId, args.cenotePermissions);
+    },
+
+    updateVariablePermissions: (parent, args, contextValue, info) => {
+        return usersProvider.updateVariablePermissions(args.userId, args.variablePermissions);
     },
 
     deleteUser: (parent, args, contextValue, info) => {

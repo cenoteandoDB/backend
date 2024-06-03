@@ -3,13 +3,13 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
-    Mutation: 'login' | 'inviteUser' | 'saveUser' | 'updateUserInfo' | 'deleteUser';
+    Mutation: 'login' | 'inviteUser' | 'register' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'deleteUser';
     Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode';
     Teacher: 'school' | 'subject';
     Student: 'school' | 'degree';
     Govern: 'type' | 'institution';
     Investigator: 'googleScholar' | 'orchid' | 'researchGate' | 'linkedin';
-    User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'createdAt' | 'updatedAt';
+    User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
@@ -20,19 +20,19 @@ export namespace UsersModule {
   };
   
   interface DefinedInputFields {
-    CenotePermission: 'cenoteId' | 'edit' | 'delete';
-    VariablePermission: 'variableId' | 'edit' | 'delete';
-    PermissionsInput: 'name' | 'surname' | 'email' | 'password' | 'phoneNumber' | 'tags' | 'companyName' | 'companyWeb';
-    UpdateUserInfoInput: 'name' | 'surname' | 'email' | 'password' | 'role' | 'phone';
+    RegisterUserInput: 'name' | 'surname' | 'email' | 'password' | 'role' | 'phone';
+    UpdateUserInfoInput: 'name' | 'surname' | 'email' | 'role';
+    UpdateCenotePermissions: 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList';
+    UpdateVariablePermissions: 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList';
     SortField: 'field' | 'sortOrder';
     PaginationInput: 'offset' | 'limit';
   };
   
-  export type CenotePermission = Pick<Types.CenotePermission, DefinedInputFields['CenotePermission']>;
-  export type VariablePermission = Pick<Types.VariablePermission, DefinedInputFields['VariablePermission']>;
-  export type PermissionsInput = Pick<Types.PermissionsInput, DefinedInputFields['PermissionsInput']>;
-  export type UpdateUserInfoInput = Pick<Types.UpdateUserInfoInput, DefinedInputFields['UpdateUserInfoInput']>;
+  export type RegisterUserInput = Pick<Types.RegisterUserInput, DefinedInputFields['RegisterUserInput']>;
   export type UserRole = DefinedEnumValues['UserRole'];
+  export type UpdateUserInfoInput = Pick<Types.UpdateUserInfoInput, DefinedInputFields['UpdateUserInfoInput']>;
+  export type UpdateCenotePermissions = Pick<Types.UpdateCenotePermissions, DefinedInputFields['UpdateCenotePermissions']>;
+  export type UpdateVariablePermissions = Pick<Types.UpdateVariablePermissions, DefinedInputFields['UpdateVariablePermissions']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type User = Pick<Types.User, DefinedFields['User']>;
   export type SortOrder = DefinedEnumValues['SortOrder'];
@@ -79,8 +79,10 @@ export namespace UsersModule {
       '*'?: gm.Middleware[];
       login?: gm.Middleware[];
       inviteUser?: gm.Middleware[];
-      saveUser?: gm.Middleware[];
+      register?: gm.Middleware[];
       updateUserInfo?: gm.Middleware[];
+      updateCenotePermissions?: gm.Middleware[];
+      updateVariablePermissions?: gm.Middleware[];
       deleteUser?: gm.Middleware[];
     };
     Query?: {
@@ -129,6 +131,8 @@ export namespace UsersModule {
       cenoteEditBlackList?: gm.Middleware[];
       variableViewWhiteList?: gm.Middleware[];
       variableViewBlackList?: gm.Middleware[];
+      variableEditWhiteList?: gm.Middleware[];
+      variableEditBlackList?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

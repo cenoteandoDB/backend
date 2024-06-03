@@ -3,8 +3,11 @@ import { EmailService } from "../../../email/EmailService";
 import {
     EmailAddress,
     PaginationInput,
+    RegisterUserInput,
     SortField,
+    UpdateCenotePermissions,
     UpdateUserInfoInput,
+    UpdateVariablePermissions,
     User,
     UserRole,
 } from "../../../generated-types/graphql";
@@ -14,6 +17,13 @@ import { firestore } from "firebase-admin";
 
 const usersDB = db.users;
 const registrationCodeDB = db.registration_code
+
+interface InvitationCode {
+    email: string,
+    name: string,
+    role: string,
+    createdAt: string,
+}
 
 /**
  * The UserProvider service is responsible for all user-related operations.
@@ -93,11 +103,11 @@ export class UsersProvider {
     /**
      * Register an user.
      *
-     * @param {UpdateUserInfoInput} userInfo user input to be registered
+     * @param {RegisterUserInput} userInfo user input to be registered
      *
      * @return {Promise<User>} the new user
      */
-    async saveUser(userInfo: UpdateUserInfoInput): Promise<User> {
+    async register(userInfo: RegisterUserInput): Promise<User> {
         const encryptedPassword = await encryptPassword(userInfo.password);
 
         const docRef = usersDB.doc();
@@ -158,7 +168,70 @@ export class UsersProvider {
         await usersDB.doc(userId).update({
             name: userInfo.name,
             surname: userInfo.surname,
-            phone: userInfo.phone,
+            email: userInfo.email,
+
+            role: userInfo.role,
+
+            updatedAt: new Date().toISOString(),
+        });
+
+        const updatedUser = await usersDB.doc(userId).get();
+        return updatedUser.data() as User;
+    }
+
+    /**
+     * Updates user cenote view and edit permissions.
+     *
+     * @param {string} userId the user id to be updated
+     * @param {UpdateCenotePermissions} cenotePermissions the updated user permissions to view 
+     * and edit cenotes
+     *
+     * @return {Promise<User>} the updated user
+     */
+    async updateCenotePermissions(userId: string, cenotePermissions: UpdateCenotePermissions)
+    : Promise<User> {
+        const snapshot = await usersDB.doc(userId).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`User does not exist.`);
+        }
+
+        await usersDB.doc(userId).update({
+            cenoteViewWhiteList: cenotePermissions.cenoteViewWhiteList,
+            cenoteViewBlackList: cenotePermissions.cenoteViewBlackList,
+
+            cenoteEditWhiteList: cenotePermissions.cenoteEditWhiteList,
+            cenoteEditBlackList: cenotePermissions.cenoteEditBlackList,
+            updatedAt: new Date().toISOString(),
+        });
+
+        const updatedUser = await usersDB.doc(userId).get();
+        return updatedUser.data() as User;
+    }
+
+    /**
+     * Updates user variables view and edit permissions.
+     *
+     * @param {string} userId the user id to be updated
+     * @param {UpdateVariablePermissions} cenotePermissions the updated user permissions to view 
+     * and edit variables
+     *
+     * @return {Promise<User>} the updated user
+     */
+    async updateVariablePermissions(userId: string, variablePermissions: UpdateVariablePermissions)
+    : Promise<User> {
+        const snapshot = await usersDB.doc(userId).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`User does not exist.`);
+        }
+
+        await usersDB.doc(userId).update({
+            variableViewWhiteList: variablePermissions.variableViewWhiteList,
+            variableViewBlackList: variablePermissions.variableViewBlackList,
+
+            variableEditWhiteList: variablePermissions.variableEditWhiteList,
+            variableEditBlackList: variablePermissions.variableEditBlackList,
             updatedAt: new Date().toISOString(),
         });
 
@@ -200,16 +273,29 @@ export class UsersProvider {
      * Verify code to register user.
      *
      * @param code the code to be validated
-     * @returns valid/invalid status
+     * @returns the registered user
      */
-    async verifyCode(code: string): Promise<boolean> {
+    async verifyCode(code: string): Promise<User> {
         const snapshot = await registrationCodeDB.doc(code).get();
 
         if (!snapshot.exists) {
             throw new Error(`Invalid registration code.`);
         }
 
-        return true;
+        const codeDetails = snapshot.data() as InvitationCode;
+
+        const docRef = usersDB.doc();
+        await docRef.set({
+            id: docRef.id,
+            role: codeDetails.role,
+            name: codeDetails.name,
+            email: codeDetails.email,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        });
+
+        const user_napshot = await usersDB.doc(docRef.id).get();
+        return user_napshot.data() as User;
     }
 
     /**

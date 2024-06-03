@@ -15,5 +15,5 @@ type Query {
     getUserById(id: ID!): User
     getUserByEmail(email: String!): User
     getUserByName(name: String!): [User!]!
-    verifyCode(code: String!): Boolean!
+    verifyCode(code: String!): User
 }

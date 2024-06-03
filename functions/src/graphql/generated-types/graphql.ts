@@ -88,12 +88,6 @@ export type CenoteLocation = {
   state: Scalars['String'];
 };
 
-export type CenotePermission = {
-  cenoteId: Scalars['String'];
-  delete: Scalars['Boolean'];
-  edit: Scalars['Boolean'];
-};
-
 export type CenoteSocialData = {
   __typename?: 'CenoteSocialData';
   comments?: Maybe<Array<Maybe<Comment>>>;
@@ -370,11 +364,13 @@ export type Mutation = {
   deleteUser: Scalars['Boolean'];
   inviteUser: Scalars['Boolean'];
   login: Scalars['String'];
-  saveUser: User;
+  register: User;
   updateCenote?: Maybe<Cenote>;
+  updateCenotePermissions?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
   updateUserInfo?: Maybe<User>;
   updateVariable?: Maybe<Variable>;
+  updateVariablePermissions?: Maybe<User>;
   uploadMap?: Maybe<Scalars['Boolean']>;
   uploadPhoto?: Maybe<Scalars['Boolean']>;
 };
@@ -433,13 +429,19 @@ export type MutationLoginArgs = {
 };
 
 
-export type MutationSaveUserArgs = {
-  userInfo: UpdateUserInfoInput;
+export type MutationRegisterArgs = {
+  userInfo: RegisterUserInput;
 };
 
 
 export type MutationUpdateCenoteArgs = {
   updated_cenote: UpdatedCenoteInput;
+};
+
+
+export type MutationUpdateCenotePermissionsArgs = {
+  cenotePermissions: UpdateCenotePermissions;
+  userId: Scalars['String'];
 };
 
 
@@ -456,6 +458,12 @@ export type MutationUpdateUserInfoArgs = {
 
 export type MutationUpdateVariableArgs = {
   updated_variable: UpdateVariableInput;
+};
+
+
+export type MutationUpdateVariablePermissionsArgs = {
+  userId: Scalars['String'];
+  variablePermissions: UpdateVariablePermissions;
 };
 
 
@@ -503,17 +511,6 @@ export type PaginationInput = {
   offset: Scalars['Int'];
 };
 
-export type PermissionsInput = {
-  companyName?: InputMaybe<Scalars['String']>;
-  companyWeb?: InputMaybe<Scalars['String']>;
-  email: Scalars['EmailAddress'];
-  name: Scalars['String'];
-  password: Scalars['String'];
-  phoneNumber?: InputMaybe<Scalars['String']>;
-  surname: Scalars['String'];
-  tags: Array<Scalars['String']>;
-};
-
 export type PhotoOrMapUploadInput = {
   cenoteId: Scalars['ID'];
   content: Scalars['String'];
@@ -550,7 +547,7 @@ export type Query = {
   variableById?: Maybe<Variable>;
   variables?: Maybe<Array<Maybe<Variable>>>;
   variablesByTheme?: Maybe<Array<Maybe<Variable>>>;
-  verifyCode: Scalars['Boolean'];
+  verifyCode?: Maybe<User>;
 };
 
 
@@ -691,6 +688,15 @@ export type ReferenceType =
   | 'THESIS'
   | 'WEB_PAGE';
 
+export type RegisterUserInput = {
+  email: Scalars['EmailAddress'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+  role: UserRole;
+  surname: Scalars['String'];
+};
+
 export type SortField = {
   field: Scalars['String'];
   sortOrder: SortOrder;
@@ -723,6 +729,13 @@ export type Teacher = {
   subject: Scalars['String'];
 };
 
+export type UpdateCenotePermissions = {
+  cenoteEditBlackList: Array<Scalars['String']>;
+  cenoteEditWhiteList: Array<Scalars['String']>;
+  cenoteViewBlackList: Array<Scalars['String']>;
+  cenoteViewWhiteList: Array<Scalars['String']>;
+};
+
 export type UpdateSpeciesInput = {
   gbifId?: InputMaybe<Scalars['ID']>;
   iNaturalistId?: InputMaybe<Scalars['ID']>;
@@ -730,10 +743,8 @@ export type UpdateSpeciesInput = {
 };
 
 export type UpdateUserInfoInput = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
   name: Scalars['String'];
-  password: Scalars['String'];
-  phone?: InputMaybe<Scalars['String']>;
   role: UserRole;
   surname: Scalars['String'];
 };
@@ -752,6 +763,13 @@ export type UpdateVariableInput = {
   timeseries?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<VariableType>;
   units?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateVariablePermissions = {
+  variableEditBlackList: Array<Scalars['String']>;
+  variableEditWhiteList: Array<Scalars['String']>;
+  variableViewBlackList: Array<Scalars['String']>;
+  variableViewWhiteList: Array<Scalars['String']>;
 };
 
 export type UpdatedCenoteInput = {
@@ -779,6 +797,8 @@ export type User = {
   role: UserRole;
   surname: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+  variableEditBlackList: Array<Scalars['String']>;
+  variableEditWhiteList: Array<Scalars['String']>;
   variableViewBlackList: Array<Scalars['String']>;
   variableViewWhiteList: Array<Scalars['String']>;
 };
@@ -818,12 +838,6 @@ export type VariableOrigin =
   | 'BOTH'
   | 'FIELD'
   | 'OFFICE';
-
-export type VariablePermission = {
-  delete: Scalars['Boolean'];
-  edit: Scalars['Boolean'];
-  variableId: Scalars['String'];
-};
 
 export type VariableTheme =
   | 'BIODIVERSITY'
@@ -1027,7 +1041,6 @@ export type ResolversTypes = {
   CenoteBounds: ResolverTypeWrapper<CenoteBounds>;
   CenoteIssue: CenoteIssue;
   CenoteLocation: ResolverTypeWrapper<CenoteLocation>;
-  CenotePermission: CenotePermission;
   CenoteSocialData: ResolverTypeWrapper<CenoteSocialData>;
   CenoteType: CenoteType;
   CityDistances: ResolverTypeWrapper<CityDistances>;
@@ -1063,12 +1076,12 @@ export type ResolversTypes = {
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
-  PermissionsInput: PermissionsInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   Profile: ResolverTypeWrapper<ResolversUnionTypes['Profile']>;
   Query: ResolverTypeWrapper<{}>;
   Reference: ResolverTypeWrapper<Reference>;
   ReferenceType: ReferenceType;
+  RegisterUserInput: RegisterUserInput;
   SortField: SortField;
   SortOrder: SortOrder;
   Species: ResolverTypeWrapper<Species>;
@@ -1076,16 +1089,17 @@ export type ResolversTypes = {
   Student: ResolverTypeWrapper<Student>;
   Teacher: ResolverTypeWrapper<Teacher>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
+  UpdateCenotePermissions: UpdateCenotePermissions;
   UpdateSpeciesInput: UpdateSpeciesInput;
   UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
+  UpdateVariablePermissions: UpdateVariablePermissions;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: ResolverTypeWrapper<Omit<User, 'profileData'> & { profileData?: Maybe<ResolversTypes['Profile']> }>;
   UserProfile: UserProfile;
   UserRole: UserRole;
   Variable: ResolverTypeWrapper<Variable>;
   VariableOrigin: VariableOrigin;
-  VariablePermission: VariablePermission;
   VariableTheme: VariableTheme;
   VariableType: VariableType;
   VariableWithData: ResolverTypeWrapper<VariableWithData>;
@@ -1105,7 +1119,6 @@ export type ResolversParentTypes = {
   Cenote: Cenote;
   CenoteBounds: CenoteBounds;
   CenoteLocation: CenoteLocation;
-  CenotePermission: CenotePermission;
   CenoteSocialData: CenoteSocialData;
   CityDistances: CityDistances;
   Comment: Comment;
@@ -1134,24 +1147,25 @@ export type ResolversParentTypes = {
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
-  PermissionsInput: PermissionsInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   Profile: ResolversUnionParentTypes['Profile'];
   Query: {};
   Reference: Reference;
+  RegisterUserInput: RegisterUserInput;
   SortField: SortField;
   Species: Species;
   String: Scalars['String'];
   Student: Student;
   Teacher: Teacher;
   URL: Scalars['URL'];
+  UpdateCenotePermissions: UpdateCenotePermissions;
   UpdateSpeciesInput: UpdateSpeciesInput;
   UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
+  UpdateVariablePermissions: UpdateVariablePermissions;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: Omit<User, 'profileData'> & { profileData?: Maybe<ResolversParentTypes['Profile']> };
   Variable: Variable;
-  VariablePermission: VariablePermission;
   VariableWithData: VariableWithData;
   iNaturalistFlagCounts: INaturalistFlagCounts;
   iNaturalistPhoto: INaturalistPhoto;
@@ -1356,11 +1370,13 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'userId'>>;
   inviteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
   login?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  saveUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSaveUserArgs, 'userInfo'>>;
+  register?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'userInfo'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
+  updateCenotePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateCenotePermissionsArgs, 'cenotePermissions' | 'userId'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
   updateUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, 'userId' | 'userInfo'>>;
   updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'updated_variable'>>;
+  updateVariablePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateVariablePermissionsArgs, 'userId' | 'variablePermissions'>>;
   uploadMap?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadMapArgs, 'mapInput'>>;
   uploadPhoto?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'photoInput'>>;
 };
@@ -1395,7 +1411,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   variableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryVariableByIdArgs, 'id'>>;
   variables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType>;
   variablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryVariablesByThemeArgs, 'theme'>>;
-  verifyCode?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryVerifyCodeArgs, 'code'>>;
+  verifyCode?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryVerifyCodeArgs, 'code'>>;
 };
 
 export type ReferenceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Reference'] = ResolversParentTypes['Reference']> = {
@@ -1473,6 +1489,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
   surname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  variableEditBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  variableEditWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   variableViewBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   variableViewWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

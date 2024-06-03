@@ -1,40 +1,47 @@
 # From graphql-scalars
 scalar EmailAddress
 
-input Permission {
-    id: String!
-    edit: Boolean!
-    delete: Boolean!
-    
-}
-
-input PermissionsInput {
+input RegisterUserInput {
     name: String!
     surname: String!
     email: EmailAddress!
-    password: String!
-
-    phoneNumber: String
-    tags: [String!]!
-
-    companyName: String
-    companyWeb: String
-}
-
-input UpdateUserInfoInput {
-    name: String!
-    surname: String!
-    email: String!
     password: String!
     role: UserRole!
     phone: String
 }
 
+input UpdateUserInfoInput {
+    name: String!
+    surname: String!
+    email: EmailAddress!
+
+    role: UserRole!
+    # profile: String!
+    # profileData: Profile
+}
+
+input UpdateCenotePermissions {
+    cenoteViewWhiteList: [String!]!
+    cenoteViewBlackList: [String!]!
+
+    cenoteEditWhiteList: [String!]!
+    cenoteEditBlackList: [String!]!
+}
+
+input UpdateVariablePermissions {
+    variableViewWhiteList: [String!]!
+    variableViewBlackList: [String!]!
+
+    variableEditWhiteList: [String!]!
+    variableEditBlackList: [String!]!
+}
+
 type Mutation {
     login(email: EmailAddress!, password: String!): String!  # Access token
     inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): Boolean!
-    saveUser(userInfo: UpdateUserInfoInput!): User!
+    register(userInfo: RegisterUserInput!): User!
     updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
-    # savePermissions(savePermissionsData: PermissionsInput!): Boolean!
+    updateCenotePermissions(userId: String!, cenotePermissions: UpdateCenotePermissions!): User
+    updateVariablePermissions(userId: String!, variablePermissions: UpdateVariablePermissions!): User
     deleteUser(userId: ID!): Boolean!
 }

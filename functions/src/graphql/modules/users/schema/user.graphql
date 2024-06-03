@@ -69,6 +69,9 @@ type User {
     variableViewWhiteList: [String!]!
     variableViewBlackList: [String!]!
 
+    variableEditWhiteList: [String!]!
+    variableEditBlackList: [String!]!
+
     createdAt: DateTime!
 	updatedAt: DateTime!
 }
