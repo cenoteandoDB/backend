@@ -635,6 +635,7 @@ export type QueryGetUserProfileDataArgs = {
 
 
 export type QueryGetUsersArgs = {
+  name?: InputMaybe<Scalars['String']>;
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<SortField>;
 };
@@ -849,11 +850,6 @@ export type User = {
   variableEditWhiteList: Array<Scalars['String']>;
   variableViewBlackList: Array<Scalars['String']>;
   variableViewWhiteList: Array<Scalars['String']>;
-};
-
-
-export type UserProfileDataArgs = {
-  profile?: InputMaybe<UserProfile>;
 };
 
 export type UserProfile =
@@ -1522,7 +1518,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   profile?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  profileData?: Resolver<ResolversTypes['ProfileData'], ParentType, ContextType, Partial<UserProfileDataArgs>>;
+  profileData?: Resolver<ResolversTypes['ProfileData'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
   surname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;

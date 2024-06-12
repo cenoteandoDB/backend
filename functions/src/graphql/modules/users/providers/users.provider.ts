@@ -46,22 +46,28 @@ export class UsersProvider {
      * 
      * @param {SortField} sort optional sort field. Default by name
      * @param {PaginationInput} pagination optional pagination parameter
-     *
+     * @param {string} name  The name of user to retrieve
      * @return {Promise<User[]>} list of all users
      */
     async getUsers(
         sort: SortField|null|undefined = { field: "name", sortOrder: "ASC" },
-        pagination: PaginationInput|null = { offset: 0, limit: 25 }
+        pagination: PaginationInput|null = { offset: 0, limit: 25 },
+        name: string|null|undefined
     ): Promise<User[]> {
-        let sort_field = sort?.field ? "name" : sort?.field!;
-        let query = usersDB.orderBy(sort_field, sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
-
+        let query: any;
+        if(name) {
+            const endSearch = name.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
+            query = usersDB.where('name', '>=', name).where('name', '<', endSearch).orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+        } else {
+            query = usersDB.orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+        }
+      
         if (pagination) {
             query = query.offset(pagination.offset).limit(pagination.limit);
         }
-
+      
         const users = await query.get();
-        return users.docs.map((doc) => doc.data() as User);
+        return users.docs.map((doc: any) => doc.data() as User);
     }
 
     /**
@@ -78,9 +84,7 @@ export class UsersProvider {
             throw new Error(`User ${id} not found.`);
         }
         
-        console.log("User: " + snapshot.data())
         const user = snapshot.data() as User;
-        console.log("User processed")
         return user;
     }
 

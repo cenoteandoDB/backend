@@ -11,7 +11,7 @@ input PaginationInput {
 }
 
 type Query {
-    getUsers(sort: SortField, pagination: PaginationInput): [User!]!
+    getUsers(sort: SortField, pagination: PaginationInput, name: String): [User!]!
     getUserById(id: ID!): User
     getUserByEmail(email: String!): User
     getUserByName(name: String!): [User!]!

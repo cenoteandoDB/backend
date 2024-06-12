@@ -5,7 +5,7 @@ const usersProvider = new UsersProvider();
 
 export const QueryResolver: UsersModule.Resolvers["Query"] = {
     getUsers: (parent, args, contextValue, info) => {
-        return usersProvider.getUsers(args.sort, args.pagination);
+        return usersProvider.getUsers(args.sort, args.pagination, args.name);
     },
     getUserById: (parent, args, contextValue, info) => {
         return UsersProvider.getUserById(args.id);
