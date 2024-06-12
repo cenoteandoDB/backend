@@ -59,15 +59,17 @@ input RegisterGovernInput {
 
 type Mutation {
     login(email: EmailAddress!, password: String!): String!  # Access token
+    
     inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): Boolean!
     register(userInfo: RegisterUserInput!): User!
-    updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
-    updateCenotePermissions(userId: String!, cenotePermissions: UpdateCenotePermissions!): User
-    updateVariablePermissions(userId: String!, variablePermissions: UpdateVariablePermissions!): User
-    deleteUser(userId: ID!): Boolean!
     registerTourist(userInfo: RegisterUserInput!, profileData: RegisterTouristInput!): User
     registerStudent(userInfo: RegisterUserInput!, profileData: RegisterStudentInput!): User
     registerTeacher(userInfo: RegisterUserInput!, profileData: RegisterStudentInput!): User
     registerInvestigator(userInfo: RegisterUserInput!, profileData: RegisterInvestigatorInput!): User
     registerGovern(userInfo: RegisterUserInput!, profileData: RegisterGovernInput!): User
+
+    updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
+    updateCenotePermissions(userId: String!, cenotePermissions: UpdateCenotePermissions!): User
+    updateVariablePermissions(userId: String!, variablePermissions: UpdateVariablePermissions!): User
+    deleteUser(userId: ID!): Boolean!
 }

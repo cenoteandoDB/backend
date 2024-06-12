@@ -3,7 +3,7 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
-    Mutation: 'login' | 'inviteUser' | 'register' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'deleteUser' | 'registerTourist' | 'registerStudent' | 'registerTeacher' | 'registerInvestigator' | 'registerGovern';
+    Mutation: 'login' | 'inviteUser' | 'register' | 'registerTourist' | 'registerStudent' | 'registerTeacher' | 'registerInvestigator' | 'registerGovern' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'deleteUser';
     Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode' | 'getUserProfileData';
     ProfileData: 'companyName' | 'companyUrl' | 'school' | 'degree' | 'subject' | 'googleScholar' | 'orchid' | 'researchGate' | 'linkedin' | 'govern_type' | 'govern_institution';
     User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'createdAt' | 'updatedAt';
@@ -75,15 +75,15 @@ export namespace UsersModule {
       login?: gm.Middleware[];
       inviteUser?: gm.Middleware[];
       register?: gm.Middleware[];
-      updateUserInfo?: gm.Middleware[];
-      updateCenotePermissions?: gm.Middleware[];
-      updateVariablePermissions?: gm.Middleware[];
-      deleteUser?: gm.Middleware[];
       registerTourist?: gm.Middleware[];
       registerStudent?: gm.Middleware[];
       registerTeacher?: gm.Middleware[];
       registerInvestigator?: gm.Middleware[];
       registerGovern?: gm.Middleware[];
+      updateUserInfo?: gm.Middleware[];
+      updateCenotePermissions?: gm.Middleware[];
+      updateVariablePermissions?: gm.Middleware[];
+      deleteUser?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];
