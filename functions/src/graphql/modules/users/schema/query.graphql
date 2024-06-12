@@ -16,4 +16,5 @@ type Query {
     getUserByEmail(email: String!): User
     getUserByName(name: String!): [User!]!
     verifyCode(code: String!): User
+    getUserProfileData(id: ID!): ProfileData
 }

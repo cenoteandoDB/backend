@@ -3,12 +3,18 @@ import { EmailService } from "../../../email/EmailService";
 import {
     EmailAddress,
     PaginationInput,
+    ProfileData,
+    RegisterGovernInput,
+    RegisterInvestigatorInput,
+    RegisterStudentInput,
+    RegisterTouristInput,
     RegisterUserInput,
     SortField,
     UpdateCenotePermissions,
     UpdateUserInfoInput,
     UpdateVariablePermissions,
     User,
+    UserProfile,
     UserRole,
 } from "../../../generated-types/graphql";
 import { comparePassword, createToken, encryptPassword } from "../../../utils/auth";
@@ -24,6 +30,12 @@ interface InvitationCode {
     role: string,
     createdAt: string,
 }
+
+type UserProfileInput = 
+                | RegisterTouristInput        
+                | RegisterGovernInput
+                | RegisterInvestigatorInput
+                | RegisterStudentInput;
 
 /**
  * The UserProvider service is responsible for all user-related operations.
@@ -41,7 +53,8 @@ export class UsersProvider {
         sort: SortField|null|undefined = { field: "name", sortOrder: "ASC" },
         pagination: PaginationInput|null = { offset: 0, limit: 25 }
     ): Promise<User[]> {
-        let query = usersDB.orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+        let sort_field = sort?.field ? "name" : sort?.field!;
+        let query = usersDB.orderBy(sort_field, sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
 
         if (pagination) {
             query = query.offset(pagination.offset).limit(pagination.limit);
@@ -64,8 +77,11 @@ export class UsersProvider {
         if (!snapshot.exists) {
             throw new Error(`User ${id} not found.`);
         }
-
-        return snapshot.data() as User;
+        
+        console.log("User: " + snapshot.data())
+        const user = snapshot.data() as User;
+        console.log("User processed")
+        return user;
     }
 
     /**
@@ -107,18 +123,19 @@ export class UsersProvider {
      *
      * @return {Promise<User>} the new user
      */
-    async register(userInfo: RegisterUserInput): Promise<User> {
+    async register(userInfo: RegisterUserInput, profile: UserProfile, profileData: UserProfileInput): Promise<User> {
         const encryptedPassword = await encryptPassword(userInfo.password);
 
         const docRef = usersDB.doc();
         await docRef.set({
             id: docRef.id,
-            role: userInfo.role,
+            role: "BASIC",
             name: userInfo.name,
             surname: userInfo.surname,
             phone: userInfo.phone,
             password: encryptedPassword,
             email: userInfo.email,
+            profile: profile,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         });
@@ -270,7 +287,7 @@ export class UsersProvider {
     }
 
     /**
-     * Verify code to register user.
+     * Verify code to register user. If valid, creates an user with the predefined data.
      *
      * @param code the code to be validated
      * @returns the registered user
@@ -314,5 +331,16 @@ export class UsersProvider {
 
         await usersDB.doc(userId).delete();
         return true;
+    }
+
+    async getUserProfileData(id: ID): Promise<ProfileData> {
+        const snapshot = await usersDB.doc(id).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`User ${id} not found.`);
+        }
+        
+        const user = snapshot.data() as User;
+        return user.profileData;
     }
 }

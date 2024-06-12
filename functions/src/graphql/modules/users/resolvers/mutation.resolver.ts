@@ -13,10 +13,6 @@ export const MutationResolver: UsersModule.Resolvers["Mutation"] = {
         return usersProvider.inviteUser(args.email, args.name, args.userRole);
     },
 
-    register: (parent, args, contextValue, info) => {
-        return usersProvider.register(args.userInfo);
-    },
-
     updateUserInfo: (parent, args, contextValue, info) => {
         return usersProvider.updateUserInfo(args.userId, args.userInfo);
     },
@@ -31,5 +27,25 @@ export const MutationResolver: UsersModule.Resolvers["Mutation"] = {
 
     deleteUser: (parent, args, contextValue, info) => {
         return usersProvider.deleteUser(args.userId);
+    },
+
+    registerTourist: (parent, args, contextValue, info) => {
+        return usersProvider.register(args.userInfo, "TOURIST", args.profileData);
+    },
+
+    registerStudent: (parent, args, contextValue, info) => {
+        return usersProvider.register(args.userInfo, "STUDENT", args.profileData);
+    },
+
+    registerTeacher: (parent, args, contextValue, info) => {
+        return usersProvider.register(args.userInfo, "TEACHER", args.profileData);
+    },
+
+    registerInvestigator: (parent, args, contextValue, info) => {
+        return usersProvider.register(args.userInfo, "INVESTIGATOR", args.profileData);
+    },
+
+    registerGovern: (parent, args, contextValue, info) => {
+        return usersProvider.register(args.userInfo, "GOVERN", args.profileData);
     },
 };

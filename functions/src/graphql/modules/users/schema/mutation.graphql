@@ -6,7 +6,6 @@ input RegisterUserInput {
     surname: String!
     email: EmailAddress!
     password: String!
-    role: UserRole!
     phone: String
 }
 
@@ -17,7 +16,7 @@ input UpdateUserInfoInput {
 
     role: UserRole!
     # profile: String!
-    # profileData: Profile
+    # profileData: ProfileData
 }
 
 input UpdateCenotePermissions {
@@ -36,6 +35,28 @@ input UpdateVariablePermissions {
     variableEditBlackList: [String!]!
 }
 
+input RegisterTouristInput {
+    companyName: String
+    companyUrl: String
+}
+
+input RegisterStudentInput {
+    school: String!
+    degree: String!
+}
+
+input RegisterInvestigatorInput {
+    googleScholar: String!
+    orchid: String!
+    researchGate: String!
+    linkedin: String
+}
+
+input RegisterGovernInput {
+    govern: GovernType!
+    institution: String!
+}
+
 type Mutation {
     login(email: EmailAddress!, password: String!): String!  # Access token
     inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): Boolean!
@@ -44,4 +65,9 @@ type Mutation {
     updateCenotePermissions(userId: String!, cenotePermissions: UpdateCenotePermissions!): User
     updateVariablePermissions(userId: String!, variablePermissions: UpdateVariablePermissions!): User
     deleteUser(userId: ID!): Boolean!
+    registerTourist(userInfo: RegisterUserInput!, profileData: RegisterTouristInput!): User
+    registerStudent(userInfo: RegisterUserInput!, profileData: RegisterStudentInput!): User
+    registerTeacher(userInfo: RegisterUserInput!, profileData: RegisterStudentInput!): User
+    registerInvestigator(userInfo: RegisterUserInput!, profileData: RegisterInvestigatorInput!): User
+    registerGovern(userInfo: RegisterUserInput!, profileData: RegisterGovernInput!): User
 }

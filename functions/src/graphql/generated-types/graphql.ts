@@ -5,7 +5,6 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -302,24 +301,10 @@ export type GbifTaxonomicStatus =
   | 'PROPARTE_SYNONYM'
   | 'SYNONYM';
 
-export type Govern = {
-  __typename?: 'Govern';
-  institution: Scalars['String'];
-  type: GovernType;
-};
-
 export type GovernType =
   | 'FEDERAL'
   | 'MUNICIPAL'
   | 'STATE';
-
-export type Investigator = {
-  __typename?: 'Investigator';
-  googleScholar: Scalars['String'];
-  linkedin?: Maybe<Scalars['String']>;
-  orchid: Scalars['String'];
-  researchGate: Scalars['String'];
-};
 
 export type LayerCategory =
   | 'ANTROPOGENICA'
@@ -365,6 +350,11 @@ export type Mutation = {
   inviteUser: Scalars['Boolean'];
   login: Scalars['String'];
   register: User;
+  registerGovern?: Maybe<User>;
+  registerInvestigator?: Maybe<User>;
+  registerStudent?: Maybe<User>;
+  registerTeacher?: Maybe<User>;
+  registerTourist?: Maybe<User>;
   updateCenote?: Maybe<Cenote>;
   updateCenotePermissions?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
@@ -430,6 +420,36 @@ export type MutationLoginArgs = {
 
 
 export type MutationRegisterArgs = {
+  userInfo: RegisterUserInput;
+};
+
+
+export type MutationRegisterGovernArgs = {
+  profileData: RegisterGovernInput;
+  userInfo: RegisterUserInput;
+};
+
+
+export type MutationRegisterInvestigatorArgs = {
+  profileData: RegisterInvestigatorInput;
+  userInfo: RegisterUserInput;
+};
+
+
+export type MutationRegisterStudentArgs = {
+  profileData: RegisterStudentInput;
+  userInfo: RegisterUserInput;
+};
+
+
+export type MutationRegisterTeacherArgs = {
+  profileData: RegisterStudentInput;
+  userInfo: RegisterUserInput;
+};
+
+
+export type MutationRegisterTouristArgs = {
+  profileData: RegisterTouristInput;
   userInfo: RegisterUserInput;
 };
 
@@ -518,7 +538,20 @@ export type PhotoOrMapUploadInput = {
   filename: Scalars['String'];
 };
 
-export type Profile = Student | Teacher;
+export type ProfileData = {
+  __typename?: 'ProfileData';
+  companyName?: Maybe<Scalars['String']>;
+  companyUrl?: Maybe<Scalars['String']>;
+  degree?: Maybe<Scalars['String']>;
+  googleScholar?: Maybe<Scalars['String']>;
+  govern_institution?: Maybe<Scalars['String']>;
+  govern_type?: Maybe<GovernType>;
+  linkedin?: Maybe<Scalars['String']>;
+  orchid?: Maybe<Scalars['String']>;
+  researchGate?: Maybe<Scalars['String']>;
+  school?: Maybe<Scalars['String']>;
+  subject?: Maybe<Scalars['String']>;
+};
 
 export type Query = {
   __typename?: 'Query';
@@ -533,6 +566,7 @@ export type Query = {
   getUserByEmail?: Maybe<User>;
   getUserById?: Maybe<User>;
   getUserByName: Array<User>;
+  getUserProfileData?: Maybe<ProfileData>;
   getUsers: Array<User>;
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
@@ -592,6 +626,11 @@ export type QueryGetUserByIdArgs = {
 
 export type QueryGetUserByNameArgs = {
   name: Scalars['String'];
+};
+
+
+export type QueryGetUserProfileDataArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -688,12 +727,33 @@ export type ReferenceType =
   | 'THESIS'
   | 'WEB_PAGE';
 
+export type RegisterGovernInput = {
+  govern: GovernType;
+  institution: Scalars['String'];
+};
+
+export type RegisterInvestigatorInput = {
+  googleScholar: Scalars['String'];
+  linkedin?: InputMaybe<Scalars['String']>;
+  orchid: Scalars['String'];
+  researchGate: Scalars['String'];
+};
+
+export type RegisterStudentInput = {
+  degree: Scalars['String'];
+  school: Scalars['String'];
+};
+
+export type RegisterTouristInput = {
+  companyName?: InputMaybe<Scalars['String']>;
+  companyUrl?: InputMaybe<Scalars['String']>;
+};
+
 export type RegisterUserInput = {
   email: Scalars['EmailAddress'];
   name: Scalars['String'];
   password: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
-  role: UserRole;
   surname: Scalars['String'];
 };
 
@@ -715,18 +775,6 @@ export type Species = {
   iNaturalistDetails?: Maybe<INaturalistTaxonRecord>;
   iNaturalistId?: Maybe<Scalars['ID']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type Student = {
-  __typename?: 'Student';
-  degree: Scalars['String'];
-  school: Scalars['String'];
-};
-
-export type Teacher = {
-  __typename?: 'Teacher';
-  school: Scalars['String'];
-  subject: Scalars['String'];
 };
 
 export type UpdateCenotePermissions = {
@@ -793,7 +841,7 @@ export type User = {
   name: Scalars['String'];
   password?: Maybe<Scalars['String']>;
   profile: Scalars['String'];
-  profileData?: Maybe<Profile>;
+  profileData: ProfileData;
   role: UserRole;
   surname: Scalars['String'];
   updatedAt: Scalars['DateTime'];
@@ -803,11 +851,17 @@ export type User = {
   variableViewWhiteList: Array<Scalars['String']>;
 };
 
+
+export type UserProfileDataArgs = {
+  profile?: InputMaybe<UserProfile>;
+};
+
 export type UserProfile =
   | 'GOVERN'
   | 'INVESTIGATOR'
   | 'STUDENT'
-  | 'TEACHER';
+  | 'TEACHER'
+  | 'TOURIST';
 
 export type UserRole =
   | 'ADMIN'
@@ -1021,15 +1075,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-/** Mapping of union types */
-export type ResolversUnionTypes = {
-  Profile: ( Student ) | ( Teacher );
-};
 
-/** Mapping of union parent types */
-export type ResolversUnionParentTypes = {
-  Profile: ( Student ) | ( Teacher );
-};
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
@@ -1058,11 +1104,9 @@ export type ResolversTypes = {
   GBIFSuggestion: ResolverTypeWrapper<GbifSuggestion>;
   GBIFTaxonomicRank: GbifTaxonomicRank;
   GBIFTaxonomicStatus: GbifTaxonomicStatus;
-  Govern: ResolverTypeWrapper<Govern>;
   GovernType: GovernType;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Investigator: ResolverTypeWrapper<Investigator>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
   LayerCategory: LayerCategory;
@@ -1077,17 +1121,19 @@ export type ResolversTypes = {
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
-  Profile: ResolverTypeWrapper<ResolversUnionTypes['Profile']>;
+  ProfileData: ResolverTypeWrapper<ProfileData>;
   Query: ResolverTypeWrapper<{}>;
   Reference: ResolverTypeWrapper<Reference>;
   ReferenceType: ReferenceType;
+  RegisterGovernInput: RegisterGovernInput;
+  RegisterInvestigatorInput: RegisterInvestigatorInput;
+  RegisterStudentInput: RegisterStudentInput;
+  RegisterTouristInput: RegisterTouristInput;
   RegisterUserInput: RegisterUserInput;
   SortField: SortField;
   SortOrder: SortOrder;
   Species: ResolverTypeWrapper<Species>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  Student: ResolverTypeWrapper<Student>;
-  Teacher: ResolverTypeWrapper<Teacher>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
   UpdateCenotePermissions: UpdateCenotePermissions;
   UpdateSpeciesInput: UpdateSpeciesInput;
@@ -1095,7 +1141,7 @@ export type ResolversTypes = {
   UpdateVariableInput: UpdateVariableInput;
   UpdateVariablePermissions: UpdateVariablePermissions;
   UpdatedCenoteInput: UpdatedCenoteInput;
-  User: ResolverTypeWrapper<Omit<User, 'profileData'> & { profileData?: Maybe<ResolversTypes['Profile']> }>;
+  User: ResolverTypeWrapper<User>;
   UserProfile: UserProfile;
   UserRole: UserRole;
   Variable: ResolverTypeWrapper<Variable>;
@@ -1131,10 +1177,8 @@ export type ResolversParentTypes = {
   Float: Scalars['Float'];
   GBIFNameUsage: GbifNameUsage;
   GBIFSuggestion: GbifSuggestion;
-  Govern: Govern;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
-  Investigator: Investigator;
   JSON: Scalars['JSON'];
   Latitude: Scalars['Latitude'];
   Longitude: Scalars['Longitude'];
@@ -1148,15 +1192,17 @@ export type ResolversParentTypes = {
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
-  Profile: ResolversUnionParentTypes['Profile'];
+  ProfileData: ProfileData;
   Query: {};
   Reference: Reference;
+  RegisterGovernInput: RegisterGovernInput;
+  RegisterInvestigatorInput: RegisterInvestigatorInput;
+  RegisterStudentInput: RegisterStudentInput;
+  RegisterTouristInput: RegisterTouristInput;
   RegisterUserInput: RegisterUserInput;
   SortField: SortField;
   Species: Species;
   String: Scalars['String'];
-  Student: Student;
-  Teacher: Teacher;
   URL: Scalars['URL'];
   UpdateCenotePermissions: UpdateCenotePermissions;
   UpdateSpeciesInput: UpdateSpeciesInput;
@@ -1164,7 +1210,7 @@ export type ResolversParentTypes = {
   UpdateVariableInput: UpdateVariableInput;
   UpdateVariablePermissions: UpdateVariablePermissions;
   UpdatedCenoteInput: UpdatedCenoteInput;
-  User: Omit<User, 'profileData'> & { profileData?: Maybe<ResolversParentTypes['Profile']> };
+  User: User;
   Variable: Variable;
   VariableWithData: VariableWithData;
   iNaturalistFlagCounts: INaturalistFlagCounts;
@@ -1315,20 +1361,6 @@ export type GbifSuggestionResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GovernResolvers<ContextType = any, ParentType extends ResolversParentTypes['Govern'] = ResolversParentTypes['Govern']> = {
-  institution?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['GovernType'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type InvestigatorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Investigator'] = ResolversParentTypes['Investigator']> = {
-  googleScholar?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  linkedin?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  orchid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  researchGate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
@@ -1371,6 +1403,11 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   inviteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
   login?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   register?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'userInfo'>>;
+  registerGovern?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterGovernArgs, 'profileData' | 'userInfo'>>;
+  registerInvestigator?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterInvestigatorArgs, 'profileData' | 'userInfo'>>;
+  registerStudent?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterStudentArgs, 'profileData' | 'userInfo'>>;
+  registerTeacher?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterTeacherArgs, 'profileData' | 'userInfo'>>;
+  registerTourist?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterTouristArgs, 'profileData' | 'userInfo'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateCenotePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateCenotePermissionsArgs, 'cenotePermissions' | 'userId'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
@@ -1381,8 +1418,19 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   uploadPhoto?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'photoInput'>>;
 };
 
-export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
-  __resolveType: TypeResolveFn<'Student' | 'Teacher', ParentType, ContextType>;
+export type ProfileDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileData'] = ResolversParentTypes['ProfileData']> = {
+  companyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  companyUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  degree?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  googleScholar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  govern_institution?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  govern_type?: Resolver<Maybe<ResolversTypes['GovernType']>, ParentType, ContextType>;
+  linkedin?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  orchid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  researchGate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  school?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  subject?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -1397,6 +1445,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
   getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
+  getUserProfileData?: Resolver<Maybe<ResolversTypes['ProfileData']>, ParentType, ContextType, RequireFields<QueryGetUserProfileDataArgs, 'id'>>;
   getUsers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryGetUsersArgs>>;
   iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
@@ -1458,18 +1507,6 @@ export type SpeciesResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type StudentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Student'] = ResolversParentTypes['Student']> = {
-  degree?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  school?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type TeacherResolvers<ContextType = any, ParentType extends ResolversParentTypes['Teacher'] = ResolversParentTypes['Teacher']> = {
-  school?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  subject?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['URL'], any> {
   name: 'URL';
 }
@@ -1485,7 +1522,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   profile?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  profileData?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
+  profileData?: Resolver<ResolversTypes['ProfileData'], ParentType, ContextType, Partial<UserProfileDataArgs>>;
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
   surname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -1621,20 +1658,16 @@ export type Resolvers<ContextType = any> = {
   EmailAddress?: GraphQLScalarType;
   GBIFNameUsage?: GbifNameUsageResolvers<ContextType>;
   GBIFSuggestion?: GbifSuggestionResolvers<ContextType>;
-  Govern?: GovernResolvers<ContextType>;
-  Investigator?: InvestigatorResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   Latitude?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
   MapLayer?: MapLayerResolvers<ContextType>;
   MeasurementOrFact?: MeasurementOrFactResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
-  Profile?: ProfileResolvers<ContextType>;
+  ProfileData?: ProfileDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Reference?: ReferenceResolvers<ContextType>;
   Species?: SpeciesResolvers<ContextType>;
-  Student?: StudentResolvers<ContextType>;
-  Teacher?: TeacherResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   Variable?: VariableResolvers<ContextType>;
