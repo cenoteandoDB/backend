@@ -1,5 +1,4 @@
 /* eslint-disable require-jsdoc */
-import {ID} from "graphql-modules/shared/types";
 import {
     NewVariableInput,
     UpdateVariableInput,
@@ -28,9 +27,14 @@ export class VariableProvider {
      *
      * @return {Promise<Variable>} the variable
      */
-    async getVariableById(id: ID): Promise<Variable> {
-        const snapshot = await variableDB.where("_id", "==", id).get();
-        return snapshot.docs[0].data() as Variable;
+    async getVariableById(id: string): Promise<Variable> {
+        const snapshot = await variableDB.doc(id).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`Variable ${id} not found.`);
+        }
+        
+        return snapshot.data() as Variable;
     }
 
     /**
@@ -75,12 +79,12 @@ export class VariableProvider {
     async updateVariable(
         updatedVariable: UpdateVariableInput
     ): Promise<Variable> {
-        await variableDB.doc(updatedVariable.id).update({
+        await variableDB.doc(updatedVariable.firestore_id).update({
             updatedAt: new Date().toISOString(),
             ...updatedVariable,
         });
 
-        const snapshot = await variableDB.doc(updatedVariable.id).get();
+        const snapshot = await variableDB.doc(updatedVariable.firestore_id).get();
         return snapshot.data() as Variable;
     }
 }

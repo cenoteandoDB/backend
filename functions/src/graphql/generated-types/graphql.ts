@@ -23,7 +23,6 @@ export type Scalars = {
 };
 
 export type AccessLevel =
-  | 'PRIVATE'
   | 'PUBLIC'
   | 'SENSITIVE';
 
@@ -43,6 +42,34 @@ export type AuditLogType =
   | 'UPDATED_CENOTE'
   | 'UPDATED_REFERENCE'
   | 'UPDATED_VARIABLE';
+
+export type Category =
+  | 'ADDITIONAL'
+  | 'BASIC'
+  | 'BIOMARKERS'
+  | 'CLIMATE'
+  | 'CULTURE'
+  | 'ESSENTIAL'
+  | 'FARMACEUTIC'
+  | 'GEOLOGY'
+  | 'GOVERN'
+  | 'HEAVY_METAL'
+  | 'HIDROLOGY'
+  | 'INFRASTRUCTURE'
+  | 'LAND'
+  | 'LOCATION'
+  | 'NUTRIENT'
+  | 'ORGANOCHLORINE_PESTICIDES'
+  | 'ORGANOPHOSPHATE_PESTICIDES'
+  | 'OTHER'
+  | 'POLYNUCLEAR_AROMATIC_HYDROCARBONS'
+  | 'PROPERTY'
+  | 'PROTECTION'
+  | 'SOCIAL'
+  | 'SPELEDIVING'
+  | 'THREATS'
+  | 'VOLATILE_HYDROCARBONS'
+  | 'WATER';
 
 export type Cenote = {
   __typename?: 'Cenote';
@@ -513,16 +540,16 @@ export type NewSpeciesInput = {
 };
 
 export type NewVariableInput = {
-  accessLevel?: InputMaybe<AccessLevel>;
-  description?: InputMaybe<Scalars['String']>;
+  accessLevel: AccessLevel;
+  description: Scalars['String'];
   enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   methodology?: InputMaybe<Scalars['String']>;
   multiple?: InputMaybe<Scalars['Boolean']>;
-  name?: InputMaybe<Scalars['String']>;
-  origin?: InputMaybe<VariableOrigin>;
-  theme?: InputMaybe<VariableTheme>;
-  timeseries?: InputMaybe<Scalars['Boolean']>;
-  type?: InputMaybe<VariableType>;
+  name: Scalars['String'];
+  origin: VariableOrigin;
+  theme: VariableTheme;
+  timeseries: Scalars['Boolean'];
+  type: VariableType;
   units?: InputMaybe<Scalars['String']>;
 };
 
@@ -799,18 +826,18 @@ export type UpdateUserInfoInput = {
 };
 
 export type UpdateVariableInput = {
-  accessLevel?: InputMaybe<AccessLevel>;
-  description?: InputMaybe<Scalars['String']>;
+  accessLevel: AccessLevel;
+  description: Scalars['String'];
   enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   firestore_id: Scalars['ID'];
   id: Scalars['ID'];
   methodology?: InputMaybe<Scalars['String']>;
   multiple?: InputMaybe<Scalars['Boolean']>;
-  name?: InputMaybe<Scalars['String']>;
-  origin?: InputMaybe<VariableOrigin>;
-  theme?: InputMaybe<VariableTheme>;
-  timeseries?: InputMaybe<Scalars['Boolean']>;
-  type?: InputMaybe<VariableType>;
+  name: Scalars['String'];
+  origin: VariableOrigin;
+  theme: VariableTheme;
+  timeseries: Scalars['Boolean'];
+  type: VariableType;
   units?: InputMaybe<Scalars['String']>;
 };
 
@@ -866,17 +893,15 @@ export type UserRole =
 
 export type Variable = {
   __typename?: 'Variable';
-  accessLevel?: Maybe<AccessLevel>;
+  accessLevel: AccessLevel;
   cenote_count: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateTime']>;
   description: Scalars['String'];
-  enumValues?: Maybe<Array<Scalars['String']>>;
   firestore_id: Scalars['ID'];
   methodology?: Maybe<Scalars['String']>;
-  multiple: Scalars['Boolean'];
   name: Scalars['String'];
   origin: VariableOrigin;
-  short_name: Scalars['String'];
+  sphere: VariableSphere;
   theme: VariableTheme;
   timeseries: Scalars['Boolean'];
   type: VariableType;
@@ -885,33 +910,33 @@ export type Variable = {
 };
 
 export type VariableOrigin =
-  | 'BOTH'
+  | 'CALCULATED'
+  | 'CALCULATED_OFFICE'
   | 'FIELD'
-  | 'OFFICE';
+  | 'FIELD_OFFICE'
+  | 'FIELD_WEB'
+  | 'OFFICE'
+  | 'WEB';
+
+export type VariableSphere =
+  | 'HUMAN_SOCIO_ECONOMICAL'
+  | 'KARSTICO_AMBIENT_SYSTEM';
 
 export type VariableTheme =
   | 'BIODIVERSITY'
   | 'CULTURAL'
-  | 'DISTURBANCE'
-  | 'DIVING'
   | 'GEOMORPHOLOGY'
-  | 'GEOREFERENCE'
-  | 'LOCATION'
+  | 'IDENTIFICATION'
   | 'ORGANIZATION'
   | 'REGULATION'
   | 'TOURISM'
   | 'WATER';
 
 export type VariableType =
-  | 'BOOLEAN'
-  | 'DATE'
-  | 'DATETIME'
-  | 'ENUM'
-  | 'JSON'
-  | 'NUMBER_WITH_UNITS'
-  | 'TEXT'
-  | 'TIME'
-  | 'UNITLESS_NUMBER';
+  | 'CONTINUOUS'
+  | 'DISCRETE'
+  | 'NOMINAL'
+  | 'ORDINAL';
 
 export type VariableWithData = {
   __typename?: 'VariableWithData';
@@ -1079,6 +1104,7 @@ export type ResolversTypes = {
   AuditLog: ResolverTypeWrapper<AuditLog>;
   AuditLogType: AuditLogType;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Category: Category;
   Cenote: ResolverTypeWrapper<Cenote>;
   CenoteBounds: ResolverTypeWrapper<CenoteBounds>;
   CenoteIssue: CenoteIssue;
@@ -1142,6 +1168,7 @@ export type ResolversTypes = {
   UserRole: UserRole;
   Variable: ResolverTypeWrapper<Variable>;
   VariableOrigin: VariableOrigin;
+  VariableSphere: VariableSphere;
   VariableTheme: VariableTheme;
   VariableType: VariableType;
   VariableWithData: ResolverTypeWrapper<VariableWithData>;
@@ -1530,17 +1557,15 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
-  accessLevel?: Resolver<Maybe<ResolversTypes['AccessLevel']>, ParentType, ContextType>;
+  accessLevel?: Resolver<ResolversTypes['AccessLevel'], ParentType, ContextType>;
   cenote_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  enumValues?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   firestore_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   methodology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  multiple?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   origin?: Resolver<ResolversTypes['VariableOrigin'], ParentType, ContextType>;
-  short_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sphere?: Resolver<ResolversTypes['VariableSphere'], ParentType, ContextType>;
   theme?: Resolver<ResolversTypes['VariableTheme'], ParentType, ContextType>;
   timeseries?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['VariableType'], ParentType, ContextType>;

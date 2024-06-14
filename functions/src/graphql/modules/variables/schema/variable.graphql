@@ -3,58 +3,88 @@ scalar DateTime
 
 enum AccessLevel {
 	PUBLIC
-	PRIVATE
 	SENSITIVE
 }
 
+enum VariableSphere {
+	KARSTICO_AMBIENT_SYSTEM
+	HUMAN_SOCIO_ECONOMICAL
+}
+
 enum VariableTheme {
-	LOCATION
-	GEOREFERENCE
-	CULTURAL
+	IDENTIFICATION
 	GEOMORPHOLOGY
 	BIODIVERSITY
-	DISTURBANCE
-	TOURISM
-	DIVING
-	ORGANIZATION
-	REGULATION
 	WATER
+	REGULATION
+	TOURISM
+	ORGANIZATION
+	CULTURAL
 }
 
 enum VariableType {
-	TEXT
-	BOOLEAN
-	ENUM
-	JSON
-	UNITLESS_NUMBER
-	NUMBER_WITH_UNITS
-	DATETIME
-	DATE
-	TIME
+	NOMINAL
+	CONTINUOUS
+	DISCRETE
+	ORDINAL
 }
 
 enum VariableOrigin {
 	FIELD
 	OFFICE
-	BOTH
+	WEB
+	FIELD_WEB
+	FIELD_OFFICE
+	CALCULATED
+	CALCULATED_OFFICE
+}
+
+enum Category {
+	LOCATION
+	LAND
+	WATER
+	GEOLOGY
+	CLIMATE
+	SPELEDIVING
+	HIDROLOGY
+	NUTRIENT
+	HEAVY_METAL
+	BIOMARKERS
+	ORGANOCHLORINE_PESTICIDES
+	ORGANOPHOSPHATE_PESTICIDES
+	VOLATILE_HYDROCARBONS
+	POLYNUCLEAR_AROMATIC_HYDROCARBONS
+	FARMACEUTIC
+	OTHER
+	GOVERN
+	CULTURE
+	THREATS
+	PROTECTION
+	PROPERTY
+	INFRASTRUCTURE
+	ESSENTIAL
+	BASIC
+	ADDITIONAL
+	SOCIAL
 }
 
 type Variable {
 	firestore_id: ID!
 
-	short_name: String!
 	name: String!
 	description: String!
 	
 	type: VariableType!
+
 	units: String   			#SHOULD be an enum 
-	enumValues: [String!]
-    timeseries: Boolean!
-    multiple: Boolean!
-    accessLevel: AccessLevel
-    theme: VariableTheme!
-    origin: VariableOrigin!
     methodology: String
+
+    timeseries: Boolean!
+    accessLevel: AccessLevel!
+	
+    theme: VariableTheme!
+	sphere: VariableSphere!
+    origin: VariableOrigin!
 
 	cenote_count: Int!
 
