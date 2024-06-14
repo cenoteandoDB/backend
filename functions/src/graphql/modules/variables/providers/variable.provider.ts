@@ -1,6 +1,9 @@
 /* eslint-disable require-jsdoc */
+import { firestore } from "firebase-admin";
 import {
     NewVariableInput,
+    PaginationInput,
+    SortField,
     UpdateVariableInput,
     Variable,
     VariableTheme,
@@ -13,11 +16,30 @@ export class VariableProvider {
     /**
      * Get all variables.
      *
+     * @param {SortField} sort optional sort field. Default by name
+     * @param {PaginationInput} pagination optional pagination parameter
+     * @param {string} name  The name of user to retrieve
      * @return {Promise<Variable[]>} list with all variables
      */
-    async getVariables(): Promise<Variable[]> {
-        const variables = await variableDB.get();
-        return variables.docs.map((doc) => doc.data() as Variable);
+    async getVariables(
+        sort: SortField|null|undefined = { field: "name", sortOrder: "ASC" },
+        pagination: PaginationInput|null = { offset: 0, limit: 25 },
+        name: string|null|undefined
+    ): Promise<Variable[]> {
+        let query: any;
+        if(name) {
+            const endSearch = name.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
+            query = variableDB.where('name', '>=', name).where('name', '<', endSearch).orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+        } else {
+            query = variableDB.orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+        }
+      
+        if (pagination) {
+            query = query.offset(pagination.offset).limit(pagination.limit);
+        }
+      
+        const users = await query.get();
+        return users.docs.map((doc: any) => doc.data() as Variable);
     }
 
     /**

@@ -595,6 +595,9 @@ export type Query = {
   getUserByName: Array<User>;
   getUserProfileData?: Maybe<ProfileData>;
   getUsers: Array<User>;
+  getVariableById?: Maybe<Variable>;
+  getVariables?: Maybe<Array<Maybe<Variable>>>;
+  getVariablesByTheme?: Maybe<Array<Maybe<Variable>>>;
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
@@ -605,9 +608,6 @@ export type Query = {
   speciesByINaturalistId?: Maybe<Species>;
   speciesById?: Maybe<Species>;
   speciesCsv?: Maybe<Scalars['String']>;
-  variableById?: Maybe<Variable>;
-  variables?: Maybe<Array<Maybe<Variable>>>;
-  variablesByTheme?: Maybe<Array<Maybe<Variable>>>;
   verifyCode?: Maybe<User>;
 };
 
@@ -668,6 +668,23 @@ export type QueryGetUsersArgs = {
 };
 
 
+export type QueryGetVariableByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetVariablesArgs = {
+  name?: InputMaybe<Scalars['String']>;
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<SortField>;
+};
+
+
+export type QueryGetVariablesByThemeArgs = {
+  theme: VariableTheme;
+};
+
+
 export type QueryINaturalistSearchArgs = {
   perPage?: InputMaybe<Scalars['Int']>;
   q: Scalars['String'];
@@ -696,16 +713,6 @@ export type QuerySpeciesByINaturalistIdArgs = {
 
 export type QuerySpeciesByIdArgs = {
   id: Scalars['ID'];
-};
-
-
-export type QueryVariableByIdArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryVariablesByThemeArgs = {
-  theme: VariableTheme;
 };
 
 
@@ -1470,6 +1477,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
   getUserProfileData?: Resolver<Maybe<ResolversTypes['ProfileData']>, ParentType, ContextType, RequireFields<QueryGetUserProfileDataArgs, 'id'>>;
   getUsers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryGetUsersArgs>>;
+  getVariableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariableByIdArgs, 'id'>>;
+  getVariables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
+  getVariablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
   iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
@@ -1480,9 +1490,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalistId'>>;
   speciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByIdArgs, 'id'>>;
   speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  variableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryVariableByIdArgs, 'id'>>;
-  variables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType>;
-  variablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryVariablesByThemeArgs, 'theme'>>;
   verifyCode?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryVerifyCodeArgs, 'code'>>;
 };
 

@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace VariablesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
-    Query: 'variables' | 'variableById' | 'variablesByTheme';
+    Query: 'getVariables' | 'getVariableById' | 'getVariablesByTheme';
     Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'theme' | 'sphere' | 'origin' | 'cenote_count' | 'createdAt' | 'updatedAt';
   };
   
@@ -31,6 +31,8 @@ export namespace VariablesModule {
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Variable = Pick<Types.Variable, DefinedFields['Variable']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type SortField = Types.SortField;
+  export type PaginationInput = Types.PaginationInput;
   export type VariableSphere = DefinedEnumValues['VariableSphere'];
   export type Category = DefinedEnumValues['Category'];
   
@@ -59,9 +61,9 @@ export namespace VariablesModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
-      variables?: gm.Middleware[];
-      variableById?: gm.Middleware[];
-      variablesByTheme?: gm.Middleware[];
+      getVariables?: gm.Middleware[];
+      getVariableById?: gm.Middleware[];
+      getVariablesByTheme?: gm.Middleware[];
     };
     Variable?: {
       '*'?: gm.Middleware[];

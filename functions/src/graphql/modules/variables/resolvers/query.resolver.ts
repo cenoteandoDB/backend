@@ -4,13 +4,13 @@ import {VariableProvider} from "../providers/variable.provider";
 const variablesProvider = new VariableProvider();
 
 export const QueryResolver: VariablesModule.Resolvers["Query"] = {
-    variables: () => {
-        return variablesProvider.getVariables();
+    getVariables: (parent, args, contextValue, info) => {
+        return variablesProvider.getVariables(args.sort, args.pagination, args.name);
     },
-    variableById: (parent, args, contextValue, info) => {
+    getVariableById: (parent, args, contextValue, info) => {
         return variablesProvider.getVariableById(args.id);
     },
-    variablesByTheme: (parent, args, contextValue, info) => {
+    getVariablesByTheme: (parent, args, contextValue, info) => {
         return variablesProvider.getVariablesByTheme(args.theme);
     },
 };
