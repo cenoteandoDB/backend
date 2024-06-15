@@ -163,8 +163,9 @@ export class UsersProvider {
         }
         
         const user = snapshot.docs[0].data() as User
-
-        if (!user.password || !comparePassword(password, user.password)) {
+        
+        const correctPassword = await comparePassword(password, user.password);
+        if (!correctPassword) {
             throw new Error(`Password does not match.`);
         }
 

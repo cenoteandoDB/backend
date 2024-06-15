@@ -873,10 +873,10 @@ export type User = {
   cenoteViewBlackList: Array<Scalars['String']>;
   cenoteViewWhiteList: Array<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  email?: Maybe<Scalars['EmailAddress']>;
+  email: Scalars['EmailAddress'];
   id: Scalars['ID'];
   name: Scalars['String'];
-  password?: Maybe<Scalars['String']>;
+  password: Scalars['String'];
   profile: UserProfile;
   profileData: ProfileData;
   role: UserRole;
@@ -1549,10 +1549,10 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   cenoteViewBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   cenoteViewWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  email?: Resolver<Maybe<ResolversTypes['EmailAddress']>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   profile?: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
   profileData?: Resolver<ResolversTypes['ProfileData'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;

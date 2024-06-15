@@ -44,8 +44,8 @@ type User {
     
     name: String!
     surname: String
-    email: EmailAddress
-    password: String
+    email: EmailAddress!
+    password: String!
 
     role: UserRole!
     profile: UserProfile!
