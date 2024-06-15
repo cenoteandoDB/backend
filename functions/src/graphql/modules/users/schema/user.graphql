@@ -43,11 +43,11 @@ type User {
     id: ID!
     
     name: String!
-    surname: String!
+    surname: String
     email: EmailAddress!
     password: String
 
-    role: UserRole!
+    role: UserRole
     profile: String!
     profileData: ProfileData!
     

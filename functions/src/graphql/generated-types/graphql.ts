@@ -794,7 +794,9 @@ export type UpdateSpeciesInput = {
 export type UpdateUserInfoInput = {
   email: Scalars['EmailAddress'];
   name: Scalars['String'];
-  role: UserRole;
+  password: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<UserRole>;
   surname: Scalars['String'];
 };
 
@@ -843,8 +845,8 @@ export type User = {
   password?: Maybe<Scalars['String']>;
   profile: Scalars['String'];
   profileData: ProfileData;
-  role: UserRole;
-  surname: Scalars['String'];
+  role?: Maybe<UserRole>;
+  surname?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
   variableEditBlackList: Array<Scalars['String']>;
   variableEditWhiteList: Array<Scalars['String']>;
@@ -1519,8 +1521,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   profile?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   profileData?: Resolver<ResolversTypes['ProfileData'], ParentType, ContextType>;
-  role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
-  surname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  role?: Resolver<Maybe<ResolversTypes['UserRole']>, ParentType, ContextType>;
+  surname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   variableEditBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   variableEditWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;

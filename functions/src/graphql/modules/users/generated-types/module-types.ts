@@ -18,7 +18,7 @@ export namespace UsersModule {
   
   interface DefinedInputFields {
     RegisterUserInput: 'name' | 'surname' | 'email' | 'password' | 'phone';
-    UpdateUserInfoInput: 'name' | 'surname' | 'email' | 'role';
+    UpdateUserInfoInput: 'name' | 'surname' | 'email' | 'password' | 'phone' | 'role';
     UpdateCenotePermissions: 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList';
     UpdateVariablePermissions: 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList';
     RegisterTouristInput: 'companyName' | 'companyUrl';
