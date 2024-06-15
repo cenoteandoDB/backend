@@ -43,8 +43,8 @@ type User {
     id: ID!
     
     name: String!
-    surname: String!
-    email: EmailAddress!
+    surname: String
+    email: EmailAddress
     password: String
 
     role: UserRole!

@@ -186,17 +186,34 @@ export class UsersProvider {
             throw new Error(`User does not exist.`);
         }
 
-        await usersDB.doc(userId).update({
+        const encryptedPassword = await encryptPassword(userInfo.password);
+            
+        // Prepare update data object
+        const updateData: { [key: string]: any } = {
             name: userInfo.name,
             surname: userInfo.surname,
             email: userInfo.email,
-
-            role: userInfo.role,
-
+            password: encryptedPassword,
             updatedAt: new Date().toISOString(),
+        };
+        if (userInfo.phone !== undefined) {
+            updateData.phone = userInfo.phone;
+        }
+        if (userInfo.role !== undefined) {
+            updateData.role = userInfo.role;
+        }
+    
+        // Remove undefined fields from updateData
+        Object.keys(updateData).forEach(key => {
+            if (updateData[key] === undefined) {
+                delete updateData[key];
+            }
         });
-
+        
         const updatedUser = await usersDB.doc(userId).get();
+        await usersDB.doc(userId).update(updateData);
+       
+      
         return updatedUser.data() as User;
     }
 

@@ -9,12 +9,14 @@ input RegisterUserInput {
     phone: String
 }
 
+
 input UpdateUserInfoInput {
     name: String!
     surname: String!
     email: EmailAddress!
-
-    role: UserRole!
+    password: String!
+    phone: String
+    role: UserRole
     # profile: String!
     # profileData: ProfileData
 }

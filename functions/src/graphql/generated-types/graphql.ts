@@ -828,7 +828,9 @@ export type UpdateSpeciesInput = {
 export type UpdateUserInfoInput = {
   email: Scalars['EmailAddress'];
   name: Scalars['String'];
-  role: UserRole;
+  password: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<UserRole>;
   surname: Scalars['String'];
 };
 
@@ -871,14 +873,14 @@ export type User = {
   cenoteViewBlackList: Array<Scalars['String']>;
   cenoteViewWhiteList: Array<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  email: Scalars['EmailAddress'];
+  email?: Maybe<Scalars['EmailAddress']>;
   id: Scalars['ID'];
   name: Scalars['String'];
   password?: Maybe<Scalars['String']>;
   profile: UserProfile;
   profileData: ProfileData;
   role: UserRole;
-  surname: Scalars['String'];
+  surname?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
   variableEditBlackList: Array<Scalars['String']>;
   variableEditWhiteList: Array<Scalars['String']>;
@@ -1547,14 +1549,14 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   cenoteViewBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   cenoteViewWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['EmailAddress']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   profile?: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
   profileData?: Resolver<ResolversTypes['ProfileData'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
-  surname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  surname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   variableEditBlackList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   variableEditWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
