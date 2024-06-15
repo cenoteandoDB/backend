@@ -48,7 +48,7 @@ type User {
     password: String
 
     role: UserRole!
-    profile: String!
+    profile: UserProfile!
     profileData: ProfileData!
     
     cenoteViewWhiteList: [String!]!

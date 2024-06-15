@@ -1,29 +1,25 @@
 input NewVariableInput {
-	name: String
-	description: String
-	type: VariableType
+	name: String!
+	description: String!
+	type: VariableType!
 	units: String   			#SHOULD be an enum 
-	enumValues: [String]
-    timeseries: Boolean
-    multiple: Boolean
-    accessLevel: AccessLevel
-    theme: VariableTheme
-    origin: VariableOrigin
+    timeseries: Boolean!
+    accessLevel: AccessLevel!
+    theme: VariableTheme!
+    origin: VariableOrigin!
     methodology: String
 }
 
 input UpdateVariableInput {
 	firestore_id: ID!
-	name: String
-	description: String
-	type: VariableType
+	name: String!
+	description: String!
+	type: VariableType!
 	units: String   			#SHOULD be an enum 
-	enumValues: [String]
-    timeseries: Boolean
-    multiple: Boolean
-    accessLevel: AccessLevel
-    theme: VariableTheme
-    origin: VariableOrigin
+    timeseries: Boolean!
+    accessLevel: AccessLevel!
+    theme: VariableTheme!
+    origin: VariableOrigin!
     methodology: String
 }
 

@@ -4,20 +4,22 @@ import * as gm from "graphql-modules";
 export namespace VariablesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
-    Query: 'variables' | 'variableById' | 'variablesByTheme';
-    Variable: 'firestore_id' | 'short_name' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology' | 'cenote_count' | 'createdAt' | 'updatedAt';
+    Query: 'getVariables' | 'getVariableById' | 'getVariablesByTheme';
+    Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'theme' | 'sphere' | 'origin' | 'cenote_count' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
-    AccessLevel: 'PUBLIC' | 'PRIVATE' | 'SENSITIVE';
-    VariableTheme: 'LOCATION' | 'GEOREFERENCE' | 'CULTURAL' | 'GEOMORPHOLOGY' | 'BIODIVERSITY' | 'DISTURBANCE' | 'TOURISM' | 'DIVING' | 'ORGANIZATION' | 'REGULATION' | 'WATER';
-    VariableType: 'TEXT' | 'BOOLEAN' | 'ENUM' | 'JSON' | 'UNITLESS_NUMBER' | 'NUMBER_WITH_UNITS' | 'DATETIME' | 'DATE' | 'TIME';
-    VariableOrigin: 'FIELD' | 'OFFICE' | 'BOTH';
+    AccessLevel: 'PUBLIC' | 'SENSITIVE';
+    VariableSphere: 'KARSTICO_AMBIENT_SYSTEM' | 'HUMAN_SOCIO_ECONOMICAL';
+    VariableTheme: 'IDENTIFICATION' | 'GEOMORPHOLOGY' | 'BIODIVERSITY' | 'WATER' | 'REGULATION' | 'TOURISM' | 'ORGANIZATION' | 'CULTURAL';
+    VariableType: 'NOMINAL' | 'CONTINUOUS' | 'DISCRETE' | 'ORDINAL';
+    VariableOrigin: 'FIELD' | 'OFFICE' | 'WEB' | 'FIELD_WEB' | 'FIELD_OFFICE' | 'CALCULATED' | 'CALCULATED_OFFICE';
+    Category: 'LOCATION' | 'LAND' | 'WATER' | 'GEOLOGY' | 'CLIMATE' | 'SPELEDIVING' | 'HIDROLOGY' | 'NUTRIENT' | 'HEAVY_METAL' | 'BIOMARKERS' | 'ORGANOCHLORINE_PESTICIDES' | 'ORGANOPHOSPHATE_PESTICIDES' | 'VOLATILE_HYDROCARBONS' | 'POLYNUCLEAR_AROMATIC_HYDROCARBONS' | 'FARMACEUTIC' | 'OTHER' | 'GOVERN' | 'CULTURE' | 'THREATS' | 'PROTECTION' | 'PROPERTY' | 'INFRASTRUCTURE' | 'ESSENTIAL' | 'BASIC' | 'ADDITIONAL' | 'SOCIAL';
   };
   
   interface DefinedInputFields {
-    NewVariableInput: 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
-    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
+    NewVariableInput: 'name' | 'description' | 'type' | 'units' | 'timeseries' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
+    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'timeseries' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
   };
   
   export type NewVariableInput = Pick<Types.NewVariableInput, DefinedInputFields['NewVariableInput']>;
@@ -29,6 +31,10 @@ export namespace VariablesModule {
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Variable = Pick<Types.Variable, DefinedFields['Variable']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type SortField = Types.SortField;
+  export type PaginationInput = Types.PaginationInput;
+  export type VariableSphere = DefinedEnumValues['VariableSphere'];
+  export type Category = DefinedEnumValues['Category'];
   
   export type Scalars = Pick<Types.Scalars, 'DateTime'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
@@ -55,25 +61,23 @@ export namespace VariablesModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
-      variables?: gm.Middleware[];
-      variableById?: gm.Middleware[];
-      variablesByTheme?: gm.Middleware[];
+      getVariables?: gm.Middleware[];
+      getVariableById?: gm.Middleware[];
+      getVariablesByTheme?: gm.Middleware[];
     };
     Variable?: {
       '*'?: gm.Middleware[];
       firestore_id?: gm.Middleware[];
-      short_name?: gm.Middleware[];
       name?: gm.Middleware[];
       description?: gm.Middleware[];
       type?: gm.Middleware[];
       units?: gm.Middleware[];
-      enumValues?: gm.Middleware[];
+      methodology?: gm.Middleware[];
       timeseries?: gm.Middleware[];
-      multiple?: gm.Middleware[];
       accessLevel?: gm.Middleware[];
       theme?: gm.Middleware[];
+      sphere?: gm.Middleware[];
       origin?: gm.Middleware[];
-      methodology?: gm.Middleware[];
       cenote_count?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
