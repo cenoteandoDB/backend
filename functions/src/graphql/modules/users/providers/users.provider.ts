@@ -140,6 +140,7 @@ export class UsersProvider {
             password: encryptedPassword,
             email: userInfo.email,
             profile: profile,
+            profileData: profileData,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         });
