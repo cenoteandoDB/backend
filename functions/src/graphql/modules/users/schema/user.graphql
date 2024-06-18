@@ -48,8 +48,8 @@ type User {
     password: String!
 
     role: UserRole!
-    profile: UserProfile!
-    profileData: ProfileData!
+    profile: UserProfile
+    profileData: ProfileData
     
     cenoteViewWhiteList: [String!]!
     cenoteViewBlackList: [String!]!
