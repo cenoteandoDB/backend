@@ -309,7 +309,8 @@ export class UsersProvider {
     }
 
     /**
-     * Verify code to register user. If valid, creates an user with the predefined data.
+     * Verify code to register user. If valid, creates an user with the predefined data and deletes
+     * the invitation code from the database.
      *
      * @param code the code to be validated
      * @returns the registered user
@@ -333,8 +334,10 @@ export class UsersProvider {
             updatedAt: new Date().toISOString(),
         });
 
-        const user_napshot = await usersDB.doc(docRef.id).get();
-        return user_napshot.data() as User;
+        await registrationCodeDB.doc(code).delete();
+
+        const user_snapshot = await usersDB.doc(docRef.id).get();
+        return user_snapshot.data() as User;
     }
 
     /**
