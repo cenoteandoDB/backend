@@ -11,7 +11,7 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
             args.new_cenote,
             args.new_cenote.coordinates
         );
-        AuditLogsProvider.save(cenote.id, "NEW_CENOTE", args.new_cenote);
+        AuditLogsProvider.save(cenote.firestore_id, "NEW_CENOTE", args.new_cenote);
 
         return cenote;
     },

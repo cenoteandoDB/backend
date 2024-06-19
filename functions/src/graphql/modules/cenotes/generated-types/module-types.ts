@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'id' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'variable_count' | 'reference_count' | 'photos' | 'maps' | 'creator' | 'distances' | 'reviewed' | 'createdAt' | 'updatedAt';
+    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'createdAt' | 'updatedAt';
     CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'county';
     Coordinates: 'latitude' | 'longitude';
     CenoteBounds: 'top_left' | 'bottom_right';
@@ -31,10 +31,9 @@ export namespace CenotesModule {
   export type CityDistances = Pick<Types.CityDistances, DefinedFields['CityDistances']>;
   export type Cenote = Pick<Types.Cenote, DefinedFields['Cenote']>;
   export type CenoteLocation = Pick<Types.CenoteLocation, DefinedFields['CenoteLocation']>;
-  export type CenoteSocialData = Pick<Types.CenoteSocialData, DefinedFields['CenoteSocialData']>;
-  export type User = Types.User;
   export type Coordinates = Pick<Types.Coordinates, DefinedFields['Coordinates']>;
   export type CenoteBounds = Pick<Types.CenoteBounds, DefinedFields['CenoteBounds']>;
+  export type CenoteSocialData = Pick<Types.CenoteSocialData, DefinedFields['CenoteSocialData']>;
   export type Comment = Pick<Types.Comment, DefinedFields['Comment']>;
   export type CoordinatesInput = Pick<Types.CoordinatesInput, DefinedInputFields['CoordinatesInput']>;
   export type NewCenoteInput = Pick<Types.NewCenoteInput, DefinedInputFields['NewCenoteInput']>;
@@ -42,13 +41,15 @@ export namespace CenotesModule {
   export type PhotoOrMapUploadInput = Pick<Types.PhotoOrMapUploadInput, DefinedInputFields['PhotoOrMapUploadInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type SortField = Types.SortField;
+  export type PaginationInput = Types.PaginationInput;
   
-  export type Scalars = Pick<Types.Scalars, 'DateTime' | 'URL' | 'JSON' | 'Latitude' | 'Longitude' | 'Coordinate'>;
+  export type Scalars = Pick<Types.Scalars, 'DateTime' | 'URL' | 'Latitude' | 'Longitude' | 'JSON' | 'Coordinate'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
   export type UrlScalarConfig = Types.UrlScalarConfig;
-  export type JsonScalarConfig = Types.JsonScalarConfig;
   export type LatitudeScalarConfig = Types.LatitudeScalarConfig;
   export type LongitudeScalarConfig = Types.LongitudeScalarConfig;
+  export type JsonScalarConfig = Types.JsonScalarConfig;
   export type CoordinateScalarConfig = Types.CoordinateScalarConfig;
   
   export type CityDistancesResolvers = Pick<Types.CityDistancesResolvers, DefinedFields['CityDistances'] | '__isTypeOf'>;
@@ -73,9 +74,9 @@ export namespace CenotesModule {
     Query?: QueryResolvers;
     DateTime?: Types.Resolvers['DateTime'];
     URL?: Types.Resolvers['URL'];
-    JSON?: Types.Resolvers['JSON'];
     Latitude?: Types.Resolvers['Latitude'];
     Longitude?: Types.Resolvers['Longitude'];
+    JSON?: Types.Resolvers['JSON'];
     Coordinate?: Types.Resolvers['Coordinate'];
   };
   
@@ -91,21 +92,18 @@ export namespace CenotesModule {
     };
     Cenote?: {
       '*'?: gm.Middleware[];
-      id?: gm.Middleware[];
-      touristic?: gm.Middleware[];
-      location?: gm.Middleware[];
-      type?: gm.Middleware[];
+      firestore_id?: gm.Middleware[];
+      cenoteando_id?: gm.Middleware[];
       name?: gm.Middleware[];
-      alternativeNames?: gm.Middleware[];
-      issues?: gm.Middleware[];
-      social?: gm.Middleware[];
+      altnames?: gm.Middleware[];
+      touristic?: gm.Middleware[];
+      latitude?: gm.Middleware[];
+      longitude?: gm.Middleware[];
       variable_count?: gm.Middleware[];
       reference_count?: gm.Middleware[];
+      species_count?: gm.Middleware[];
       photos?: gm.Middleware[];
       maps?: gm.Middleware[];
-      creator?: gm.Middleware[];
-      distances?: gm.Middleware[];
-      reviewed?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

@@ -4,11 +4,13 @@ import {db} from "../../database/db";
 import {
     Cenote,
     CenoteBounds,
-    CenoteLocation,
     CoordinatesInput,
     NewCenoteInput,
+    PaginationInput,
+    SortField,
     UpdatedCenoteInput,
 } from "../../../generated-types/graphql";
+import { firestore } from "firebase-admin";
 
 const cenotesDB = db.cenotes;
 
@@ -18,9 +20,24 @@ export class CenotesProvider {
      *
      * @return {Promise<Cenote[]>} a list with all cenotes
      */
-    async getCenotes(): Promise<Cenote[]> {
-        const cenotes = await cenotesDB.get();
-        return cenotes.docs.map((doc) => doc.data() as Cenote);
+    async getCenotes(
+        sort: SortField|null|undefined = { field: "cenoteando_id", sortOrder: "ASC" },
+        pagination: PaginationInput|null = { offset: 0, limit: 25 },
+        name: string|null|undefined
+    ): Promise<Cenote[]> {
+        let query: any;
+        if(name) {
+            const endSearch = name.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
+            query = cenotesDB.where('name', '>=', name).where('name', '<', endSearch).orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+        } else {
+            query = cenotesDB.orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+        }
+        
+        if (pagination) {
+            query = query.offset(pagination.offset).limit(pagination.limit);
+        }
+        const cenotes = await query.get();
+        return cenotes.docs.map((doc: any) => doc.data() as Cenote);
     }
 
     /**
@@ -48,8 +65,7 @@ export class CenotesProvider {
             .get()
             .then(
                 (snapshot) =>
-                    (snapshot.docs[0].data() as Cenote).location.coordinates
-                        .latitude
+                    (snapshot.docs[0].data() as Cenote).latitude
             );
         const minLat = await cenotesDB
             .orderBy("lat", "desc")
@@ -57,8 +73,7 @@ export class CenotesProvider {
             .get()
             .then(
                 (snapshot) =>
-                    (snapshot.docs[0].data() as Cenote).location.coordinates
-                        .latitude
+                    (snapshot.docs[0].data() as Cenote).latitude
             );
         const maxLng = await cenotesDB
             .orderBy("lng", "asc")
@@ -66,8 +81,7 @@ export class CenotesProvider {
             .get()
             .then(
                 (snapshot) =>
-                    (snapshot.docs[0].data() as Cenote).location.coordinates
-                        .longitude
+                    (snapshot.docs[0].data() as Cenote).longitude
             );
         const minLng = await cenotesDB
             .orderBy("lng", "asc")
@@ -75,8 +89,7 @@ export class CenotesProvider {
             .get()
             .then(
                 (snapshot) =>
-                    (snapshot.docs[0].data() as Cenote).location.coordinates
-                        .longitude
+                    (snapshot.docs[0].data() as Cenote).longitude
             );
 
         return {
@@ -110,13 +123,13 @@ export class CenotesProvider {
         );
         */
 
-        const location = this.getCenoteLocation(coordinates);
-
         const docRef = cenotesDB.doc();
         await docRef.set({
             id: docRef.id,
             createdAt: new Date().toISOString(),
-            location,
+            updatedAt: new Date().toISOString(),
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
             ...newCenote,
         });
 
@@ -154,25 +167,6 @@ export class CenotesProvider {
         this.getCenoteDocument(id);
         await cenotesDB.doc(id).delete();
         return true;
-    }
-
-    /**
-     * Get Cenote Location information.
-     *
-     * @param {CoordinatesInput} input the cenote coordinates
-     *
-     * @return {CenoteLocation} with Cenote's coordinates, country, state and municipality
-     */
-    private getCenoteLocation(input: CoordinatesInput): CenoteLocation {
-        const location: CenoteLocation = {
-            geojson: "",
-            coordinates: [input.latitude, input.longitude],
-            country: "Mexico",
-            state: "State",
-            county: "County",
-        };
-
-        return location;
     }
 
     /**

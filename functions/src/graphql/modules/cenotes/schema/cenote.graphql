@@ -1,6 +1,9 @@
 # From graphql-scalars
 scalar DateTime
 scalar URL
+scalar Latitude
+scalar Longitude
+
 
 enum CenoteType {
 	NO_TYPE
@@ -23,38 +26,39 @@ type CityDistances {
 # TODO: Reference, Species, VariableWithData
 
 type Cenote {
-	id: ID!
+	firestore_id: ID!
+	cenoteando_id: ID!
+
+	name: String!
+	altnames: [String!]!
 
 	touristic: Boolean!
-	location: CenoteLocation!
-	type: CenoteType!
+	latitude: Latitude!
+  	longitude: Longitude!
 
-    # QUESTION: How to deal with unnamed cenotes? (from automated sources or recently discovered)
-	name: String!
-	alternativeNames: [String!]
-
-	issues: [CenoteIssue]
-	social: CenoteSocialData
-
-	# references: [Reference!]
-	# species: [Species!]
 	variable_count: Int!
 	reference_count: Int!
-	# species_count: Int!  -- Not working for now
+	species_count: Int!
 
 	photos: [URL!]
 	maps: [URL!]
 
+	createdAt: DateTime
+	updatedAt: DateTime
+
+	# social: CenoteSocialData
+
+	# references: [Reference!]
+	# species: [Species!]
+
 	# TODO: Define how this data is fetched by the frontend.
 	# data: [VariableWithData]
 
-	creator: User
+	# creator: User
 	# contributors: [User]
 
-	distances: [CityDistances]
+	# distances: [CityDistances]
 
-	reviewed: Boolean
-	createdAt: DateTime
-	updatedAt: DateTime
+	# reviewed: Boolean
 
 }

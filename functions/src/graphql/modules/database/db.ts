@@ -3,7 +3,7 @@ admin.initializeApp();
 
 export const db = {
     users: admin.firestore().collection("users"),
-    cenotes: admin.firestore().collection("cenotes_silver"),
+    cenotes: admin.firestore().collection("cenotes_test"),
     species: admin.firestore().collection("species_bronze"),
     variables: admin.firestore().collection("variables_test"),
     references: admin.firestore().collection("references"),
