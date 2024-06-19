@@ -18,9 +18,5 @@ export const QueryResolver: UsersModule.Resolvers["Query"] = {
     },
     verifyCode: (parent, args, contextValue, info) => {
         return usersProvider.verifyCode(args.code);
-    },
-
-    getUserProfileData: (parent, args, contextValue, info) => {
-        return usersProvider.getUserProfileData(args.id);
     }
 };

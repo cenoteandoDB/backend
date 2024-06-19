@@ -5,7 +5,7 @@ export namespace VariablesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
     Query: 'getVariables' | 'getVariableById' | 'getVariablesByTheme';
-    Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'theme' | 'sphere' | 'origin' | 'cenote_count' | 'createdAt' | 'updatedAt';
+    Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'origin' | 'theme' | 'sphere' | 'category' | 'cenote_count' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
@@ -14,7 +14,7 @@ export namespace VariablesModule {
     VariableTheme: 'IDENTIFICATION' | 'GEOMORPHOLOGY' | 'BIODIVERSITY' | 'WATER' | 'REGULATION' | 'TOURISM' | 'ORGANIZATION' | 'CULTURAL';
     VariableType: 'NOMINAL' | 'CONTINUOUS' | 'DISCRETE' | 'ORDINAL';
     VariableOrigin: 'FIELD' | 'OFFICE' | 'WEB' | 'FIELD_WEB' | 'FIELD_OFFICE' | 'CALCULATED' | 'CALCULATED_OFFICE';
-    Category: 'LOCATION' | 'LAND' | 'WATER' | 'GEOLOGY' | 'CLIMATE' | 'SPELEDIVING' | 'HIDROLOGY' | 'NUTRIENT' | 'HEAVY_METAL' | 'BIOMARKERS' | 'ORGANOCHLORINE_PESTICIDES' | 'ORGANOPHOSPHATE_PESTICIDES' | 'VOLATILE_HYDROCARBONS' | 'POLYNUCLEAR_AROMATIC_HYDROCARBONS' | 'FARMACEUTIC' | 'OTHER' | 'GOVERN' | 'CULTURE' | 'THREATS' | 'PROTECTION' | 'PROPERTY' | 'INFRASTRUCTURE' | 'ESSENTIAL' | 'BASIC' | 'ADDITIONAL' | 'SOCIAL';
+    VariableCategory: 'LOCATION' | 'LAND' | 'WATER' | 'GEOLOGY' | 'CLIMATE' | 'SPELEDIVING' | 'HIDROLOGY' | 'NUTRIENT' | 'HEAVY_METAL' | 'BIOMARKERS' | 'ORGANOCHLORINE_PESTICIDES' | 'ORGANOPHOSPHATE_PESTICIDES' | 'VOLATILE_HYDROCARBONS' | 'POLYNUCLEAR_AROMATIC_HYDROCARBONS' | 'FARMACEUTIC' | 'OTHER' | 'GOVERN' | 'CULTURE' | 'THREATS' | 'PROTECTION' | 'PROPERTY' | 'INFRASTRUCTURE' | 'ESSENTIAL' | 'BASIC' | 'ADDITIONAL' | 'SOCIAL';
   };
   
   interface DefinedInputFields {
@@ -34,7 +34,7 @@ export namespace VariablesModule {
   export type SortField = Types.SortField;
   export type PaginationInput = Types.PaginationInput;
   export type VariableSphere = DefinedEnumValues['VariableSphere'];
-  export type Category = DefinedEnumValues['Category'];
+  export type VariableCategory = DefinedEnumValues['VariableCategory'];
   
   export type Scalars = Pick<Types.Scalars, 'DateTime'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
@@ -75,9 +75,10 @@ export namespace VariablesModule {
       methodology?: gm.Middleware[];
       timeseries?: gm.Middleware[];
       accessLevel?: gm.Middleware[];
+      origin?: gm.Middleware[];
       theme?: gm.Middleware[];
       sphere?: gm.Middleware[];
-      origin?: gm.Middleware[];
+      category?: gm.Middleware[];
       cenote_count?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];

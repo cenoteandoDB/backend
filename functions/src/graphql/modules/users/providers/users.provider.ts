@@ -3,7 +3,6 @@ import { EmailService } from "../../../email/EmailService";
 import {
     EmailAddress,
     PaginationInput,
-    ProfileData,
     RegisterGovernInput,
     RegisterInvestigatorInput,
     RegisterStudentInput,
@@ -354,16 +353,5 @@ export class UsersProvider {
 
         await usersDB.doc(userId).delete();
         return true;
-    }
-
-    async getUserProfileData(id: ID): Promise<ProfileData> {
-        const snapshot = await usersDB.doc(id).get();
-
-        if (!snapshot.exists) {
-            throw new Error(`User ${id} not found.`);
-        }
-        
-        const user = snapshot.data() as User;
-        return user.profileData;
     }
 }

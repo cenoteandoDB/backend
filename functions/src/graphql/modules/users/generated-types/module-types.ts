@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
     Mutation: 'login' | 'inviteUser' | 'register' | 'registerTourist' | 'registerStudent' | 'registerTeacher' | 'registerInvestigator' | 'registerGovern' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'deleteUser';
-    Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode' | 'getUserProfileData';
+    Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode';
     ProfileData: 'companyName' | 'companyUrl' | 'school' | 'degree' | 'subject' | 'googleScholar' | 'orchid' | 'researchGate' | 'linkedin' | 'govern_type' | 'govern_institution';
     User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'createdAt' | 'updatedAt';
   };
@@ -45,8 +45,8 @@ export namespace UsersModule {
   export type SortField = Pick<Types.SortField, DefinedInputFields['SortField']>;
   export type PaginationInput = Pick<Types.PaginationInput, DefinedInputFields['PaginationInput']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
-  export type ProfileData = Pick<Types.ProfileData, DefinedFields['ProfileData']>;
   export type UserProfile = DefinedEnumValues['UserProfile'];
+  export type ProfileData = Pick<Types.ProfileData, DefinedFields['ProfileData']>;
   
   export type Scalars = Pick<Types.Scalars, 'EmailAddress' | 'DateTime'>;
   export type EmailAddressScalarConfig = Types.EmailAddressScalarConfig;
@@ -92,7 +92,6 @@ export namespace UsersModule {
       getUserByEmail?: gm.Middleware[];
       getUserByName?: gm.Middleware[];
       verifyCode?: gm.Middleware[];
-      getUserProfileData?: gm.Middleware[];
     };
     ProfileData?: {
       '*'?: gm.Middleware[];

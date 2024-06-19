@@ -43,34 +43,6 @@ export type AuditLogType =
   | 'UPDATED_REFERENCE'
   | 'UPDATED_VARIABLE';
 
-export type Category =
-  | 'ADDITIONAL'
-  | 'BASIC'
-  | 'BIOMARKERS'
-  | 'CLIMATE'
-  | 'CULTURE'
-  | 'ESSENTIAL'
-  | 'FARMACEUTIC'
-  | 'GEOLOGY'
-  | 'GOVERN'
-  | 'HEAVY_METAL'
-  | 'HIDROLOGY'
-  | 'INFRASTRUCTURE'
-  | 'LAND'
-  | 'LOCATION'
-  | 'NUTRIENT'
-  | 'ORGANOCHLORINE_PESTICIDES'
-  | 'ORGANOPHOSPHATE_PESTICIDES'
-  | 'OTHER'
-  | 'POLYNUCLEAR_AROMATIC_HYDROCARBONS'
-  | 'PROPERTY'
-  | 'PROTECTION'
-  | 'SOCIAL'
-  | 'SPELEDIVING'
-  | 'THREATS'
-  | 'VOLATILE_HYDROCARBONS'
-  | 'WATER';
-
 export type Cenote = {
   __typename?: 'Cenote';
   alternativeNames?: Maybe<Array<Scalars['String']>>;
@@ -593,7 +565,6 @@ export type Query = {
   getUserByEmail?: Maybe<User>;
   getUserById?: Maybe<User>;
   getUserByName: Array<User>;
-  getUserProfileData?: Maybe<ProfileData>;
   getUsers: Array<User>;
   getVariableById?: Maybe<Variable>;
   getVariables?: Maybe<Array<Maybe<Variable>>>;
@@ -653,11 +624,6 @@ export type QueryGetUserByIdArgs = {
 
 export type QueryGetUserByNameArgs = {
   name: Scalars['String'];
-};
-
-
-export type QueryGetUserProfileDataArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -877,8 +843,8 @@ export type User = {
   id: Scalars['ID'];
   name: Scalars['String'];
   password: Scalars['String'];
-  profile: UserProfile;
-  profileData: ProfileData;
+  profile?: Maybe<UserProfile>;
+  profileData?: Maybe<ProfileData>;
   role: UserRole;
   surname?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
@@ -903,6 +869,7 @@ export type UserRole =
 export type Variable = {
   __typename?: 'Variable';
   accessLevel: AccessLevel;
+  category: VariableCategory;
   cenote_count: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateTime']>;
   description: Scalars['String'];
@@ -917,6 +884,34 @@ export type Variable = {
   units?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
+
+export type VariableCategory =
+  | 'ADDITIONAL'
+  | 'BASIC'
+  | 'BIOMARKERS'
+  | 'CLIMATE'
+  | 'CULTURE'
+  | 'ESSENTIAL'
+  | 'FARMACEUTIC'
+  | 'GEOLOGY'
+  | 'GOVERN'
+  | 'HEAVY_METAL'
+  | 'HIDROLOGY'
+  | 'INFRASTRUCTURE'
+  | 'LAND'
+  | 'LOCATION'
+  | 'NUTRIENT'
+  | 'ORGANOCHLORINE_PESTICIDES'
+  | 'ORGANOPHOSPHATE_PESTICIDES'
+  | 'OTHER'
+  | 'POLYNUCLEAR_AROMATIC_HYDROCARBONS'
+  | 'PROPERTY'
+  | 'PROTECTION'
+  | 'SOCIAL'
+  | 'SPELEDIVING'
+  | 'THREATS'
+  | 'VOLATILE_HYDROCARBONS'
+  | 'WATER';
 
 export type VariableOrigin =
   | 'CALCULATED'
@@ -1113,7 +1108,6 @@ export type ResolversTypes = {
   AuditLog: ResolverTypeWrapper<AuditLog>;
   AuditLogType: AuditLogType;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Category: Category;
   Cenote: ResolverTypeWrapper<Cenote>;
   CenoteBounds: ResolverTypeWrapper<CenoteBounds>;
   CenoteIssue: CenoteIssue;
@@ -1176,6 +1170,7 @@ export type ResolversTypes = {
   UserProfile: UserProfile;
   UserRole: UserRole;
   Variable: ResolverTypeWrapper<Variable>;
+  VariableCategory: VariableCategory;
   VariableOrigin: VariableOrigin;
   VariableSphere: VariableSphere;
   VariableTheme: VariableTheme;
@@ -1477,7 +1472,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
   getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
-  getUserProfileData?: Resolver<Maybe<ResolversTypes['ProfileData']>, ParentType, ContextType, RequireFields<QueryGetUserProfileDataArgs, 'id'>>;
   getUsers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryGetUsersArgs>>;
   getVariableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariableByIdArgs, 'id'>>;
   getVariables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
@@ -1553,8 +1547,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  profile?: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
-  profileData?: Resolver<ResolversTypes['ProfileData'], ParentType, ContextType>;
+  profile?: Resolver<Maybe<ResolversTypes['UserProfile']>, ParentType, ContextType>;
+  profileData?: Resolver<Maybe<ResolversTypes['ProfileData']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
   surname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -1567,6 +1561,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
   accessLevel?: Resolver<ResolversTypes['AccessLevel'], ParentType, ContextType>;
+  category?: Resolver<ResolversTypes['VariableCategory'], ParentType, ContextType>;
   cenote_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

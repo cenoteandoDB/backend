@@ -39,7 +39,7 @@ enum VariableOrigin {
 	CALCULATED_OFFICE
 }
 
-enum Category {
+enum VariableCategory {
 	LOCATION
 	LAND
 	WATER
@@ -81,10 +81,11 @@ type Variable {
 
     timeseries: Boolean!
     accessLevel: AccessLevel!
+    origin: VariableOrigin!
 	
     theme: VariableTheme!
 	sphere: VariableSphere!
-    origin: VariableOrigin!
+	category: VariableCategory!
 
 	cenote_count: Int!
 
