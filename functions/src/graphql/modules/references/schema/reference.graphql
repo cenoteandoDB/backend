@@ -2,50 +2,47 @@
 scalar DateTime
 
 enum ReferenceType {
-	REPORT
-	JOURNAL
-	THESIS
-	BOOK
-	BOOK_CHAPTER
-	WEB_PAGE
-	OTHER
+  REPORT
+  JOURNAL
+  THESIS
+  BOOK
+  BOOK_CHAPTER
+  WEB_PAGE
+  OTHER
 }
 
 type Reference {
+  cenoteando_id: ID! # Reference ID in Cenoteando project excel files
+  firestore_id: ID! # Reference ID in Firestore
+  type: ReferenceType!
+  unique_code: String!
+  title: String!
+  short_name: String
+  date_primary: Int
+  authors: [String!]!
+  journal_name: String
+  issue: String
+  institution: String
+  date_secondary: Int
+  book: String
+  pages: String
+  doi: String
+  url: String
+  keywords: [String!]
 
-	cenoteando_id: ID! # Reference ID in Cenoteando project excel files
-	firestore_id: ID!  # Reference ID in Firestore
+  has_pdf: Boolean!
+  pdf_name: String
+  pdf_url: String
 
-	type: ReferenceType!
-	unique_code: String!
-	title: String!
-	short_name: String
-	date_primary: Int
-	authors: [String!]!
-	journal_name: String
-	issue: String
-	institution: String
-	date_secondary: Int
-	book: String
-	pages: String
-	doi: String
-	url: String
-	keywords: [String!]
+  mendeley_ref: Boolean!
+  uploaded_mendeley: Boolean!
+  validated_mendeley: Boolean!
+  uploaded_dropbox: Boolean!
+  uploaded_gcp: Boolean!
 
-	has_pdf: Boolean!
-	pdf_name: String
-	pdf_url: String
+  cenotes_count: Int!
+  species_count: Int!
 
-	mendeley_ref: Boolean!
-	uploaded_mendeley: Boolean!
-	validated_mendeley: Boolean!
-	uploaded_dropbox: Boolean!
-	uploaded_gcp: Boolean!
-
-	cenotes_count: Int!
-	species_count: Int!
-
-	createdAt: DateTime
-	updatedAt: DateTime
-
+  createdAt: DateTime
+  updatedAt: DateTime
 }

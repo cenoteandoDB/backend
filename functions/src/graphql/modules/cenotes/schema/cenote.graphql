@@ -4,61 +4,59 @@ scalar URL
 scalar Latitude
 scalar Longitude
 
-
 enum CenoteType {
-	NO_TYPE
-	CENOTE
-	DRY_CAVE
-	WATER_WELL
-	WATERY # TODO: Come up with better term for "aguada", maybe WATER_POINT?
+  NO_TYPE
+  CENOTE
+  DRY_CAVE
+  WATER_WELL
+  WATERY # TODO: Come up with better term for "aguada", maybe WATER_POINT?
 }
 
 enum CenoteIssue {
-    GEOTAG_NOT_VERIFIED
+  GEOTAG_NOT_VERIFIED
 }
 
 type CityDistances {
-	location: String!
-	distance: Float
-	time: Int
+  location: String!
+  distance: Float
+  time: Int
 }
 
 # TODO: Reference, Species, VariableWithData
 
 type Cenote {
-	firestore_id: ID!
-	cenoteando_id: ID!
+  firestore_id: ID!
+  cenoteando_id: ID!
 
-	name: String!
-	altnames: [String!]!
+  name: String!
+  altnames: [String!]!
 
-	touristic: Boolean!
-	latitude: Latitude!
-  	longitude: Longitude!
+  touristic: Boolean!
+  latitude: Latitude!
+  longitude: Longitude!
 
-	variable_count: Int!
-	reference_count: Int!
-	species_count: Int!
+  variable_count: Int!
+  reference_count: Int!
+  species_count: Int!
 
-	photos: [URL!]
-	maps: [URL!]
+  photos: [URL!]
+  maps: [URL!]
 
-	createdAt: DateTime
-	updatedAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
 
-	# social: CenoteSocialData
+  # social: CenoteSocialData
 
-	# references: [Reference!]
-	# species: [Species!]
+  # references: [Reference!]
+  # species: [Species!]
 
-	# TODO: Define how this data is fetched by the frontend.
-	# data: [VariableWithData]
+  # TODO: Define how this data is fetched by the frontend.
+  # data: [VariableWithData]
 
-	# creator: User
-	# contributors: [User]
+  # creator: User
+  # contributors: [User]
 
-	# distances: [CityDistances]
+  # distances: [CityDistances]
 
-	# reviewed: Boolean
-
+  # reviewed: Boolean
 }

@@ -1,29 +1,29 @@
 input NewVariableInput {
-	name: String!
-	description: String!
-	type: VariableType!
-	units: String   			#SHOULD be an enum 
-    timeseries: Boolean!
-    accessLevel: AccessLevel!
-    theme: VariableTheme!
-    origin: VariableOrigin!
-    methodology: String
+  name: String!
+  description: String!
+  type: VariableType!
+  units: String #SHOULD be an enum
+  timeseries: Boolean!
+  accessLevel: AccessLevel!
+  theme: VariableTheme!
+  origin: VariableOrigin!
+  methodology: String
 }
 
 input UpdateVariableInput {
-	firestore_id: ID!
-	name: String!
-	description: String!
-	type: VariableType!
-	units: String   			#SHOULD be an enum 
-    timeseries: Boolean!
-    accessLevel: AccessLevel!
-    theme: VariableTheme!
-    origin: VariableOrigin!
-    methodology: String
+  firestore_id: ID!
+  name: String!
+  description: String!
+  type: VariableType!
+  units: String #SHOULD be an enum
+  timeseries: Boolean!
+  accessLevel: AccessLevel!
+  theme: VariableTheme!
+  origin: VariableOrigin!
+  methodology: String
 }
 
 type Mutation {
-    createVariable(new_variable: NewVariableInput!): Variable
-    updateVariable(updated_variable: UpdateVariableInput!): Variable
+  createVariable(new_variable: NewVariableInput!): Variable
+  updateVariable(updated_variable: UpdateVariableInput!): Variable
 }

@@ -1,4 +1,4 @@
 type Query {
-	references: [Reference!]
-	referenceById(id: ID!): Reference
+  references: [Reference!]
+  referenceById(id: ID!): Reference
 }

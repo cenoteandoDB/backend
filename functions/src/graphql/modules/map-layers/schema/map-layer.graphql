@@ -2,20 +2,20 @@
 # None
 
 enum LayerCategory {
-    ANTROPOGENICA
-    INTRINSECA
-    HIDROLOGIA
-    CLIMA
-    GEO_ESTATISTICA
+  ANTROPOGENICA
+  INTRINSECA
+  HIDROLOGIA
+  CLIMA
+  GEO_ESTATISTICA
 }
 
 type MapLayer {
-    id: ID!
-    name: String!
-    category: LayerCategory
-    description: String
-    thumbnail: String
-    metadata: String
-    geojson: String
-    zip: String
+  id: ID!
+  name: String!
+  category: LayerCategory
+  description: String
+  thumbnail: String
+  metadata: String
+  geojson: String
+  zip: String
 }

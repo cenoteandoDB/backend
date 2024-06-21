@@ -1,12 +1,16 @@
 type Query {
-	cenotes(sort: SortField, pagination: PaginationInput, name: String): [Cenote!]!
-	cenoteById(id: ID!): Cenote
-	cenotesCsv: String
-	cenotesBounds: CenoteBounds
-	# cenoteDataByTheme(cenoteId: ID, theme: VariableTheme): [VariableWithData]
-	# cenoteDataByVariable(cenoteId: ID, variableId: ID): VariableWithData
-	
-	# TODO: Curation Pipeline
-	# -> Curation queries (query cenote/variable/references/data proposals for review)
-	# -> Collaboration queries (query status of proposals, interactive submission validation, etc.)
+  cenotes(
+    sort: SortField
+    pagination: PaginationInput
+    name: String
+  ): [Cenote!]!
+  cenoteById(id: ID!): Cenote
+  cenotesCsv: String
+  cenotesBounds: CenoteBounds
+  # cenoteDataByTheme(cenoteId: ID, theme: VariableTheme): [VariableWithData]
+  # cenoteDataByVariable(cenoteId: ID, variableId: ID): VariableWithData
+
+  # TODO: Curation Pipeline
+  # -> Curation queries (query cenote/variable/references/data proposals for review)
+  # -> Collaboration queries (query status of proposals, interactive submission validation, etc.)
 }

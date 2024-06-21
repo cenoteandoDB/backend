@@ -2,95 +2,95 @@
 scalar DateTime
 
 enum AccessLevel {
-	PUBLIC
-	SENSITIVE
+  PUBLIC
+  SENSITIVE
 }
 
 enum VariableSphere {
-	KARSTICO_AMBIENT_SYSTEM
-	HUMAN_SOCIO_ECONOMICAL
+  KARSTICO_AMBIENT_SYSTEM
+  HUMAN_SOCIO_ECONOMICAL
 }
 
 enum VariableTheme {
-	IDENTIFICATION
-	GEOMORPHOLOGY
-	BIODIVERSITY
-	WATER
-	REGULATION
-	TOURISM
-	ORGANIZATION
-	CULTURAL
+  IDENTIFICATION
+  GEOMORPHOLOGY
+  BIODIVERSITY
+  WATER
+  REGULATION
+  TOURISM
+  ORGANIZATION
+  CULTURAL
 }
 
 enum VariableType {
-	NOMINAL
-	CONTINUOUS
-	DISCRETE
-	ORDINAL
+  NOMINAL
+  CONTINUOUS
+  DISCRETE
+  ORDINAL
 }
 
 enum VariableOrigin {
-	FIELD
-	OFFICE
-	WEB
-	FIELD_WEB
-	FIELD_OFFICE
-	CALCULATED
-	CALCULATED_OFFICE
+  FIELD
+  OFFICE
+  WEB
+  FIELD_WEB
+  FIELD_OFFICE
+  CALCULATED
+  CALCULATED_OFFICE
 }
 
 enum VariableCategory {
-	LOCATION
-	LAND
-	WATER
-	GEOLOGY
-	CLIMATE
-	SPELEDIVING
-	HIDROLOGY
-	NUTRIENT
-	HEAVY_METAL
-	BIOMARKERS
-	ORGANOCHLORINE_PESTICIDES
-	ORGANOPHOSPHATE_PESTICIDES
-	VOLATILE_HYDROCARBONS
-	POLYNUCLEAR_AROMATIC_HYDROCARBONS
-	FARMACEUTIC
-	OTHER
-	GOVERN
-	CULTURE
-	THREATS
-	PROTECTION
-	PROPERTY
-	INFRASTRUCTURE
-	ESSENTIAL
-	BASIC
-	ADDITIONAL
-	SOCIAL
+  LOCATION
+  LAND
+  WATER
+  GEOLOGY
+  CLIMATE
+  SPELEDIVING
+  HIDROLOGY
+  NUTRIENT
+  HEAVY_METAL
+  BIOMARKERS
+  ORGANOCHLORINE_PESTICIDES
+  ORGANOPHOSPHATE_PESTICIDES
+  VOLATILE_HYDROCARBONS
+  POLYNUCLEAR_AROMATIC_HYDROCARBONS
+  FARMACEUTIC
+  OTHER
+  GOVERN
+  CULTURE
+  THREATS
+  PROTECTION
+  PROPERTY
+  INFRASTRUCTURE
+  ESSENTIAL
+  BASIC
+  ADDITIONAL
+  SOCIAL
 }
 
 type Variable {
-	firestore_id: ID!
+  firestore_id: ID!
 
-	name: String!
-	description: String!
-	
-	type: VariableType!
+  name: String!
+  description: String!
 
-	units: String   			#SHOULD be an enum 
-    methodology: String
+  type: VariableType!
 
-    timeseries: Boolean!
-    accessLevel: AccessLevel!
-    origin: VariableOrigin!
-	
-    theme: VariableTheme!
-	sphere: VariableSphere!
-	category: VariableCategory!
+  units: String #SHOULD be an enum
+  methodology: String
 
-	cenote_count: Int!
+  timeseries: Boolean!
+  accessLevel: AccessLevel!
+  origin: VariableOrigin!
 
-	createdAt: DateTime
-	updatedAt: DateTime
+  theme: VariableTheme!
+  sphere: VariableSphere!
+  category: VariableCategory!
 
-	# creator: User 
+  cenote_count: Int!
+
+  createdAt: DateTime
+  updatedAt: DateTime
+
+  # creator: User
 }

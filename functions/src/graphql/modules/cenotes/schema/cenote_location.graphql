@@ -7,23 +7,23 @@ scalar Coordinate
 # TODO: Implement scalar GeoJSON (check: https://github.com/ghengeveld/graphql-geojson)
 
 type CenoteLocation {
-	coordinates: Coordinate!
-	geojson: JSON!
-    country: String!
-    state: String!
-    county: String!
+  coordinates: Coordinate!
+  geojson: JSON!
+  country: String!
+  state: String!
+  county: String!
 }
 
 type Coordinates {
-	latitude: Latitude!
-	longitude: Longitude!
+  latitude: Latitude!
+  longitude: Longitude!
 }
 
 """
-This type is used to set the boundaries of interactive maps for visualizing cenotes. 
+This type is used to set the boundaries of interactive maps for visualizing cenotes.
 It returns the bounding coordinates of the region of interest (where there is cenote data).
 """
 type CenoteBounds {
-	top_left: Coordinates
-	bottom_right: Coordinates
+  top_left: Coordinates
+  bottom_right: Coordinates
 }

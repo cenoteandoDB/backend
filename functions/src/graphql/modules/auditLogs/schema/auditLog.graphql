@@ -3,20 +3,20 @@ scalar DateTime
 scalar JSON
 
 enum AuditLogType {
-	NEW_CENOTE
-	UPDATED_CENOTE
-	DELETE_CENOTE
-	NEW_REFERENCE
-	UPDATED_REFERENCE
-	NEW_VARIABLE
-	UPDATED_VARIABLE
+  NEW_CENOTE
+  UPDATED_CENOTE
+  DELETE_CENOTE
+  NEW_REFERENCE
+  UPDATED_REFERENCE
+  NEW_VARIABLE
+  UPDATED_VARIABLE
 }
 
 type AuditLog {
-	objectId: ID!
-	type: AuditLogType!
-	arguments: JSON!
-	timestamp: DateTime!
+  objectId: ID!
+  type: AuditLogType!
+  arguments: JSON!
+  timestamp: DateTime!
 
-	# user
+  # user
 }

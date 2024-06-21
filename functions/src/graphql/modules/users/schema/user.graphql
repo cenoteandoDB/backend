@@ -3,66 +3,66 @@ scalar EmailAddress
 scalar DateTime
 
 enum UserRole {
-    BASIC
-    CURATOR
-    ADMIN
+  BASIC
+  CURATOR
+  ADMIN
 }
 
 enum UserProfile {
-    TOURIST
-    TEACHER
-    STUDENT
-    GOVERN
-    INVESTIGATOR
+  TOURIST
+  TEACHER
+  STUDENT
+  GOVERN
+  INVESTIGATOR
 }
 
 enum GovernType {
-    FEDERAL
-    STATE
-    MUNICIPAL
+  FEDERAL
+  STATE
+  MUNICIPAL
 }
 
 type ProfileData {
-    companyName: String
-    companyUrl: String
+  companyName: String
+  companyUrl: String
 
-    school: String
-    degree: String
-    subject: String
+  school: String
+  degree: String
+  subject: String
 
-    googleScholar: String
-    orchid: String
-    researchGate: String
-    linkedin: String
+  googleScholar: String
+  orchid: String
+  researchGate: String
+  linkedin: String
 
-    govern_type: GovernType
-    govern_institution: String
+  govern_type: GovernType
+  govern_institution: String
 }
 
 type User {
-    id: ID!
-    
-    name: String!
-    surname: String
-    email: EmailAddress!
-    password: String!
+  id: ID!
 
-    role: UserRole!
-    profile: UserProfile
-    profileData: ProfileData
-    
-    cenoteViewWhiteList: [String!]!
-    cenoteViewBlackList: [String!]!
+  name: String!
+  surname: String
+  email: EmailAddress!
+  password: String!
 
-    cenoteEditWhiteList: [String!]!
-    cenoteEditBlackList: [String!]!
+  role: UserRole!
+  profile: UserProfile
+  profileData: ProfileData
 
-    variableViewWhiteList: [String!]!
-    variableViewBlackList: [String!]!
+  cenoteViewWhiteList: [String!]!
+  cenoteViewBlackList: [String!]!
 
-    variableEditWhiteList: [String!]!
-    variableEditBlackList: [String!]!
+  cenoteEditWhiteList: [String!]!
+  cenoteEditBlackList: [String!]!
 
-    createdAt: DateTime!
-	updatedAt: DateTime!
+  variableViewWhiteList: [String!]!
+  variableViewBlackList: [String!]!
+
+  variableEditWhiteList: [String!]!
+  variableEditBlackList: [String!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

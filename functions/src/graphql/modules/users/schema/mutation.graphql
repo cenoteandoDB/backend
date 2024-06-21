@@ -2,76 +2,95 @@
 scalar EmailAddress
 
 input RegisterUserInput {
-    name: String!
-    surname: String!
-    email: EmailAddress!
-    password: String!
-    phone: String
+  name: String!
+  surname: String!
+  email: EmailAddress!
+  password: String!
+  phone: String
 }
 
-
 input UpdateUserInfoInput {
-    name: String!
-    surname: String!
-    email: EmailAddress!
-    password: String!
-    phone: String
-    role: UserRole
-    # profile: String!
-    # profileData: ProfileData
+  name: String!
+  surname: String!
+  email: EmailAddress!
+  password: String!
+  phone: String
+  role: UserRole
+  # profile: String!
+  # profileData: ProfileData
 }
 
 input UpdateCenotePermissions {
-    cenoteViewWhiteList: [String!]!
-    cenoteViewBlackList: [String!]!
+  cenoteViewWhiteList: [String!]!
+  cenoteViewBlackList: [String!]!
 
-    cenoteEditWhiteList: [String!]!
-    cenoteEditBlackList: [String!]!
+  cenoteEditWhiteList: [String!]!
+  cenoteEditBlackList: [String!]!
 }
 
 input UpdateVariablePermissions {
-    variableViewWhiteList: [String!]!
-    variableViewBlackList: [String!]!
+  variableViewWhiteList: [String!]!
+  variableViewBlackList: [String!]!
 
-    variableEditWhiteList: [String!]!
-    variableEditBlackList: [String!]!
+  variableEditWhiteList: [String!]!
+  variableEditBlackList: [String!]!
 }
 
 input RegisterTouristInput {
-    companyName: String
-    companyUrl: String
+  companyName: String
+  companyUrl: String
 }
 
 input RegisterStudentInput {
-    school: String!
-    degree: String!
+  school: String!
+  degree: String!
 }
 
 input RegisterInvestigatorInput {
-    googleScholar: String!
-    orchid: String!
-    researchGate: String!
-    linkedin: String
+  googleScholar: String!
+  orchid: String!
+  researchGate: String!
+  linkedin: String
 }
 
 input RegisterGovernInput {
-    govern: GovernType!
-    institution: String!
+  govern: GovernType!
+  institution: String!
 }
 
 type Mutation {
-    login(email: EmailAddress!, password: String!): String!  # Access token
-    
-    inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): Boolean!
-    register(userInfo: RegisterUserInput!): User!
-    registerTourist(userInfo: RegisterUserInput!, profileData: RegisterTouristInput!): User
-    registerStudent(userInfo: RegisterUserInput!, profileData: RegisterStudentInput!): User
-    registerTeacher(userInfo: RegisterUserInput!, profileData: RegisterStudentInput!): User
-    registerInvestigator(userInfo: RegisterUserInput!, profileData: RegisterInvestigatorInput!): User
-    registerGovern(userInfo: RegisterUserInput!, profileData: RegisterGovernInput!): User
+  login(email: EmailAddress!, password: String!): String! # Access token
+  inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): Boolean!
+  register(userInfo: RegisterUserInput!): User!
+  registerTourist(
+    userInfo: RegisterUserInput!
+    profileData: RegisterTouristInput!
+  ): User
+  registerStudent(
+    userInfo: RegisterUserInput!
+    profileData: RegisterStudentInput!
+  ): User
+  registerTeacher(
+    userInfo: RegisterUserInput!
+    profileData: RegisterStudentInput!
+  ): User
+  registerInvestigator(
+    userInfo: RegisterUserInput!
+    profileData: RegisterInvestigatorInput!
+  ): User
+  registerGovern(
+    userInfo: RegisterUserInput!
+    profileData: RegisterGovernInput!
+  ): User
 
-    updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
-    updateCenotePermissions(userId: String!, cenotePermissions: UpdateCenotePermissions!): User
-    updateVariablePermissions(userId: String!, variablePermissions: UpdateVariablePermissions!): User
-    deleteUser(userId: ID!): Boolean!
+  updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
+  updateCenotePermissions(
+    userId: String!
+    cenotePermissions: UpdateCenotePermissions!
+  ): User
+  updateVariablePermissions(
+    userId: String!
+    variablePermissions: UpdateVariablePermissions!
+  ): User
+  deleteUser(userId: ID!): Boolean!
 }

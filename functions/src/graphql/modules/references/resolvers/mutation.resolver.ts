@@ -1,4 +1,3 @@
-import {ReferencesModule} from "../generated-types/module-types";
+import { ReferencesModule } from "../generated-types/module-types";
 
-export const MutationResolver: ReferencesModule.Resolvers["Mutation"] = {
-};
+export const MutationResolver: ReferencesModule.Resolvers["Mutation"] = {};
