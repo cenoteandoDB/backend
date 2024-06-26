@@ -23,4 +23,7 @@ export const MutationResolver: VariablesModule.Resolvers["Mutation"] = {
         );
         return variable;
     },
+    deleteVariable: (parent, args, contextValue, info) => {
+        return variablesProvider.deleteVariable(args.id);
+    },
 };

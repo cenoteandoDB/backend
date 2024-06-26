@@ -9,6 +9,7 @@ import {
     VariableTheme,
 } from "../../../generated-types/graphql";
 import {db} from "../../database/db";
+import { ID } from "graphql-modules/shared/types";
 
 const variableDB = db.variables;
 
@@ -108,5 +109,23 @@ export class VariableProvider {
 
         const snapshot = await variableDB.doc(updatedVariable.firestore_id).get();
         return snapshot.data() as Variable;
+    }
+
+      /**
+     * Delete a variable by id.
+     *
+     * @param {ID} id of the user to delete
+     *
+     * @return {Promise<Boolean>} true if deleted
+     */
+      async deleteVariable(id: ID): Promise<boolean> {
+        const snapshot = await variableDB.doc(id).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`Variable does not exist.`);
+        }
+
+        await variableDB.doc(id).delete();
+        return true;
     }
 }

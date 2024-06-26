@@ -26,4 +26,5 @@ input UpdateVariableInput {
 type Mutation {
     createVariable(new_variable: NewVariableInput!): Variable
     updateVariable(updated_variable: UpdateVariableInput!): Variable
+    deleteVariable(id: ID!): Boolean!
 }

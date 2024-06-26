@@ -3,7 +3,7 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace VariablesModule {
   interface DefinedFields {
-    Mutation: 'createVariable' | 'updateVariable';
+    Mutation: 'createVariable' | 'updateVariable' | 'deleteVariable';
     Query: 'getVariables' | 'getVariableById' | 'getVariablesByTheme';
     Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'origin' | 'theme' | 'sphere' | 'category' | 'cenote_count' | 'createdAt' | 'updatedAt';
   };
@@ -58,6 +58,7 @@ export namespace VariablesModule {
       '*'?: gm.Middleware[];
       createVariable?: gm.Middleware[];
       updateVariable?: gm.Middleware[];
+      deleteVariable?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];

@@ -187,17 +187,20 @@ export class UsersProvider {
         if (!snapshot.exists) {
             throw new Error(`User does not exist.`);
         }
-
-        const encryptedPassword = await encryptPassword(userInfo.password);
+  
+    
             
         // Prepare update data object
         const updateData: { [key: string]: any } = {
             name: userInfo.name,
             surname: userInfo.surname,
             email: userInfo.email,
-            password: encryptedPassword,
             updatedAt: new Date().toISOString(),
         };
+        if(userInfo.password){
+            const encryptedPassword = await encryptPassword(userInfo.password);
+            updateData.password = encryptedPassword;
+        }
         if (userInfo.phone !== undefined) {
             updateData.phone = userInfo.phone;
         }
