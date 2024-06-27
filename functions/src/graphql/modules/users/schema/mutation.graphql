@@ -1,13 +1,96 @@
 # From graphql-scalars
 scalar EmailAddress
 
-input RegisterInput {
-    name: String!
-    email: EmailAddress!
-    password: String!
+input RegisterUserInput {
+  name: String!
+  surname: String!
+  email: EmailAddress!
+  password: String!
+  phone: String
+}
+
+input UpdateUserInfoInput {
+  name: String!
+  surname: String!
+  email: EmailAddress!
+  password: String
+  phone: String
+  role: UserRole
+  # profile: String!
+  # profileData: ProfileData
+}
+
+input UpdateCenotePermissions {
+  cenoteViewWhiteList: [String!]!
+  cenoteViewBlackList: [String!]!
+
+  cenoteEditWhiteList: [String!]!
+  cenoteEditBlackList: [String!]!
+}
+
+input UpdateVariablePermissions {
+  variableViewWhiteList: [String!]!
+  variableViewBlackList: [String!]!
+
+  variableEditWhiteList: [String!]!
+  variableEditBlackList: [String!]!
+}
+
+input RegisterTouristInput {
+  companyName: String
+  companyUrl: String
+}
+
+input RegisterStudentInput {
+  school: String!
+  degree: String!
+}
+
+input RegisterInvestigatorInput {
+  googleScholar: String!
+  orchid: String!
+  researchGate: String!
+  linkedin: String
+}
+
+input RegisterGovernInput {
+  govern: GovernType!
+  institution: String!
 }
 
 type Mutation {
-    register(input: RegisterInput!): User
-    updateEmail(id: ID!, email: EmailAddress!): User
+  login(email: EmailAddress!, password: String!): String! # Access token
+  inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): Boolean!
+  register(userInfo: RegisterUserInput!): User!
+  registerTourist(
+    userInfo: RegisterUserInput!
+    profileData: RegisterTouristInput!
+  ): User
+  registerStudent(
+    userInfo: RegisterUserInput!
+    profileData: RegisterStudentInput!
+  ): User
+  registerTeacher(
+    userInfo: RegisterUserInput!
+    profileData: RegisterStudentInput!
+  ): User
+  registerInvestigator(
+    userInfo: RegisterUserInput!
+    profileData: RegisterInvestigatorInput!
+  ): User
+  registerGovern(
+    userInfo: RegisterUserInput!
+    profileData: RegisterGovernInput!
+  ): User
+
+  updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
+  updateCenotePermissions(
+    userId: String!
+    cenotePermissions: UpdateCenotePermissions!
+  ): User
+  updateVariablePermissions(
+    userId: String!
+    variablePermissions: UpdateVariablePermissions!
+  ): User
+  deleteUser(userId: ID!): Boolean!
 }

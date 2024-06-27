@@ -4,14 +4,15 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'id' | '_key' | 'geojson' | 'touristic' | 'location' | 'type' | 'name' | 'alternativeNames' | 'issues' | 'social' | 'photos' | 'maps' | 'creator' | 'distances' | 'createdAt' | 'updatedAt';
-    CenoteLocation: 'coordinates' | 'country' | 'state' | 'municipality';
+    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'createdAt' | 'updatedAt';
+    CenoteList: 'cenotes' | 'totalCount';
+    CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'county';
     Coordinates: 'latitude' | 'longitude';
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
     Comment: 'commenter' | 'comment' | 'review';
-    Mutation: 'createCenote' | 'updateCenote' | 'uploadPhoto' | 'uploadMap';
-    Query: 'cenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds';
+    Mutation: 'createCenote' | 'updateCenote' | 'deleteCenote' | 'uploadPhoto' | 'uploadMap';
+    Query: 'getCenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds';
   };
   
   interface DefinedEnumValues {
@@ -30,11 +31,11 @@ export namespace CenotesModule {
   export type CenoteIssue = DefinedEnumValues['CenoteIssue'];
   export type CityDistances = Pick<Types.CityDistances, DefinedFields['CityDistances']>;
   export type Cenote = Pick<Types.Cenote, DefinedFields['Cenote']>;
+  export type CenoteList = Pick<Types.CenoteList, DefinedFields['CenoteList']>;
   export type CenoteLocation = Pick<Types.CenoteLocation, DefinedFields['CenoteLocation']>;
-  export type CenoteSocialData = Pick<Types.CenoteSocialData, DefinedFields['CenoteSocialData']>;
-  export type User = Types.User;
   export type Coordinates = Pick<Types.Coordinates, DefinedFields['Coordinates']>;
   export type CenoteBounds = Pick<Types.CenoteBounds, DefinedFields['CenoteBounds']>;
+  export type CenoteSocialData = Pick<Types.CenoteSocialData, DefinedFields['CenoteSocialData']>;
   export type Comment = Pick<Types.Comment, DefinedFields['Comment']>;
   export type CoordinatesInput = Pick<Types.CoordinatesInput, DefinedInputFields['CoordinatesInput']>;
   export type NewCenoteInput = Pick<Types.NewCenoteInput, DefinedInputFields['NewCenoteInput']>;
@@ -42,16 +43,20 @@ export namespace CenotesModule {
   export type PhotoOrMapUploadInput = Pick<Types.PhotoOrMapUploadInput, DefinedInputFields['PhotoOrMapUploadInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type SortField = Types.SortField;
+  export type PaginationInput = Types.PaginationInput;
   
-  export type Scalars = Pick<Types.Scalars, 'DateTime' | 'URL' | 'JSON' | 'Latitude' | 'Longitude'>;
+  export type Scalars = Pick<Types.Scalars, 'DateTime' | 'URL' | 'Latitude' | 'Longitude' | 'JSON' | 'Coordinate'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
   export type UrlScalarConfig = Types.UrlScalarConfig;
-  export type JsonScalarConfig = Types.JsonScalarConfig;
   export type LatitudeScalarConfig = Types.LatitudeScalarConfig;
   export type LongitudeScalarConfig = Types.LongitudeScalarConfig;
+  export type JsonScalarConfig = Types.JsonScalarConfig;
+  export type CoordinateScalarConfig = Types.CoordinateScalarConfig;
   
   export type CityDistancesResolvers = Pick<Types.CityDistancesResolvers, DefinedFields['CityDistances'] | '__isTypeOf'>;
   export type CenoteResolvers = Pick<Types.CenoteResolvers, DefinedFields['Cenote'] | '__isTypeOf'>;
+  export type CenoteListResolvers = Pick<Types.CenoteListResolvers, DefinedFields['CenoteList'] | '__isTypeOf'>;
   export type CenoteLocationResolvers = Pick<Types.CenoteLocationResolvers, DefinedFields['CenoteLocation'] | '__isTypeOf'>;
   export type CoordinatesResolvers = Pick<Types.CoordinatesResolvers, DefinedFields['Coordinates'] | '__isTypeOf'>;
   export type CenoteBoundsResolvers = Pick<Types.CenoteBoundsResolvers, DefinedFields['CenoteBounds'] | '__isTypeOf'>;
@@ -63,6 +68,7 @@ export namespace CenotesModule {
   export interface Resolvers {
     CityDistances?: CityDistancesResolvers;
     Cenote?: CenoteResolvers;
+    CenoteList?: CenoteListResolvers;
     CenoteLocation?: CenoteLocationResolvers;
     Coordinates?: CoordinatesResolvers;
     CenoteBounds?: CenoteBoundsResolvers;
@@ -72,9 +78,10 @@ export namespace CenotesModule {
     Query?: QueryResolvers;
     DateTime?: Types.Resolvers['DateTime'];
     URL?: Types.Resolvers['URL'];
-    JSON?: Types.Resolvers['JSON'];
     Latitude?: Types.Resolvers['Latitude'];
     Longitude?: Types.Resolvers['Longitude'];
+    JSON?: Types.Resolvers['JSON'];
+    Coordinate?: Types.Resolvers['Coordinate'];
   };
   
   export interface MiddlewareMap {
@@ -89,29 +96,36 @@ export namespace CenotesModule {
     };
     Cenote?: {
       '*'?: gm.Middleware[];
-      id?: gm.Middleware[];
-      _key?: gm.Middleware[];
-      geojson?: gm.Middleware[];
-      touristic?: gm.Middleware[];
-      location?: gm.Middleware[];
-      type?: gm.Middleware[];
+      firestore_id?: gm.Middleware[];
+      cenoteando_id?: gm.Middleware[];
       name?: gm.Middleware[];
-      alternativeNames?: gm.Middleware[];
-      issues?: gm.Middleware[];
-      social?: gm.Middleware[];
+      altnames?: gm.Middleware[];
+      state?: gm.Middleware[];
+      municipality?: gm.Middleware[];
+      type?: gm.Middleware[];
+      touristic?: gm.Middleware[];
+      latitude?: gm.Middleware[];
+      longitude?: gm.Middleware[];
+      variable_count?: gm.Middleware[];
+      reference_count?: gm.Middleware[];
+      species_count?: gm.Middleware[];
       photos?: gm.Middleware[];
       maps?: gm.Middleware[];
-      creator?: gm.Middleware[];
-      distances?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
+    };
+    CenoteList?: {
+      '*'?: gm.Middleware[];
+      cenotes?: gm.Middleware[];
+      totalCount?: gm.Middleware[];
     };
     CenoteLocation?: {
       '*'?: gm.Middleware[];
       coordinates?: gm.Middleware[];
+      geojson?: gm.Middleware[];
       country?: gm.Middleware[];
       state?: gm.Middleware[];
-      municipality?: gm.Middleware[];
+      county?: gm.Middleware[];
     };
     Coordinates?: {
       '*'?: gm.Middleware[];
@@ -137,12 +151,13 @@ export namespace CenotesModule {
       '*'?: gm.Middleware[];
       createCenote?: gm.Middleware[];
       updateCenote?: gm.Middleware[];
+      deleteCenote?: gm.Middleware[];
       uploadPhoto?: gm.Middleware[];
       uploadMap?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];
-      cenotes?: gm.Middleware[];
+      getCenotes?: gm.Middleware[];
       cenoteById?: gm.Middleware[];
       cenotesCsv?: gm.Middleware[];
       cenotesBounds?: gm.Middleware[];

@@ -2,29 +2,28 @@
 scalar JSON
 scalar Latitude
 scalar Longitude
+scalar Coordinate
 
 # TODO: Implement scalar GeoJSON (check: https://github.com/ghengeveld/graphql-geojson)
 
 type CenoteLocation {
-	# QUESTION: What other location information is required? 
-	# -> Maybe instead of gadm we should include only country, state, and municipality information
-	coordinates: Coordinates!
-	# geojson: JSON! # TODO: Use GeoJSON PointObject
-    country: String!
-    state: String!
-    municipality: String!
+  coordinates: Coordinate!
+  geojson: JSON!
+  country: String!
+  state: String!
+  county: String!
 }
 
 type Coordinates {
-	latitude: Latitude!
-	longitude: Longitude!
+  latitude: Latitude!
+  longitude: Longitude!
 }
 
 """
-This type is used to set the boundaries of interactive maps for visualizing cenotes. 
+This type is used to set the boundaries of interactive maps for visualizing cenotes.
 It returns the bounding coordinates of the region of interest (where there is cenote data).
 """
 type CenoteBounds {
-	top_left: Coordinates
-	bottom_right: Coordinates
+  top_left: Coordinates
+  bottom_right: Coordinates
 }

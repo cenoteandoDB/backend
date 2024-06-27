@@ -4,15 +4,15 @@ scalar DateTime
 # union VariableTypeUnion = Int | String | Boolean | Float
 
 type MeasurementOrFact {
-	timestamp: DateTime!
-	value: String!
+  timestamp: DateTime!
+  value: String!
 }
 
 type VariableWithData {
-	_id: ID!
-	_to: ID!
-	_from: ID!
-	measurements: [MeasurementOrFact!]!
-	firstTimestamp: DateTime!
-	lastTimestamp: DateTime!
+  _id: ID!
+  _to: ID!
+  _from: ID!
+  measurements: [MeasurementOrFact!]!
+  firstTimestamp: DateTime!
+  lastTimestamp: DateTime!
 }

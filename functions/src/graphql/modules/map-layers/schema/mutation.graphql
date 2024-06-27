@@ -2,11 +2,11 @@
 # None
 
 input MapLayerInput {
-    id: String!
-    name: String!
-    description: String
+  id: String!
+  name: String!
+  description: String
 }
 
 type Mutation {
-    create(input: MapLayerInput!): MapLayer
+  create(input: MapLayerInput!): MapLayer
 }

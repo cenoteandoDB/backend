@@ -1,4 +1,4 @@
 type Query {
-    layers: [MapLayer]
-    layer(id: ID!): MapLayer
+  layers: [MapLayer]
+  layer(id: ID!): MapLayer
 }

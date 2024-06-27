@@ -2,61 +2,101 @@
 scalar DateTime
 
 enum AccessLevel {
-	PUBLIC
-	PRIVATE
-	SENSITIVE
+  PUBLIC
+  SENSITIVE
+}
+
+enum VariableSphere {
+  KARSTICO_AMBIENT_SYSTEM
+  HUMAN_SOCIO_ECONOMICAL
 }
 
 enum VariableTheme {
-	LOCATION
-	GEOREFERENCE
-	CULTURAL
-	GEOMORPHOLOGY
-	BIODIVERSITY
-	DISTURBANCE
-	TOURISM
-	DIVING
-	ORGANIZATION
-	REGULATION
-	WATER
+  IDENTIFICATION
+  GEOMORPHOLOGY
+  BIODIVERSITY
+  WATER
+  REGULATION
+  TOURISM
+  ORGANIZATION
+  CULTURAL
 }
 
 enum VariableType {
-	TEXT
-	BOOLEAN
-	ENUM
-	JSON
-	UNITLESS_NUMBER
-	NUMBER_WITH_UNITS
-	DATETIME
-	DATE
-	TIME
+  NOMINAL
+  CONTINUOUS
+  DISCRETE
+  ORDINAL
 }
 
 enum VariableOrigin {
-	FIELD
-	OFFICE
-	BOTH
+  FIELD
+  OFFICE
+  WEB
+  FIELD_WEB
+  FIELD_OFFICE
+  CALCULATED
+  CALCULATED_OFFICE
+}
+
+enum VariableCategory {
+  LOCATION
+  LAND
+  WATER
+  GEOLOGY
+  CLIMATE
+  SPELEDIVING
+  HIDROLOGY
+  NUTRIENT
+  HEAVY_METAL
+  BIOMARKERS
+  ORGANOCHLORINE_PESTICIDES
+  ORGANOPHOSPHATE_PESTICIDES
+  VOLATILE_HYDROCARBONS
+  POLYNUCLEAR_AROMATIC_HYDROCARBONS
+  FARMACEUTIC
+  OTHER
+  GOVERN
+  CULTURE
+  THREATS
+  PROTECTION
+  PROPERTY
+  INFRASTRUCTURE
+  ESSENTIAL
+  BASIC
+  ADDITIONAL
+  SOCIAL
 }
 
 type Variable {
-	_id: ID!
+  id: ID #SHOULD be an  Optional
+  firestore_id: ID
 
-	name: String
-	description: String
-	
-	type: VariableType
-	units: String   			#SHOULD be an enum 
-	enumValues: [String]
-    timeseries: Boolean
-    multiple: Boolean
-    accessLevel: AccessLevel
-    theme: VariableTheme
-    origin: VariableOrigin
-    methodology: String
+  name: String!
+  description: String
 
-	createdAt: DateTime
-	updatedAt: DateTime
+  type: VariableType
 
-	# creator: User 
+  units: String #SHOULD be an enum
+  methodology: String
+
+  timeseries: Boolean
+  accessLevel: AccessLevel
+  origin: VariableOrigin
+
+  theme: VariableTheme
+  sphere: VariableSphere
+  category: VariableCategory
+
+  cenote_count: Int
+
+  createdAt: DateTime
+  updatedAt: DateTime
+
+  # creator: User
+}
+
+type VariableList {
+  variables: [Variable!]!
+  totalCount: Int!
 }

@@ -1,15 +1,15 @@
 input NewSpeciesInput {
-    gbifId: ID
-	iNaturalistId: ID
+  gbifId: ID
+  iNaturalistId: ID
 }
 
 input UpdateSpeciesInput {
-    id: ID!
-    gbifId: ID
-	iNaturalistId: ID
+  id: ID!
+  gbifId: ID
+  iNaturalistId: ID
 }
 
 type Mutation {
-    createSpecies(new_species: NewSpeciesInput!): Species
-    updateSpecies(updated_species: UpdateSpeciesInput!): Species
+  createSpecies(new_species: NewSpeciesInput!): Species
+  updateSpecies(updated_species: UpdateSpeciesInput!): Species
 }

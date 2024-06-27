@@ -1,0 +1,33 @@
+input NewVariableInput {
+  name: String
+  description: String
+  type: VariableType
+  units: String #SHOULD be an enum
+  enumValues: [String]
+  timeseries: Boolean
+  multiple: Boolean
+  accessLevel: AccessLevel
+  theme: VariableTheme
+  origin: VariableOrigin
+  methodology: String
+}
+
+input UpdateVariableInput {
+  id: ID!
+  name: String
+  description: String
+  type: VariableType
+  units: String #SHOULD be an enum
+  enumValues: [String]
+  timeseries: Boolean
+  multiple: Boolean
+  accessLevel: AccessLevel
+  theme: VariableTheme
+  origin: VariableOrigin
+  methodology: String
+}
+
+type Mutation {
+  createVariable(new_variable: NewVariableInput!): Variable
+  updateVariable(updated_variable: UpdateVariableInput!): Variable
+}

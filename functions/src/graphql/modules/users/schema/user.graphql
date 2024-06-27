@@ -1,15 +1,73 @@
 # From graphql-scalars
 scalar EmailAddress
+scalar DateTime
 
 enum UserRole {
-    BASIC
-    CENOTERO_ADVANCED
-    ADMIN
+  BASIC
+  CURATOR
+  ADMIN
+}
+
+enum UserProfile {
+  TOURIST
+  TEACHER
+  STUDENT
+  GOVERN
+  INVESTIGATOR
+}
+
+enum GovernType {
+  FEDERAL
+  STATE
+  MUNICIPAL
+}
+
+type ProfileData {
+  companyName: String
+  companyUrl: String
+
+  school: String
+  degree: String
+  subject: String
+
+  googleScholar: String
+  orchid: String
+  researchGate: String
+  linkedin: String
+
+  govern_type: GovernType
+  govern_institution: String
 }
 
 type User {
-    id: ID!
-    name: String!
-    email: EmailAddress!
-    role: UserRole!
+  id: ID!
+
+  name: String!
+  surname: String
+  email: EmailAddress!
+  password: String!
+
+  role: UserRole!
+  profile: UserProfile
+  profileData: ProfileData
+
+  cenoteViewWhiteList: [String!]!
+  cenoteViewBlackList: [String!]!
+
+  cenoteEditWhiteList: [String!]!
+  cenoteEditBlackList: [String!]!
+
+  variableViewWhiteList: [String!]!
+  variableViewBlackList: [String!]!
+
+  variableEditWhiteList: [String!]!
+  variableEditBlackList: [String!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type UserList {
+  users: [User!]!
+  totalCount: Int!
 }

@@ -1,5 +1,5 @@
 type Query {
-	variables: [Variable]
-	variableById(id: ID!): Variable
-	variablesByTheme(theme: VariableTheme!): [Variable]
+  getVariables(sort: SortField, pagination: PaginationInput, name: String): VariableList!
+  getVariableById(id: ID!): Variable
+  getVariablesByTheme(theme: VariableTheme!): [Variable]
 }

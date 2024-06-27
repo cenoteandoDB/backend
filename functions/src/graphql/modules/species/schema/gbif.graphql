@@ -1,231 +1,231 @@
 scalar JSON
 
 type GBIFSuggestion {
-    key: ID!
-    kingdom: String
-    phylum: String
-    class: String
-    order: String
-    family: String
-    genus: String
-    species: String
-    canonicalName: String
-    rank: GBIFTaxonomicRank
+  key: ID!
+  kingdom: String
+  phylum: String
+  class: String
+  order: String
+  family: String
+  genus: String
+  species: String
+  canonicalName: String
+  rank: GBIFTaxonomicRank
 }
 
 type GBIFNameUsage {
-    key: Int
-    nubKey: Int
-    nameKey: Int
-    taxonID: String
-    sourceTaxonKey: Int
-    kingdom: String
-    phylum: String
-    order: String
-    family: String
-    genus: String
-    species: String
-    kingdomKey: Int
-    phylumKey: Int
-    classKey: Int
-    orderKey: Int
-    familyKey: Int
-    genusKey: Int
-    speciesKey: Int
-    datasetKey: String
-    constituentKey: String
-    parentKey: Int
-    parent: String
-    scientificName: String
-    canonicalName: String
-    vernacularName: String
-    authorship: String
-    nameType: GBIFNameType
-    rank: GBIFTaxonomicRank
-    origin: GBIFOrigin
-    taxonomicStatus: GBIFTaxonomicStatus
-    nomenclaturalStatus: [String!] # Assuming it's an array of strings
-    remarks: String
-    publishedIn: String
-    numDescendants: Int
-    lastCrawled: String
-    lastInterpreted: String
-    issues: [String!] # Assuming it's an array of strings
-    class: String
-    basionymKey: Int
-    basionym: String
+  key: Int
+  nubKey: Int
+  nameKey: Int
+  taxonID: String
+  sourceTaxonKey: Int
+  kingdom: String
+  phylum: String
+  order: String
+  family: String
+  genus: String
+  species: String
+  kingdomKey: Int
+  phylumKey: Int
+  classKey: Int
+  orderKey: Int
+  familyKey: Int
+  genusKey: Int
+  speciesKey: Int
+  datasetKey: String
+  constituentKey: String
+  parentKey: Int
+  parent: String
+  scientificName: String
+  canonicalName: String
+  vernacularName: String
+  authorship: String
+  nameType: GBIFNameType
+  rank: GBIFTaxonomicRank
+  origin: GBIFOrigin
+  taxonomicStatus: GBIFTaxonomicStatus
+  nomenclaturalStatus: [String!] # Assuming it's an array of strings
+  remarks: String
+  publishedIn: String
+  numDescendants: Int
+  lastCrawled: String
+  lastInterpreted: String
+  issues: [String!] # Assuming it's an array of strings
+  class: String
+  basionymKey: Int
+  basionym: String
 }
 
 enum GBIFNameType {
-    # A name that has been flagged by the name parser due to the use of blacklisted epithets/words.
-    BLACKLISTED
+  # A name that has been flagged by the name parser due to the use of blacklisted epithets/words.
+  BLACKLISTED
 
-    # Candidatus is a component of the taxonomic name for a bacterium that cannot be maintained in a Bacteriology Culture Collection.
-    CANDIDATUS
+  # Candidatus is a component of the taxonomic name for a bacterium that cannot be maintained in a Bacteriology Culture Collection.
+  CANDIDATUS
 
-    # A cultivated plant name.
-    CULTIVAR
+  # A cultivated plant name.
+  CULTIVAR
 
-    # Doubtful whether this is a scientific name at all.
-    DOUBTFUL
+  # Doubtful whether this is a scientific name at all.
+  DOUBTFUL
 
-    # A hybrid formula (not a hybrid name).
-    HYBRID
+  # A hybrid formula (not a hybrid name).
+  HYBRID
 
-    # A scientific name with some informal addition like "cf." or indetermined like Abies spec.
-    INFORMAL
+  # A scientific name with some informal addition like "cf." or indetermined like Abies spec.
+  INFORMAL
 
-    # Surely not a scientific name of any kind.
-    NO_NAME
+  # Surely not a scientific name of any kind.
+  NO_NAME
 
-    # Operational Taxonomic Unit.
-    OTU
+  # Operational Taxonomic Unit.
+  OTU
 
-    # A placeholder name like "incertae sedis" or "unknown genus".
-    PLACEHOLDER
+  # A placeholder name like "incertae sedis" or "unknown genus".
+  PLACEHOLDER
 
-    # A scientific latin name that might contain authorship but is not any of the other name types below (virus, hybrid, cultivar, etc).
-    SCIENTIFIC
+  # A scientific latin name that might contain authorship but is not any of the other name types below (virus, hybrid, cultivar, etc).
+  SCIENTIFIC
 
-    # A virus name.
-    VIRUS
+  # A virus name.
+  VIRUS
 }
 
 enum GBIFTaxonomicRank {
-    ABERRATION # Zoological legacy rank
-    BIOVAR # Microbial rank based on biochemical or physiological properties
-    CHEMOFORM # Microbial infrasubspecific rank based on chemical constitution
-    CHEMOVAR # Microbial rank based on production or amount of production of a particular chemical
-    CLASS
-    COHORT # Sometimes used in zoology, e.g.
-    CONVARIETY # A group of cultivars
-    CULTIVAR
-    CULTIVAR_GROUP # Rank in use from the code for cultivated plants
-    DOMAIN
-    FAMILY
-    FORM
-    FORMA_SPECIALIS # Microbial infrasubspecific rank
-    GENUS
-    GRANDORDER
-    GREX # The term grex has been coined to expand botanical nomenclature to describe hybrids of orchids
-    INFRACLASS
-    INFRACOHORT
-    INFRAFAMILY
-    INFRAGENERIC_NAME # used for any other unspecific rank below genera and above species
-    INFRAGENUS
-    INFRAKINGDOM
-    INFRALEGION
-    INFRAORDER
-    INFRAPHYLUM
-    INFRASPECIFIC_NAME # used for any other unspecific rank below species
-    INFRASUBSPECIFIC_NAME # used also for any other unspecific rank below subspecies
-    INFRATRIBE
-    KINGDOM
-    LEGION # Sometimes used in zoology, e.g.
-    MAGNORDER
-    MORPH # Zoological legacy rank
-    MORPHOVAR # Microbial rank based on morphological characteristics
-    NATIO # Zoological legacy rank
-    ORDER
-    OTHER # Any other rank we cannot map to this enumeration
-    PARVCLASS
-    PARVORDER
-    PATHOVAR # Microbial rank based on pathogenic reactions in one or more hosts
-    PHAGOVAR # Microbial infrasubspecific rank based on reactions to bacteriophage
-    PHYLUM
-    PROLES # Botanical legacy rank
-    RACE # Botanical legacy rank
-    SECTION
-    SERIES
-    SEROVAR # Microbial infrasubspecific rank based on antigenic characteristics
-    SPECIES
-    SPECIES_AGGREGATE # A loosely defined group of species
-    STRAIN # A microbial strain
-    SUBCLASS
-    SUBCOHORT
-    SUBFAMILY
-    SUBFORM
-    SUBGENUS
-    SUBKINGDOM
-    SUBLEGION
-    SUBORDER
-    SUBPHYLUM
-    SUBSECTION
-    SUBSERIES
-    SUBSPECIES
-    SUBTRIBE
-    SUBVARIETY
-    SUPERCLASS
-    SUPERCOHORT
-    SUPERFAMILY
-    SUPERKINGDOM
-    SUPERLEGION
-    SUPERORDER
-    SUPERPHYLUM
-    SUPERTRIBE
-    SUPRAGENERIC_NAME # Used for any other unspecific rank above genera
-    TRIBE
-    UNRANKED
-    VARIETY
+  ABERRATION # Zoological legacy rank
+  BIOVAR # Microbial rank based on biochemical or physiological properties
+  CHEMOFORM # Microbial infrasubspecific rank based on chemical constitution
+  CHEMOVAR # Microbial rank based on production or amount of production of a particular chemical
+  CLASS
+  COHORT # Sometimes used in zoology, e.g.
+  CONVARIETY # A group of cultivars
+  CULTIVAR
+  CULTIVAR_GROUP # Rank in use from the code for cultivated plants
+  DOMAIN
+  FAMILY
+  FORM
+  FORMA_SPECIALIS # Microbial infrasubspecific rank
+  GENUS
+  GRANDORDER
+  GREX # The term grex has been coined to expand botanical nomenclature to describe hybrids of orchids
+  INFRACLASS
+  INFRACOHORT
+  INFRAFAMILY
+  INFRAGENERIC_NAME # used for any other unspecific rank below genera and above species
+  INFRAGENUS
+  INFRAKINGDOM
+  INFRALEGION
+  INFRAORDER
+  INFRAPHYLUM
+  INFRASPECIFIC_NAME # used for any other unspecific rank below species
+  INFRASUBSPECIFIC_NAME # used also for any other unspecific rank below subspecies
+  INFRATRIBE
+  KINGDOM
+  LEGION # Sometimes used in zoology, e.g.
+  MAGNORDER
+  MORPH # Zoological legacy rank
+  MORPHOVAR # Microbial rank based on morphological characteristics
+  NATIO # Zoological legacy rank
+  ORDER
+  OTHER # Any other rank we cannot map to this enumeration
+  PARVCLASS
+  PARVORDER
+  PATHOVAR # Microbial rank based on pathogenic reactions in one or more hosts
+  PHAGOVAR # Microbial infrasubspecific rank based on reactions to bacteriophage
+  PHYLUM
+  PROLES # Botanical legacy rank
+  RACE # Botanical legacy rank
+  SECTION
+  SERIES
+  SEROVAR # Microbial infrasubspecific rank based on antigenic characteristics
+  SPECIES
+  SPECIES_AGGREGATE # A loosely defined group of species
+  STRAIN # A microbial strain
+  SUBCLASS
+  SUBCOHORT
+  SUBFAMILY
+  SUBFORM
+  SUBGENUS
+  SUBKINGDOM
+  SUBLEGION
+  SUBORDER
+  SUBPHYLUM
+  SUBSECTION
+  SUBSERIES
+  SUBSPECIES
+  SUBTRIBE
+  SUBVARIETY
+  SUPERCLASS
+  SUPERCOHORT
+  SUPERFAMILY
+  SUPERKINGDOM
+  SUPERLEGION
+  SUPERORDER
+  SUPERPHYLUM
+  SUPERTRIBE
+  SUPRAGENERIC_NAME # Used for any other unspecific rank above genera
+  TRIBE
+  UNRANKED
+  VARIETY
 }
 
 enum GBIFOrigin {
-    # Generated, missing autonym.
-    AUTONYM
+  # Generated, missing autonym.
+  AUTONYM
 
-    # Placeholder usage for a missing or implicit basionym.
-    BASIONYM_PLACEHOLDER
+  # Placeholder usage for a missing or implicit basionym.
+  BASIONYM_PLACEHOLDER
 
-    # Implicit usage from a denormalized classification.
-    DENORMED_CLASSIFICATION
+  # Implicit usage from a denormalized classification.
+  DENORMED_CLASSIFICATION
 
-    # Implicit synonym based on the illegitimate ex author.
-    EX_AUTHOR_SYNONYM
+  # Implicit synonym based on the illegitimate ex author.
+  EX_AUTHOR_SYNONYM
 
-    # Generated, missing genus or species for "orphaned" lower name.
-    IMPLICIT_NAME
+  # Generated, missing genus or species for "orphaned" lower name.
+  IMPLICIT_NAME
 
-    # Artificial accepted usage for a synonym if it's missing to preserve the taxonomic hierarchy.
-    MISSING_ACCEPTED
+  # Artificial accepted usage for a synonym if it's missing to preserve the taxonomic hierarchy.
+  MISSING_ACCEPTED
 
-    # Any other origin not covered by the above.
-    OTHER
+  # Any other origin not covered by the above.
+  OTHER
 
-    # Duplicated usage from a single pro parte record.
-    PROPARTE
+  # Duplicated usage from a single pro parte record.
+  PROPARTE
 
-    # Record came straight from source record.
-    SOURCE
+  # Record came straight from source record.
+  SOURCE
 
-    # Implicit usage from a verbatim accepted name usage.
-    VERBATIM_ACCEPTED
+  # Implicit usage from a verbatim accepted name usage.
+  VERBATIM_ACCEPTED
 
-    # Implicit usage from a verbatim basionym/original name.
-    VERBATIM_BASIONYM
+  # Implicit usage from a verbatim basionym/original name.
+  VERBATIM_BASIONYM
 
-    # Implicit usage from a verbatim parent name usage.
-    VERBATIM_PARENT
+  # Implicit usage from a verbatim parent name usage.
+  VERBATIM_PARENT
 }
 
 enum GBIFTaxonomicStatus {
-    # Accepted taxonomic status.
-    ACCEPTED
+  # Accepted taxonomic status.
+  ACCEPTED
 
-    # Treated as accepted, but doubtful whether this is correct.
-    DOUBTFUL
+  # Treated as accepted, but doubtful whether this is correct.
+  DOUBTFUL
 
-    # More specific subclass of SYNONYM.
-    HETEROTYPIC_SYNONYM
+  # More specific subclass of SYNONYM.
+  HETEROTYPIC_SYNONYM
 
-    # More specific subclass of SYNONYM.
-    HOMOTYPIC_SYNONYM
+  # More specific subclass of SYNONYM.
+  HOMOTYPIC_SYNONYM
 
-    # More specific subclass of SYNONYM.
-    MISAPPLIED
+  # More specific subclass of SYNONYM.
+  MISAPPLIED
 
-    # More specific subclass of SYNONYM.
-    PROPARTE_SYNONYM
+  # More specific subclass of SYNONYM.
+  PROPARTE_SYNONYM
 
-    # A general synonym, the exact type is unknown.
-    SYNONYM
+  # A general synonym, the exact type is unknown.
+  SYNONYM
 }

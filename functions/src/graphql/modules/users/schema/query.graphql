@@ -1,4 +1,23 @@
+enum SortOrder {
+  ASC
+  DESC
+}
+
+input SortField {
+  field: String!
+  sortOrder: SortOrder!
+}
+
+input PaginationInput {
+  offset: Int!
+  limit: Int!
+}
+
+
 type Query {
-    users: [User]
-    userById(id: ID!): User
+  getUsers(sort: SortField, pagination: PaginationInput, name: String): UserList!
+  getUserById(id: ID!): User
+  getUserByEmail(email: String!): User
+  getUserByName(name: String!): [User!]!
+  verifyCode(code: String!): User
 }
