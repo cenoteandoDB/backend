@@ -15,8 +15,9 @@ import {
     UpdateVariablePermissions,
     User,
     UserProfile,
-    UserRole,
+    UserRole
 } from "../../../generated-types/graphql";
+import { UserList } from "../../../generated-types/graphql";
 import { comparePassword, createToken, encryptPassword } from "../../../utils/auth";
 import {db} from "../../database/db";
 import { firestore } from "firebase-admin";
@@ -47,27 +48,34 @@ export class UsersProvider {
      * @param {SortField} sort optional sort field. Default by name
      * @param {PaginationInput} pagination optional pagination parameter
      * @param {string} name  The name of user to retrieve
-     * @return {Promise<User[]>} list of all users
+     * @return {Promise<UserList>} list of all users and the total count
      */
     async getUsers(
         sort: SortField|null|undefined = { field: "name", sortOrder: "ASC" },
         pagination: PaginationInput|null = { offset: 0, limit: 25 },
         name: string|null|undefined
-    ): Promise<User[]> {
+    ): Promise<UserList> {
         let query: any;
+        let countQuery: any;
         if(name) {
             const endSearch = name.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1));
             query = usersDB.where('name', '>=', name).where('name', '<', endSearch).orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+            countQuery = usersDB.where('name', '>=', name).where('name', '<', endSearch);
         } else {
             query = usersDB.orderBy(sort?.field ?? "name", sort?.sortOrder.toLowerCase() as firestore.OrderByDirection);
+            countQuery = usersDB;
         }
       
         if (pagination) {
             query = query.offset(pagination.offset).limit(pagination.limit);
         }
       
-        const users = await query.get();
-        return users.docs.map((doc: any) => doc.data() as User);
+        const [usersSnapshot, totalCountSnapshot] = await Promise.all([query.get(), countQuery.get()]);
+
+        const users = usersSnapshot.docs.map((doc: any) => doc.data() as User);
+        const totalCount = totalCountSnapshot.size;
+
+        return { users, totalCount };
     }
 
     /**
@@ -376,4 +384,5 @@ export class UsersProvider {
         }
         return user.profileData;
     }
+
 }

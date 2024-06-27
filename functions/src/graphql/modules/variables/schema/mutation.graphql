@@ -1,13 +1,15 @@
 input NewVariableInput {
 	name: String!
 	description: String!
-	type: VariableType!
-	units: String   			#SHOULD be an enum 
-    timeseries: Boolean!
+    category: VariableCategory!
     accessLevel: AccessLevel!
+	type: VariableType!
     theme: VariableTheme!
+    sphere: VariableSphere!
     origin: VariableOrigin!
+	units: String   			#SHOULD be an enum 
     methodology: String
+    timeseries: Boolean!
 }
 
 input UpdateVariableInput {

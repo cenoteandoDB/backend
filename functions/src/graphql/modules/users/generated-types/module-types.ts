@@ -7,6 +7,7 @@ export namespace UsersModule {
     Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode';
     ProfileData: 'companyName' | 'companyUrl' | 'school' | 'degree' | 'subject' | 'googleScholar' | 'orchid' | 'researchGate' | 'linkedin' | 'govern_type' | 'govern_institution';
     User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'createdAt' | 'updatedAt';
+    UserList: 'users' | 'totalCount';
   };
   
   interface DefinedEnumValues {
@@ -45,6 +46,7 @@ export namespace UsersModule {
   export type SortField = Pick<Types.SortField, DefinedInputFields['SortField']>;
   export type PaginationInput = Pick<Types.PaginationInput, DefinedInputFields['PaginationInput']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type UserList = Pick<Types.UserList, DefinedFields['UserList']>;
   export type UserProfile = DefinedEnumValues['UserProfile'];
   export type ProfileData = Pick<Types.ProfileData, DefinedFields['ProfileData']>;
   
@@ -56,12 +58,14 @@ export namespace UsersModule {
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
   export type ProfileDataResolvers = Pick<Types.ProfileDataResolvers, DefinedFields['ProfileData'] | '__isTypeOf'>;
   export type UserResolvers = Pick<Types.UserResolvers, DefinedFields['User'] | '__isTypeOf'>;
+  export type UserListResolvers = Pick<Types.UserListResolvers, DefinedFields['UserList'] | '__isTypeOf'>;
   
   export interface Resolvers {
     Mutation?: MutationResolvers;
     Query?: QueryResolvers;
     ProfileData?: ProfileDataResolvers;
     User?: UserResolvers;
+    UserList?: UserListResolvers;
     EmailAddress?: Types.Resolvers['EmailAddress'];
     DateTime?: Types.Resolvers['DateTime'];
   };
@@ -127,6 +131,11 @@ export namespace UsersModule {
       variableEditBlackList?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
+    };
+    UserList?: {
+      '*'?: gm.Middleware[];
+      users?: gm.Middleware[];
+      totalCount?: gm.Middleware[];
     };
   };
 }

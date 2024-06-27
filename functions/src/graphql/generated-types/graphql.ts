@@ -52,11 +52,14 @@ export type Cenote = {
   latitude: Scalars['Latitude'];
   longitude: Scalars['Longitude'];
   maps?: Maybe<Array<Scalars['URL']>>;
+  municipality?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   photos?: Maybe<Array<Scalars['URL']>>;
   reference_count: Scalars['Int'];
   species_count: Scalars['Int'];
+  state?: Maybe<Scalars['String']>;
   touristic: Scalars['Boolean'];
+  type?: Maybe<CenoteType>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   variable_count: Scalars['Int'];
 };
@@ -73,6 +76,12 @@ export type CenoteBounds = {
 
 export type CenoteIssue =
   | 'GEOTAG_NOT_VERIFIED';
+
+export type CenoteList = {
+  __typename?: 'CenoteList';
+  cenotes: Array<Cenote>;
+  totalCount: Scalars['Int'];
+};
 
 export type CenoteLocation = {
   __typename?: 'CenoteLocation';
@@ -516,12 +525,14 @@ export type NewSpeciesInput = {
 
 export type NewVariableInput = {
   accessLevel: AccessLevel;
+  category: VariableCategory;
   description: Scalars['String'];
   enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   methodology?: InputMaybe<Scalars['String']>;
   multiple?: InputMaybe<Scalars['Boolean']>;
   name: Scalars['String'];
   origin: VariableOrigin;
+  sphere: VariableSphere;
   theme: VariableTheme;
   timeseries: Scalars['Boolean'];
   type: VariableType;
@@ -561,16 +572,16 @@ export type Query = {
   cenoteById?: Maybe<Cenote>;
   cenoteDataByTheme?: Maybe<Array<VariableWithData>>;
   cenoteDataByVariable?: Maybe<VariableWithData>;
-  cenotes: Array<Cenote>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
   gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
+  getCenotes: CenoteList;
   getUserByEmail?: Maybe<User>;
   getUserById?: Maybe<User>;
   getUserByName: Array<User>;
-  getUsers: Array<User>;
+  getUsers: UserList;
   getVariableById?: Maybe<Variable>;
-  getVariables?: Maybe<Array<Maybe<Variable>>>;
+  getVariables: VariableList;
   getVariablesByTheme?: Maybe<Array<Maybe<Variable>>>;
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
@@ -609,16 +620,16 @@ export type QueryCenoteDataByVariableArgs = {
 };
 
 
-export type QueryCenotesArgs = {
-  name?: InputMaybe<Scalars['String']>;
-  pagination?: InputMaybe<PaginationInput>;
-  sort?: InputMaybe<SortField>;
-};
-
-
 export type QueryGbifSpeciesSuggestionArgs = {
   q: Scalars['String'];
   rank?: InputMaybe<GbifTaxonomicRank>;
+};
+
+
+export type QueryGetCenotesArgs = {
+  name?: InputMaybe<Scalars['String']>;
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<SortField>;
 };
 
 
@@ -804,7 +815,7 @@ export type UpdateSpeciesInput = {
 export type UpdateUserInfoInput = {
   email: Scalars['EmailAddress'];
   name: Scalars['String'];
-  password: Scalars['String'];
+  password?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   role?: InputMaybe<UserRole>;
   surname: Scalars['String'];
@@ -864,6 +875,12 @@ export type User = {
   variableViewWhiteList: Array<Scalars['String']>;
 };
 
+export type UserList = {
+  __typename?: 'UserList';
+  totalCount: Scalars['Int'];
+  users: Array<User>;
+};
+
 export type UserProfile =
   | 'GOVERN'
   | 'INVESTIGATOR'
@@ -878,19 +895,20 @@ export type UserRole =
 
 export type Variable = {
   __typename?: 'Variable';
-  accessLevel: AccessLevel;
-  category: VariableCategory;
-  cenote_count: Scalars['Int'];
+  accessLevel?: Maybe<AccessLevel>;
+  category?: Maybe<VariableCategory>;
+  cenote_count?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['DateTime']>;
-  description: Scalars['String'];
-  firestore_id: Scalars['ID'];
+  description?: Maybe<Scalars['String']>;
+  firestore_id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars['ID']>;
   methodology?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  origin: VariableOrigin;
-  sphere: VariableSphere;
-  theme: VariableTheme;
-  timeseries: Scalars['Boolean'];
-  type: VariableType;
+  origin?: Maybe<VariableOrigin>;
+  sphere?: Maybe<VariableSphere>;
+  theme?: Maybe<VariableTheme>;
+  timeseries?: Maybe<Scalars['Boolean']>;
+  type?: Maybe<VariableType>;
   units?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -922,6 +940,12 @@ export type VariableCategory =
   | 'THREATS'
   | 'VOLATILE_HYDROCARBONS'
   | 'WATER';
+
+export type VariableList = {
+  __typename?: 'VariableList';
+  totalCount: Scalars['Int'];
+  variables: Array<Variable>;
+};
 
 export type VariableOrigin =
   | 'CALCULATED'
@@ -1121,6 +1145,7 @@ export type ResolversTypes = {
   Cenote: ResolverTypeWrapper<Cenote>;
   CenoteBounds: ResolverTypeWrapper<CenoteBounds>;
   CenoteIssue: CenoteIssue;
+  CenoteList: ResolverTypeWrapper<CenoteList>;
   CenoteLocation: ResolverTypeWrapper<CenoteLocation>;
   CenoteSocialData: ResolverTypeWrapper<CenoteSocialData>;
   CenoteType: CenoteType;
@@ -1177,10 +1202,12 @@ export type ResolversTypes = {
   UpdateVariablePermissions: UpdateVariablePermissions;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: ResolverTypeWrapper<User>;
+  UserList: ResolverTypeWrapper<UserList>;
   UserProfile: UserProfile;
   UserRole: UserRole;
   Variable: ResolverTypeWrapper<Variable>;
   VariableCategory: VariableCategory;
+  VariableList: ResolverTypeWrapper<VariableList>;
   VariableOrigin: VariableOrigin;
   VariableSphere: VariableSphere;
   VariableTheme: VariableTheme;
@@ -1201,6 +1228,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Cenote: Cenote;
   CenoteBounds: CenoteBounds;
+  CenoteList: CenoteList;
   CenoteLocation: CenoteLocation;
   CenoteSocialData: CenoteSocialData;
   CityDistances: CityDistances;
@@ -1248,7 +1276,9 @@ export type ResolversParentTypes = {
   UpdateVariablePermissions: UpdateVariablePermissions;
   UpdatedCenoteInput: UpdatedCenoteInput;
   User: User;
+  UserList: UserList;
   Variable: Variable;
+  VariableList: VariableList;
   VariableWithData: VariableWithData;
   iNaturalistFlagCounts: INaturalistFlagCounts;
   iNaturalistPhoto: INaturalistPhoto;
@@ -1275,11 +1305,14 @@ export type CenoteResolvers<ContextType = any, ParentType extends ResolversParen
   latitude?: Resolver<ResolversTypes['Latitude'], ParentType, ContextType>;
   longitude?: Resolver<ResolversTypes['Longitude'], ParentType, ContextType>;
   maps?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
+  municipality?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   photos?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
   reference_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   species_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   touristic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['CenoteType']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   variable_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1288,6 +1321,12 @@ export type CenoteResolvers<ContextType = any, ParentType extends ResolversParen
 export type CenoteBoundsResolvers<ContextType = any, ParentType extends ResolversParentTypes['CenoteBounds'] = ResolversParentTypes['CenoteBounds']> = {
   bottom_right?: Resolver<Maybe<ResolversTypes['Coordinates']>, ParentType, ContextType>;
   top_left?: Resolver<Maybe<ResolversTypes['Coordinates']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CenoteListResolvers<ContextType = any, ParentType extends ResolversParentTypes['CenoteList'] = ResolversParentTypes['CenoteList']> = {
+  cenotes?: Resolver<Array<ResolversTypes['Cenote']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1473,16 +1512,16 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
   cenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryCenoteDataByThemeArgs, 'cenote' | 'theme'>>;
   cenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryCenoteDataByVariableArgs, 'cenote' | 'variable'>>;
-  cenotes?: Resolver<Array<ResolversTypes['Cenote']>, ParentType, ContextType, Partial<QueryCenotesArgs>>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   gbifSpeciesSuggestion?: Resolver<Maybe<Array<ResolversTypes['GBIFSuggestion']>>, ParentType, ContextType, RequireFields<QueryGbifSpeciesSuggestionArgs, 'q'>>;
+  getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
   getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
-  getUsers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryGetUsersArgs>>;
+  getUsers?: Resolver<ResolversTypes['UserList'], ParentType, ContextType, Partial<QueryGetUsersArgs>>;
   getVariableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariableByIdArgs, 'id'>>;
-  getVariables?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
+  getVariables?: Resolver<ResolversTypes['VariableList'], ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
   getVariablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
   iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
@@ -1567,22 +1606,35 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserListResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserList'] = ResolversParentTypes['UserList']> = {
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
-  accessLevel?: Resolver<ResolversTypes['AccessLevel'], ParentType, ContextType>;
-  category?: Resolver<ResolversTypes['VariableCategory'], ParentType, ContextType>;
-  cenote_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  accessLevel?: Resolver<Maybe<ResolversTypes['AccessLevel']>, ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['VariableCategory']>, ParentType, ContextType>;
+  cenote_count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  firestore_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firestore_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   methodology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  origin?: Resolver<ResolversTypes['VariableOrigin'], ParentType, ContextType>;
-  sphere?: Resolver<ResolversTypes['VariableSphere'], ParentType, ContextType>;
-  theme?: Resolver<ResolversTypes['VariableTheme'], ParentType, ContextType>;
-  timeseries?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['VariableType'], ParentType, ContextType>;
+  origin?: Resolver<Maybe<ResolversTypes['VariableOrigin']>, ParentType, ContextType>;
+  sphere?: Resolver<Maybe<ResolversTypes['VariableSphere']>, ParentType, ContextType>;
+  theme?: Resolver<Maybe<ResolversTypes['VariableTheme']>, ParentType, ContextType>;
+  timeseries?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['VariableType']>, ParentType, ContextType>;
   units?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type VariableListResolvers<ContextType = any, ParentType extends ResolversParentTypes['VariableList'] = ResolversParentTypes['VariableList']> = {
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  variables?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1681,6 +1733,7 @@ export type Resolvers<ContextType = any> = {
   AuditLog?: AuditLogResolvers<ContextType>;
   Cenote?: CenoteResolvers<ContextType>;
   CenoteBounds?: CenoteBoundsResolvers<ContextType>;
+  CenoteList?: CenoteListResolvers<ContextType>;
   CenoteLocation?: CenoteLocationResolvers<ContextType>;
   CenoteSocialData?: CenoteSocialDataResolvers<ContextType>;
   CityDistances?: CityDistancesResolvers<ContextType>;
@@ -1703,7 +1756,9 @@ export type Resolvers<ContextType = any> = {
   Species?: SpeciesResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
+  UserList?: UserListResolvers<ContextType>;
   Variable?: VariableResolvers<ContextType>;
+  VariableList?: VariableListResolvers<ContextType>;
   VariableWithData?: VariableWithDataResolvers<ContextType>;
   iNaturalistFlagCounts?: INaturalistFlagCountsResolvers<ContextType>;
   iNaturalistPhoto?: INaturalistPhotoResolvers<ContextType>;

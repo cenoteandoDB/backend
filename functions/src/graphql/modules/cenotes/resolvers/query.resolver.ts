@@ -4,7 +4,7 @@ import { CenotesProvider } from "../providers/cenotes.provider";
 const cenotesProvider = new CenotesProvider();
 
 export const QueryResolver: CenotesModule.Resolvers["Query"] = {
-  cenotes: (parent, args, contextValue, info) => {
+  getCenotes: (parent, args, contextValue, info) => {
     return cenotesProvider.getCenotes(args.sort, args.pagination, args.name);
   },
 

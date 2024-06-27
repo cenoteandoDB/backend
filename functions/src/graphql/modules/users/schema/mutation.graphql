@@ -13,7 +13,7 @@ input UpdateUserInfoInput {
   name: String!
   surname: String!
   email: EmailAddress!
-  password: String!
+  password: String
   phone: String
   role: UserRole
   # profile: String!

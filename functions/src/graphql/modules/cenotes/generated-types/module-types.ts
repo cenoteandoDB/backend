@@ -4,14 +4,15 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'createdAt' | 'updatedAt';
+    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'createdAt' | 'updatedAt';
+    CenoteList: 'cenotes' | 'totalCount';
     CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'county';
     Coordinates: 'latitude' | 'longitude';
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
     Comment: 'commenter' | 'comment' | 'review';
     Mutation: 'createCenote' | 'updateCenote' | 'deleteCenote' | 'uploadPhoto' | 'uploadMap';
-    Query: 'cenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds';
+    Query: 'getCenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds';
   };
   
   interface DefinedEnumValues {
@@ -30,6 +31,7 @@ export namespace CenotesModule {
   export type CenoteIssue = DefinedEnumValues['CenoteIssue'];
   export type CityDistances = Pick<Types.CityDistances, DefinedFields['CityDistances']>;
   export type Cenote = Pick<Types.Cenote, DefinedFields['Cenote']>;
+  export type CenoteList = Pick<Types.CenoteList, DefinedFields['CenoteList']>;
   export type CenoteLocation = Pick<Types.CenoteLocation, DefinedFields['CenoteLocation']>;
   export type Coordinates = Pick<Types.Coordinates, DefinedFields['Coordinates']>;
   export type CenoteBounds = Pick<Types.CenoteBounds, DefinedFields['CenoteBounds']>;
@@ -54,6 +56,7 @@ export namespace CenotesModule {
   
   export type CityDistancesResolvers = Pick<Types.CityDistancesResolvers, DefinedFields['CityDistances'] | '__isTypeOf'>;
   export type CenoteResolvers = Pick<Types.CenoteResolvers, DefinedFields['Cenote'] | '__isTypeOf'>;
+  export type CenoteListResolvers = Pick<Types.CenoteListResolvers, DefinedFields['CenoteList'] | '__isTypeOf'>;
   export type CenoteLocationResolvers = Pick<Types.CenoteLocationResolvers, DefinedFields['CenoteLocation'] | '__isTypeOf'>;
   export type CoordinatesResolvers = Pick<Types.CoordinatesResolvers, DefinedFields['Coordinates'] | '__isTypeOf'>;
   export type CenoteBoundsResolvers = Pick<Types.CenoteBoundsResolvers, DefinedFields['CenoteBounds'] | '__isTypeOf'>;
@@ -65,6 +68,7 @@ export namespace CenotesModule {
   export interface Resolvers {
     CityDistances?: CityDistancesResolvers;
     Cenote?: CenoteResolvers;
+    CenoteList?: CenoteListResolvers;
     CenoteLocation?: CenoteLocationResolvers;
     Coordinates?: CoordinatesResolvers;
     CenoteBounds?: CenoteBoundsResolvers;
@@ -96,6 +100,9 @@ export namespace CenotesModule {
       cenoteando_id?: gm.Middleware[];
       name?: gm.Middleware[];
       altnames?: gm.Middleware[];
+      state?: gm.Middleware[];
+      municipality?: gm.Middleware[];
+      type?: gm.Middleware[];
       touristic?: gm.Middleware[];
       latitude?: gm.Middleware[];
       longitude?: gm.Middleware[];
@@ -106,6 +113,11 @@ export namespace CenotesModule {
       maps?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
+    };
+    CenoteList?: {
+      '*'?: gm.Middleware[];
+      cenotes?: gm.Middleware[];
+      totalCount?: gm.Middleware[];
     };
     CenoteLocation?: {
       '*'?: gm.Middleware[];
@@ -145,7 +157,7 @@ export namespace CenotesModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
-      cenotes?: gm.Middleware[];
+      getCenotes?: gm.Middleware[];
       cenoteById?: gm.Middleware[];
       cenotesCsv?: gm.Middleware[];
       cenotesBounds?: gm.Middleware[];

@@ -1,9 +1,9 @@
 type Query {
-  cenotes(
+  getCenotes(
     sort: SortField
     pagination: PaginationInput
     name: String
-  ): [Cenote!]!
+  ): CenoteList!
   cenoteById(id: ID!): Cenote
   cenotesCsv: String
   cenotesBounds: CenoteBounds

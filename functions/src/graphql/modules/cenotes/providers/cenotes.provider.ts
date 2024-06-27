@@ -9,6 +9,7 @@ import {
   PaginationInput,
   SortField,
   UpdatedCenoteInput,
+  CenoteList
 } from "../../../generated-types/graphql";
 import { firestore } from "firebase-admin";
 
@@ -17,8 +18,10 @@ const cenotesDB = db.cenotes;
 export class CenotesProvider {
   /**
    * Get all cenotes.
-   *
-   * @return {Promise<Cenote[]>} a list with all cenotes
+   * @param {SortField} sort optional sort field. Default by name
+   * @param {PaginationInput} pagination optional pagination parameter
+   * @param {string} name  The name of user to retrieve
+   * @return {Promise<CenoteList>} a list with all cenotes
    */
   async getCenotes(
     sort: SortField | null | undefined = {
@@ -27,8 +30,9 @@ export class CenotesProvider {
     },
     pagination: PaginationInput | null = { offset: 0, limit: 25 },
     name: string | null | undefined,
-  ): Promise<Cenote[]> {
+  ): Promise<CenoteList> {
     let query: any;
+    let countQuery: any;
     if (name) {
       const endSearch = name.replace(/.$/, (c) =>
         String.fromCharCode(c.charCodeAt(0) + 1),
@@ -40,18 +44,25 @@ export class CenotesProvider {
           sort?.field ?? "name",
           sort?.sortOrder.toLowerCase() as firestore.OrderByDirection,
         );
+      countQuery = cenotesDB.where('name', '>=', name).where('name', '<', endSearch);
     } else {
       query = cenotesDB.orderBy(
         sort?.field ?? "name",
         sort?.sortOrder.toLowerCase() as firestore.OrderByDirection,
       );
+      countQuery = cenotesDB;
     }
 
     if (pagination) {
       query = query.offset(pagination.offset).limit(pagination.limit);
     }
-    const cenotes = await query.get();
-    return cenotes.docs.map((doc: any) => doc.data() as Cenote);
+    
+    const [cenotesSnapshot, totalCountSnapshot] = await Promise.all([query.get(), countQuery.get()]);
+
+    const  cenotes = cenotesSnapshot.docs.map((doc: any) => doc.data() as Cenote);
+    const totalCount = totalCountSnapshot.size;
+
+    return { cenotes, totalCount };
   }
 
   /**

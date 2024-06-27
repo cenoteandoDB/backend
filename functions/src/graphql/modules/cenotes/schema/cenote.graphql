@@ -30,6 +30,9 @@ type Cenote {
 
   name: String!
   altnames: [String!]!
+  state: String
+  municipality: String
+  type: CenoteType
 
   touristic: Boolean!
   latitude: Latitude!
@@ -59,4 +62,10 @@ type Cenote {
   # distances: [CityDistances]
 
   # reviewed: Boolean
+}
+
+
+type CenoteList {
+  cenotes: [Cenote!]!
+  totalCount: Int!
 }
