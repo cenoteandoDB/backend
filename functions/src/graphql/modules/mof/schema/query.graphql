@@ -1,4 +1,5 @@
 type Query {
-  cenoteDataByTheme(cenote: ID!, theme: VariableTheme!): [VariableWithData!]
-  cenoteDataByVariable(cenote: ID!, variable: ID!): VariableWithData
+  getCenoteDataByTheme(cenoteId: ID!, theme: VariableTheme!): [VariableWithData!]
+  getCenoteDataByVariable(cenoteId: ID!, variableId: ID!): VariableWithData
+  getCenoteData(cenoteId: ID!): [VariableWithData!]
 }

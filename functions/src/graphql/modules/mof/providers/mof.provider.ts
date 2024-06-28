@@ -17,29 +17,36 @@ export class MofProvider {
   /**
    * Get cenote measurements or facts by theme.
    *
-   * @param {ID} id of the cenote to get MoF
+   * @param {ID} cenoteId of the cenote to get MoF
    * @param {VariableTheme} theme of the cenote to get MoF
    *
    * @return {Promise<VariableWithData[]>} list of MoF
    */
-  async cenoteDataByTheme(
-    id: ID,
-    theme: VariableTheme,
-  ): Promise<VariableWithData[]> {
+  async cenoteDataByTheme(cenoteId: ID, theme: VariableTheme): Promise<VariableWithData[]> {
     const data: VariableWithData[] = [];
-    const snapshot = await mofDB.where("_to", "==", this.getCenoteId(id)).get();
+    const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
     const mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
 
     for (const mof of mofs) {
-      const variableSnapshot = await variableDB
-        .where("_id", "==", mof._from)
-        .get();
-      const variable = variableSnapshot.docs[0].data() as Variable;
+      const variableSnapshot = await variableDB.doc(mof.variableId).get();
+      const variable = variableSnapshot.data() as Variable;
       if (variable.theme == theme) {
         data.push(mof);
       }
     }
     return data;
+  }
+
+  /**
+   * Get cenote measurements or facts.
+   *
+   * @param {ID} cenoteId of the cenote to get MoF
+   *
+   * @return {Promise<VariableWithData[]>} list of MoF
+   */
+  async getCenoteData(cenoteId: ID): Promise<VariableWithData[]> {
+    const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
+    return snapshot.docs.map((doc) => doc.data() as VariableWithData);
   }
 
   /**
@@ -50,13 +57,10 @@ export class MofProvider {
    *
    * @return {Promise<VariableWithData>} MoFs of given cenote and variable
    */
-  async cenoteDataByVariable(
-    cenoteId: ID,
-    variableId: ID,
-  ): Promise<VariableWithData> {
+  async cenoteDataByVariable(cenoteId: ID, variableId: ID): Promise<VariableWithData> {
     const mof = await mofDB
-      .where("_to", "==", this.getCenoteId(cenoteId))
-      .where("_from", "==", this.getVariableId(variableId))
+      .where("cenoteId", "==", cenoteId)
+      .where("variableId", "==", variableId)
       .get();
     return mof.docs[0].data() as VariableWithData;
   }
@@ -75,8 +79,8 @@ export class MofProvider {
     newMof: NewMeasurementOrFactInput,
   ): Promise<VariableWithData> {
     const doc = await mofDB
-      .where("_to", "==", this.getCenoteId(newMof.cenote))
-      .where("_from", "==", this.getVariableId(newMof.variable))
+      .where("cenoteId", "==", newMof.cenoteId)
+      .where("variableId", "==", newMof.variableId)
       .get();
 
     const mof: MeasurementOrFact = {
@@ -98,9 +102,9 @@ export class MofProvider {
   ): Promise<VariableWithData> {
     const docRef = mofDB.doc();
     await docRef.set({
-      _id: docRef.id,
-      _to: this.getCenoteId(input.cenote),
-      _from: this.getVariableId(input.variable),
+      id: docRef.id,
+      cenoteId: input.cenoteId,
+      variableId: input.variableId,
       measurements: [mof],
       firstTimestamp: new Date(input.timestamp).toISOString(),
       lastTimestamp: new Date(input.timestamp).toISOString(),
@@ -115,7 +119,7 @@ export class MofProvider {
     mof: MeasurementOrFact,
   ): Promise<VariableWithData> {
     bucket.measurements.push(mof);
-    console.log(bucket.measurements);
+
     const firstTimestamp =
       bucket.firstTimestamp < mof.timestamp
         ? bucket.firstTimestamp
@@ -125,13 +129,13 @@ export class MofProvider {
         ? bucket.lastTimestamp
         : mof.timestamp;
 
-    await mofDB.doc(bucket._id).update({
+    await mofDB.doc(bucket.id).update({
       measurements: bucket.measurements,
       firstTimestamp,
       lastTimestamp,
     });
 
-    const snapshot = await mofDB.doc(bucket._id).get();
+    const snapshot = await mofDB.doc(bucket.id).get();
     return snapshot.data() as VariableWithData;
   }
 
@@ -145,8 +149,8 @@ export class MofProvider {
    */
   async deleteMoF(deletMofInput: DeleteMofInput): Promise<boolean> {
     const doc = await mofDB
-      .where("_to", "==", this.getCenoteId(deletMofInput.cenote))
-      .where("_from", "==", this.getVariableId(deletMofInput.variable))
+      .where("cenoteId", "==", deletMofInput.cenoteId)
+      .where("variableId", "==", deletMofInput.variableId)
       .get();
 
     if (!doc.empty) {
@@ -193,11 +197,4 @@ export class MofProvider {
     });
   }
 
-  private getCenoteId(cenoteId: string): string {
-    return `Cenotes/${cenoteId}`;
-  }
-
-  private getVariableId(variableId: string): string {
-    return `Variables/${variableId}`;
-  }
 }

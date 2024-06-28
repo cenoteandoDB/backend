@@ -4,14 +4,14 @@ import * as gm from "graphql-modules";
 export namespace MofModule {
   interface DefinedFields {
     MeasurementOrFact: 'timestamp' | 'value';
-    VariableWithData: '_id' | '_to' | '_from' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
+    VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
     Mutation: 'createMof' | 'deleteMof';
-    Query: 'cenoteDataByTheme' | 'cenoteDataByVariable';
+    Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData';
   };
   
   interface DefinedInputFields {
-    NewMeasurementOrFactInput: 'variable' | 'cenote' | 'timestamp' | 'value';
-    DeleteMofInput: 'variable' | 'cenote' | 'timestamp';
+    NewMeasurementOrFactInput: 'variableId' | 'cenoteId' | 'timestamp' | 'value';
+    DeleteMofInput: 'variableId' | 'cenoteId' | 'timestamp';
   };
   
   export type MeasurementOrFact = Pick<Types.MeasurementOrFact, DefinedFields['MeasurementOrFact']>;
@@ -49,9 +49,9 @@ export namespace MofModule {
     };
     VariableWithData?: {
       '*'?: gm.Middleware[];
-      _id?: gm.Middleware[];
-      _to?: gm.Middleware[];
-      _from?: gm.Middleware[];
+      id?: gm.Middleware[];
+      cenoteId?: gm.Middleware[];
+      variableId?: gm.Middleware[];
       measurements?: gm.Middleware[];
       firstTimestamp?: gm.Middleware[];
       lastTimestamp?: gm.Middleware[];
@@ -63,8 +63,9 @@ export namespace MofModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
-      cenoteDataByTheme?: gm.Middleware[];
-      cenoteDataByVariable?: gm.Middleware[];
+      getCenoteDataByTheme?: gm.Middleware[];
+      getCenoteDataByVariable?: gm.Middleware[];
+      getCenoteData?: gm.Middleware[];
     };
   };
 }
