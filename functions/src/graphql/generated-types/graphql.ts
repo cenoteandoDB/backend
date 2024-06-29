@@ -132,6 +132,7 @@ export type CoordinatesInput = {
 export type DeleteMofInput = {
   cenoteId: Scalars['ID'];
   timestamp: Scalars['DateTime'];
+  value: Scalars['String'];
   variableId: Scalars['ID'];
 };
 

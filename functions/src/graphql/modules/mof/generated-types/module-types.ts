@@ -11,7 +11,7 @@ export namespace MofModule {
   
   interface DefinedInputFields {
     NewMeasurementOrFactInput: 'variableId' | 'cenoteId' | 'timestamp' | 'value';
-    DeleteMofInput: 'variableId' | 'cenoteId' | 'timestamp';
+    DeleteMofInput: 'variableId' | 'cenoteId' | 'value' | 'timestamp';
   };
   
   export type MeasurementOrFact = Pick<Types.MeasurementOrFact, DefinedFields['MeasurementOrFact']>;

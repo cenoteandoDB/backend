@@ -140,8 +140,9 @@ export class MofProvider {
   }
 
   /**
-   * Deletes a Measurement or Fact given cenote,
-   * variable and timestamp of measure.
+   * Deletes a Measurement or Fact of a cenote.
+   * Uses the value and timestamp to identify the MoF to be deleted and updates first and
+   * last timestamps of bucket. If bucket becomes empty, deletes the entry in the database.
    *
    * @param {DeleteMofInput} deletMofInput MoF to delete
    *
@@ -158,7 +159,7 @@ export class MofProvider {
       const docId = doc.docs[0].id;
 
       const mofs = bucket.measurements.filter(
-        (mof: any) => mof.timestamp !== deletMofInput.timestamp.toISOString(),
+        (mof: any) => mof.timestamp !== deletMofInput.timestamp.toISOString() && mof.value !== deletMofInput.value,
       );
 
       if (mofs.length == 0) {

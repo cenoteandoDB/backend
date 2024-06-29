@@ -11,6 +11,7 @@ input NewMeasurementOrFactInput {
 input DeleteMofInput {
   variableId: ID!
   cenoteId: ID!
+  value: String!
   timestamp: DateTime!
 }
 
