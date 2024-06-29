@@ -130,9 +130,10 @@ export type CoordinatesInput = {
 };
 
 export type DeleteMofInput = {
-  cenote: Scalars['ID'];
+  cenoteId: Scalars['ID'];
   timestamp: Scalars['DateTime'];
-  variable: Scalars['ID'];
+  value: Scalars['String'];
+  variableId: Scalars['ID'];
 };
 
 export type GbifNameType =
@@ -512,10 +513,10 @@ export type NewCenoteInput = {
 };
 
 export type NewMeasurementOrFactInput = {
-  cenote: Scalars['ID'];
+  cenoteId: Scalars['ID'];
   timestamp: Scalars['DateTime'];
   value: Scalars['String'];
-  variable: Scalars['ID'];
+  variableId: Scalars['ID'];
 };
 
 export type NewSpeciesInput = {
@@ -570,11 +571,12 @@ export type Query = {
   __typename?: 'Query';
   auditLogs?: Maybe<Array<Maybe<AuditLog>>>;
   cenoteById?: Maybe<Cenote>;
-  cenoteDataByTheme?: Maybe<Array<VariableWithData>>;
-  cenoteDataByVariable?: Maybe<VariableWithData>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
   gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
+  getCenoteData?: Maybe<Array<VariableWithData>>;
+  getCenoteDataByTheme?: Maybe<Array<VariableWithData>>;
+  getCenoteDataByVariable?: Maybe<VariableWithData>;
   getCenotes: CenoteList;
   getUserByEmail?: Maybe<User>;
   getUserById?: Maybe<User>;
@@ -608,21 +610,26 @@ export type QueryCenoteByIdArgs = {
 };
 
 
-export type QueryCenoteDataByThemeArgs = {
-  cenote: Scalars['ID'];
+export type QueryGbifSpeciesSuggestionArgs = {
+  q: Scalars['String'];
+  rank?: InputMaybe<GbifTaxonomicRank>;
+};
+
+
+export type QueryGetCenoteDataArgs = {
+  cenoteId: Scalars['ID'];
+};
+
+
+export type QueryGetCenoteDataByThemeArgs = {
+  cenoteId: Scalars['ID'];
   theme: VariableTheme;
 };
 
 
-export type QueryCenoteDataByVariableArgs = {
-  cenote: Scalars['ID'];
-  variable: Scalars['ID'];
-};
-
-
-export type QueryGbifSpeciesSuggestionArgs = {
-  q: Scalars['String'];
-  rank?: InputMaybe<GbifTaxonomicRank>;
+export type QueryGetCenoteDataByVariableArgs = {
+  cenoteId: Scalars['ID'];
+  variableId: Scalars['ID'];
 };
 
 
@@ -978,12 +985,12 @@ export type VariableType =
 
 export type VariableWithData = {
   __typename?: 'VariableWithData';
-  _from: Scalars['ID'];
-  _id: Scalars['ID'];
-  _to: Scalars['ID'];
+  cenoteId: Scalars['ID'];
   firstTimestamp: Scalars['DateTime'];
+  id: Scalars['ID'];
   lastTimestamp: Scalars['DateTime'];
   measurements: Array<MeasurementOrFact>;
+  variableId: Scalars['ID'];
 };
 
 export type INaturalistFlagCounts = {
@@ -1510,11 +1517,12 @@ export type ProfileDataResolvers<ContextType = any, ParentType extends Resolvers
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   auditLogs?: Resolver<Maybe<Array<Maybe<ResolversTypes['AuditLog']>>>, ParentType, ContextType, RequireFields<QueryAuditLogsArgs, 'id' | 'type'>>;
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
-  cenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryCenoteDataByThemeArgs, 'cenote' | 'theme'>>;
-  cenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryCenoteDataByVariableArgs, 'cenote' | 'variable'>>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   gbifSpeciesSuggestion?: Resolver<Maybe<Array<ResolversTypes['GBIFSuggestion']>>, ParentType, ContextType, RequireFields<QueryGbifSpeciesSuggestionArgs, 'q'>>;
+  getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
+  getCenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
+  getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
@@ -1639,12 +1647,12 @@ export type VariableListResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type VariableWithDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['VariableWithData'] = ResolversParentTypes['VariableWithData']> = {
-  _from?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  _to?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  cenoteId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   firstTimestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastTimestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   measurements?: Resolver<Array<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
+  variableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

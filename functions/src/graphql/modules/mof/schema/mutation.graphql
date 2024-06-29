@@ -2,15 +2,16 @@
 scalar DateTime
 
 input NewMeasurementOrFactInput {
-  variable: ID!
-  cenote: ID!
+  variableId: ID!
+  cenoteId: ID!
   timestamp: DateTime!
   value: String!
 }
 
 input DeleteMofInput {
-  variable: ID!
-  cenote: ID!
+  variableId: ID!
+  cenoteId: ID!
+  value: String!
   timestamp: DateTime!
 }
 
