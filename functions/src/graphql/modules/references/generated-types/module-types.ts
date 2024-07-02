@@ -4,8 +4,9 @@ import * as gm from "graphql-modules";
 export namespace ReferencesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
-    Query: 'references' | 'referenceById';
+    Query: 'getReferences' | 'getReferenceById';
     Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'pdf_url' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'cenotes_count' | 'species_count' | 'createdAt' | 'updatedAt';
+    ReferenceList: 'references' | 'totalCount';
   };
   
   interface DefinedEnumValues {
@@ -26,6 +27,9 @@ export namespace ReferencesModule {
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Variable = Types.Variable;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type ReferenceList = Pick<Types.ReferenceList, DefinedFields['ReferenceList']>;
+  export type SortField = Types.SortField;
+  export type PaginationInput = Types.PaginationInput;
   export type Reference = Pick<Types.Reference, DefinedFields['Reference']>;
   export type ReferenceType = DefinedEnumValues['ReferenceType'];
   
@@ -35,11 +39,13 @@ export namespace ReferencesModule {
   export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields['Mutation']>;
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
   export type ReferenceResolvers = Pick<Types.ReferenceResolvers, DefinedFields['Reference'] | '__isTypeOf'>;
+  export type ReferenceListResolvers = Pick<Types.ReferenceListResolvers, DefinedFields['ReferenceList'] | '__isTypeOf'>;
   
   export interface Resolvers {
     Mutation?: MutationResolvers;
     Query?: QueryResolvers;
     Reference?: ReferenceResolvers;
+    ReferenceList?: ReferenceListResolvers;
     DateTime?: Types.Resolvers['DateTime'];
   };
   
@@ -54,8 +60,8 @@ export namespace ReferencesModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
-      references?: gm.Middleware[];
-      referenceById?: gm.Middleware[];
+      getReferences?: gm.Middleware[];
+      getReferenceById?: gm.Middleware[];
     };
     Reference?: {
       '*'?: gm.Middleware[];
@@ -88,6 +94,11 @@ export namespace ReferencesModule {
       species_count?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
+    };
+    ReferenceList?: {
+      '*'?: gm.Middleware[];
+      references?: gm.Middleware[];
+      totalCount?: gm.Middleware[];
     };
   };
 }

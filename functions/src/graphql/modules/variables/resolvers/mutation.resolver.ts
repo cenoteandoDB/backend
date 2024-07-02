@@ -5,6 +5,7 @@ import { VariableProvider } from "../providers/variable.provider";
 const variablesProvider = new VariableProvider();
 
 export const MutationResolver: VariablesModule.Resolvers["Mutation"] = {
+  
   createVariable: async (parent, args, contextValue, info) => {
     const variable = await variablesProvider.createVariable(args.new_variable);
     if (variable.firestore_id) {
@@ -17,17 +18,20 @@ export const MutationResolver: VariablesModule.Resolvers["Mutation"] = {
 
     return variable;
   },
+
   updateVariable: async (parent, args, contextValue, info) => {
     const variable = await variablesProvider.updateVariable(
-      args.updated_variable,
+      args.firestore_id,
+      args.updated_variable
     );
     AuditLogsProvider.save(
-      args.updated_variable.firestore_id,
+      args.firestore_id,
       "UPDATED_VARIABLE",
       args.updated_variable,
     );
     return variable;
   },
+
   deleteVariable: (parent, args, contextValue, info) => {
     return variablesProvider.deleteVariable(args.id);
   },

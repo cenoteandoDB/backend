@@ -125,20 +125,22 @@ export class VariableProvider {
   /**
    * Updates a variable.
    *
+   * @param {string} variableId the variable id
    * @param {UpdateVariableInput} updatedVariable the information to update
    * the variable
    *
    * @return {Promise<Variable>} the updated variable
    */
   async updateVariable(
-    updatedVariable: UpdateVariableInput,
+    variableId: string,
+    updatedVariable: UpdateVariableInput
   ): Promise<Variable> {
-    await variableDB.doc(updatedVariable.firestore_id).update({
+    await variableDB.doc(variableId).update({
       updatedAt: new Date().toISOString(),
       ...updatedVariable,
     });
 
-    const snapshot = await variableDB.doc(updatedVariable.firestore_id).get();
+    const snapshot = await variableDB.doc(variableId).get();
     return snapshot.data() as Variable;
   }
 

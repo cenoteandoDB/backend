@@ -69,26 +69,25 @@ enum VariableCategory {
 }
 
 type Variable {
-  id: ID #SHOULD be an  Optional
   firestore_id: ID
 
   name: String!
-  description: String
+  description: String!
 
-  type: VariableType
+  type: VariableType!
 
   units: String #SHOULD be an enum
   methodology: String
 
-  timeseries: Boolean
-  accessLevel: AccessLevel
-  origin: VariableOrigin
+  timeseries: Boolean!
+  accessLevel: AccessLevel!
+  origin: VariableOrigin!
 
-  theme: VariableTheme
-  sphere: VariableSphere
-  category: VariableCategory
+  theme: VariableTheme!
+  sphere: VariableSphere!
+  category: VariableCategory!
 
-  cenote_count: Int
+  cenote_count: Int!
 
   createdAt: DateTime
   updatedAt: DateTime

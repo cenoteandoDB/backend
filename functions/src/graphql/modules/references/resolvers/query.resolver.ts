@@ -4,10 +4,10 @@ import { ReferenceProvider } from "../providers/reference.provider";
 const referenceProvider = new ReferenceProvider();
 
 export const QueryResolver: ReferencesModule.Resolvers["Query"] = {
-  references: () => {
-    return referenceProvider.getReferences();
+  getReferences: (parent, args, contextValue, info) => {
+    return referenceProvider.getReferences(args.sort, args.pagination, args.title);
   },
-  referenceById: (parent, args, contextValue, info) => {
+  getReferenceById: (parent, args, contextValue, info) => {
     return referenceProvider.getReferenceById(args.id);
   },
 };

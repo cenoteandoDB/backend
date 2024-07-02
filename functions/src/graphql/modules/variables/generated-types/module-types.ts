@@ -5,7 +5,7 @@ export namespace VariablesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable' | 'deleteVariable';
     Query: 'getVariables' | 'getVariableById' | 'getVariablesByTheme';
-    Variable: 'id' | 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'origin' | 'theme' | 'sphere' | 'category' | 'cenote_count' | 'createdAt' | 'updatedAt';
+    Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'origin' | 'theme' | 'sphere' | 'category' | 'cenote_count' | 'createdAt' | 'updatedAt';
     VariableList: 'variables' | 'totalCount';
   };
   
@@ -19,16 +19,16 @@ export namespace VariablesModule {
   };
   
   interface DefinedInputFields {
-    NewVariableInput: 'name' | 'description' | 'category' | 'accessLevel' | 'type' | 'theme' | 'sphere' | 'origin' | 'units' | 'methodology' | 'timeseries';
-    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'timeseries' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
+    NewVariableInput: 'name' | 'description' | 'type' | 'units' | 'timeseries' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'methodology' | 'cenote_count';
+    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'timeseries' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'methodology' | 'cenote_count';
   };
   
   export type NewVariableInput = Pick<Types.NewVariableInput, DefinedInputFields['NewVariableInput']>;
-  export type VariableCategory = DefinedEnumValues['VariableCategory'];
-  export type AccessLevel = DefinedEnumValues['AccessLevel'];
   export type VariableType = DefinedEnumValues['VariableType'];
+  export type AccessLevel = DefinedEnumValues['AccessLevel'];
   export type VariableTheme = DefinedEnumValues['VariableTheme'];
   export type VariableSphere = DefinedEnumValues['VariableSphere'];
+  export type VariableCategory = DefinedEnumValues['VariableCategory'];
   export type VariableOrigin = DefinedEnumValues['VariableOrigin'];
   export type UpdateVariableInput = Pick<Types.UpdateVariableInput, DefinedInputFields['UpdateVariableInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
@@ -72,7 +72,6 @@ export namespace VariablesModule {
     };
     Variable?: {
       '*'?: gm.Middleware[];
-      id?: gm.Middleware[];
       firestore_id?: gm.Middleware[];
       name?: gm.Middleware[];
       description?: gm.Middleware[];
