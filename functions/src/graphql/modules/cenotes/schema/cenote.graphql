@@ -64,7 +64,6 @@ type Cenote {
   # reviewed: Boolean
 }
 
-
 type CenoteList {
   cenotes: [Cenote!]!
   totalCount: Int!

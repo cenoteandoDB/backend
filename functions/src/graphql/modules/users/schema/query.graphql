@@ -13,9 +13,12 @@ input PaginationInput {
   limit: Int!
 }
 
-
 type Query {
-  getUsers(sort: SortField, pagination: PaginationInput, name: String): UserList!
+  getUsers(
+    sort: SortField
+    pagination: PaginationInput
+    name: String
+  ): UserList!
   getUserById(id: ID!): User
   getUserByEmail(email: String!): User
   getUserByName(name: String!): [User!]!

@@ -1,6 +1,9 @@
 import nodemailer from "nodemailer";
 import { readFileSync } from "fs";
 
+/**
+ * Class to handle emails.
+ */
 export class EmailService {
   private EMAIL = process.env.EMAIL!;
   private EMAIL_PASSWORD = process.env.EMAIL_PASSWORD!;
@@ -8,9 +11,9 @@ export class EmailService {
   /**
    * Send an invitation code to a user.
    *
-   * @param email the email of the user to invite
-   * @param name the name of the invitee
-   * @param code the generated code
+   * @param {string} email the email of the user to invite
+   * @param {string} name the name of the invitee
+   * @param {string} code the generated code
    */
   async sendInvitationEmail(
     email: string,
@@ -25,7 +28,11 @@ export class EmailService {
   }
 
   /**
-   * Method to send an email given a template
+   * Method to send an email given a template.
+   *
+   * @param {string} emailTo the email
+   * @param {string} subject the email subject
+   * @param {string} htmlEmail the email html template already populated
    */
   private async sendEmail(
     emailTo: string,
@@ -49,6 +56,11 @@ export class EmailService {
     }
   }
 
+  /**
+   * Creates a email transporter with configuration from environment variables.
+   *
+   * @return {nodemailer.Transporter<SMTPTransport.SentMessageInfo>} the email transporter
+   */
   private createTransporter() {
     const transporter = nodemailer.createTransport({
       service: "Gmail",

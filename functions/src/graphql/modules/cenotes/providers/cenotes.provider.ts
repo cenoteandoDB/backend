@@ -9,7 +9,7 @@ import {
   PaginationInput,
   SortField,
   UpdatedCenoteInput,
-  CenoteList
+  CenoteList,
 } from "../../../generated-types/graphql";
 import { firestore } from "firebase-admin";
 
@@ -44,7 +44,9 @@ export class CenotesProvider {
           sort?.field ?? "name",
           sort?.sortOrder.toLowerCase() as firestore.OrderByDirection,
         );
-      countQuery = cenotesDB.where('name', '>=', name).where('name', '<', endSearch);
+      countQuery = cenotesDB
+        .where("name", ">=", name)
+        .where("name", "<", endSearch);
     } else {
       query = cenotesDB.orderBy(
         sort?.field ?? "name",
@@ -56,10 +58,15 @@ export class CenotesProvider {
     if (pagination) {
       query = query.offset(pagination.offset).limit(pagination.limit);
     }
-    
-    const [cenotesSnapshot, totalCountSnapshot] = await Promise.all([query.get(), countQuery.get()]);
 
-    const  cenotes = cenotesSnapshot.docs.map((doc: any) => doc.data() as Cenote);
+    const [cenotesSnapshot, totalCountSnapshot] = await Promise.all([
+      query.get(),
+      countQuery.get(),
+    ]);
+
+    const cenotes = cenotesSnapshot.docs.map(
+      (doc: any) => doc.data() as Cenote,
+    );
     const totalCount = totalCountSnapshot.size;
 
     return { cenotes, totalCount };

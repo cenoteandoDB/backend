@@ -11,10 +11,23 @@ interface DecodedToken {
   userId: string;
 }
 
+/**
+ * Encrypts a password.
+ *
+ * @param {string} password the original password
+ * @return {Promise<string>} the encrypted password
+ */
 export async function encryptPassword(password: string): Promise<string> {
   return await bcrypt.hash(password, SALT_ROUNDS);
 }
 
+/**
+ * Compares two passwords.
+ *
+ * @param {string} password the original password
+ * @param {string} actualPassword the encrypted password from database
+ * @return {Promise<boolean>} true if they are the same. False otherwise
+ */
 export async function comparePassword(
   password: string,
   actualPassword: string,
@@ -22,6 +35,12 @@ export async function comparePassword(
   return bcrypt.compareSync(password, actualPassword);
 }
 
+/**
+ * Creates a JWT token for a user id.
+ *
+ * @param {string} userId the user id
+ * @return {string} the JWT
+ */
 export function createToken(userId: string): string {
   const payload = { userId: userId };
 
@@ -30,15 +49,25 @@ export function createToken(userId: string): string {
   return token;
 }
 
+/**
+ * Decodes a JWT token into a user id.
+ *
+ * @param {string} token the token to be decoded
+ * @return {string} an entity with the user id
+ */
 export function decodeToken(token: string): string {
   const decodedToken = jwt.verify(token, SECRET) as DecodedToken;
 
   return decodedToken.userId;
 }
 
-export function validateAuth(
-  authorizationHeader: string,
-): Promise<User> | null {
+/**
+ * Validates that the token in the header corresponds to a valid user id.
+ *
+ * @param {string} authorizationHeader the header with the authorization token
+ * @return {Promise<User>} the user
+ */
+export function validateAuth(authorizationHeader: string): Promise<User> | null {
   const token = authorizationHeader.replace("Bearer ", "");
 
   const userId = decodeToken(token);

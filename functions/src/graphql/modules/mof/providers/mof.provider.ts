@@ -22,7 +22,10 @@ export class MofProvider {
    *
    * @return {Promise<VariableWithData[]>} list of MoF
    */
-  async cenoteDataByTheme(cenoteId: ID, theme: VariableTheme): Promise<VariableWithData[]> {
+  async cenoteDataByTheme(
+    cenoteId: ID,
+    theme: VariableTheme,
+  ): Promise<VariableWithData[]> {
     const data: VariableWithData[] = [];
     const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
     const mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
@@ -57,7 +60,10 @@ export class MofProvider {
    *
    * @return {Promise<VariableWithData>} MoFs of given cenote and variable
    */
-  async cenoteDataByVariable(cenoteId: ID, variableId: ID): Promise<VariableWithData> {
+  async cenoteDataByVariable(
+    cenoteId: ID,
+    variableId: ID,
+  ): Promise<VariableWithData> {
     const mof = await mofDB
       .where("cenoteId", "==", cenoteId)
       .where("variableId", "==", variableId)
@@ -121,13 +127,9 @@ export class MofProvider {
     bucket.measurements.push(mof);
 
     const firstTimestamp =
-      bucket.firstTimestamp < mof.timestamp
-        ? bucket.firstTimestamp
-        : mof.timestamp;
+      bucket.firstTimestamp < mof.timestamp ? bucket.firstTimestamp : mof.timestamp;
     const lastTimestamp =
-      bucket.lastTimestamp > mof.timestamp
-        ? bucket.lastTimestamp
-        : mof.timestamp;
+      bucket.lastTimestamp > mof.timestamp ? bucket.lastTimestamp : mof.timestamp;
 
     await mofDB.doc(bucket.id).update({
       measurements: bucket.measurements,
@@ -159,7 +161,9 @@ export class MofProvider {
       const docId = doc.docs[0].id;
 
       const mofs = bucket.measurements.filter(
-        (mof: any) => mof.timestamp !== deletMofInput.timestamp.toISOString() && mof.value !== deletMofInput.value,
+        (mof: any) =>
+          mof.timestamp !== deletMofInput.timestamp.toISOString() &&
+          mof.value !== deletMofInput.value,
       );
 
       if (mofs.length == 0) {
@@ -197,5 +201,4 @@ export class MofProvider {
       measurements,
     });
   }
-
 }
