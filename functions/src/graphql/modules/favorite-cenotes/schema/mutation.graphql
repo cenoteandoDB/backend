@@ -1,0 +1,11 @@
+input NewFavoriteCenote {
+  firestore_id: ID
+  userId: String!
+  cenoteId: String!
+  createdAt: DateTime
+}
+
+type Mutation {
+  addFavoriteCenote(favoriteCenotes: NewFavoriteCenote!): FavoriteCenotes!
+  removeFavorite(id: ID!): Boolean
+}

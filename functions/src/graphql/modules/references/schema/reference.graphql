@@ -47,7 +47,10 @@ type Reference {
   updatedAt: DateTime
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 56695d9 (Cenote List Changes)
 type ReferenceList {
   references: [Reference!]!
   totalCount: Int!

@@ -4,7 +4,6 @@ import { db } from "../../database/db";
 import {
   Cenote,
   CenoteBounds,
-  CoordinatesInput,
   NewCenoteInput,
   PaginationInput,
   SortField,
@@ -14,6 +13,7 @@ import {
 import { firestore } from "firebase-admin";
 
 const cenotesDB = db.cenotes;
+const favoriteCenoteDB = db.favorite_cenotes;
 
 export class CenotesProvider {
   /**
@@ -21,15 +21,17 @@ export class CenotesProvider {
    * @param {SortField} sort optional sort field. Default by name
    * @param {PaginationInput} pagination optional pagination parameter
    * @param {string} name  The name of user to retrieve
+   * @param {string} userId
    * @return {Promise<CenoteList>} a list with all cenotes
    */
   async getCenotes(
-    sort: SortField | null | undefined = {
+      sort: SortField | null | undefined = {
       field: "cenoteando_id",
-      sortOrder: "ASC",
+      sortOrder: "ASC"
     },
     pagination: PaginationInput | null = { offset: 0, limit: 25 },
     name: string | null | undefined,
+    userId: string | null | undefined
   ): Promise<CenoteList> {
     let query: any;
     let countQuery: any;
@@ -59,6 +61,7 @@ export class CenotesProvider {
       query = query.offset(pagination.offset).limit(pagination.limit);
     }
 
+<<<<<<< HEAD
     const [cenotesSnapshot, totalCountSnapshot] = await Promise.all([
       query.get(),
       countQuery.get(),
@@ -66,6 +69,18 @@ export class CenotesProvider {
 
     const cenotes = cenotesSnapshot.docs.map(
       (doc: any) => doc.data() as Cenote,
+=======
+    const cenotes = await Promise.all(
+      cenotesSnapshot.docs.map(async (doc: any) => {
+        const data = doc.data() as Cenote;
+        const favoriteSnapshot = await favoriteCenoteDB
+          .where('userId', '==', userId)
+          .where('cenoteId', '==', doc.id)
+          .get();
+        const isFavorite = !favoriteSnapshot.empty;
+        return { ...data, isFavorite };
+      })
+>>>>>>> 56695d9 (Cenote List Changes)
     );
     const totalCount = totalCountSnapshot.size;
 
@@ -132,13 +147,11 @@ export class CenotesProvider {
    * Creates a cenote.
    *
    * @param {NewCenoteInput} newCenote new cenote input
-   * @param {CoordinatesInput} coordinates cenote geographical location
    *
    * @return {Promise<Cenote>} the new cenote
    */
   async createCenote(
-    newCenote: NewCenoteInput,
-    coordinates: CoordinatesInput,
+    newCenote: NewCenoteInput
   ): Promise<Cenote> {
     /*
         const distances = await DirectionsService.getDrivingDistance(
@@ -149,10 +162,9 @@ export class CenotesProvider {
     const docRef = cenotesDB.doc();
     await docRef.set({
       id: docRef.id,
+      firestore_id: docRef.id,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude,
       ...newCenote,
     });
 
@@ -162,20 +174,17 @@ export class CenotesProvider {
 
   /**
    * Updates a cenote.
-   *
+   * @param {string} cenoteId the cenote id to be updated
    * @param {UpdatedCenoteInput} updatedCenote the information to update the cenote
-   *
    * @return {Promise<Cenote>} the updated cenote
    */
-  async updateCenote(updatedCenote: UpdatedCenoteInput): Promise<Cenote> {
-    const cenoteDoc = await this.getCenoteDocument(updatedCenote.id);
-
-    await cenotesDB.doc(cenoteDoc.id).update({
+  async updateCenote(cenoteId: string, updatedCenote: UpdatedCenoteInput): Promise<Cenote> {
+    await cenotesDB.doc(cenoteId).update({
       ...updatedCenote,
       updatedAt: new Date().toISOString(),
     });
 
-    const cenote = await cenotesDB.doc(cenoteDoc.id).get();
+    const cenote = await cenotesDB.doc(cenoteId).get();
     return cenote.data() as Cenote;
   }
 
@@ -187,7 +196,12 @@ export class CenotesProvider {
    * @return {Promise<Boolean>} true if deleted
    */
   async deleteCenote(id: ID): Promise<boolean> {
-    this.getCenoteDocument(id);
+    const snapshot = await cenotesDB.doc(id).get();
+
+    if (!snapshot.exists) {
+        throw new Error(`Cenote does not exist.`);
+    }
+
     await cenotesDB.doc(id).delete();
     return true;
   }

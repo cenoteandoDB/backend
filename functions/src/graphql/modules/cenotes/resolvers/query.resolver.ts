@@ -5,7 +5,7 @@ const cenotesProvider = new CenotesProvider();
 
 export const QueryResolver: CenotesModule.Resolvers["Query"] = {
   getCenotes: (parent, args, contextValue, info) => {
-    return cenotesProvider.getCenotes(args.sort, args.pagination, args.name);
+    return cenotesProvider.getCenotes(args.sort, args.pagination, args.name, args.userId);
   },
 
   cenoteById: (parent, args, contextValue, info) => {

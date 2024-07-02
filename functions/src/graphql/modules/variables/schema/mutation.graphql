@@ -14,6 +14,7 @@ input NewVariableInput {
 }
 
 input UpdateVariableInput {
+<<<<<<< HEAD
   firestore_id: ID!
   name: String!
   description: String!
@@ -33,4 +34,24 @@ type Mutation {
   createVariable(new_variable: NewVariableInput!): Variable
   updateVariable(firestore_id: String!, updated_variable: UpdateVariableInput!): Variable
   deleteVariable(id: ID!): Boolean!
+=======
+    id: ID
+	name: String!
+	description: String!
+    category: VariableCategory!
+    accessLevel: AccessLevel!
+	type: VariableType!
+    theme: VariableTheme!
+    sphere: VariableSphere!
+    origin: VariableOrigin!
+	units: String   			#SHOULD be an enum 
+    methodology: String
+    timeseries: Boolean!
+}
+
+type Mutation {
+    createVariable(new_variable: NewVariableInput!): Variable
+    updateVariable(variableId: String!, updated_variable: UpdateVariableInput!): Variable
+    deleteVariable(id: ID!): Boolean!
+>>>>>>> 56695d9 (Cenote List Changes)
 }

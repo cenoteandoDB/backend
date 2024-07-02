@@ -12,4 +12,5 @@ export const db = {
   audit_logs: admin.firestore().collection("audit_logs"),
   cenotes_species: admin.firestore().collection("audit_logs"),
   registration_code: admin.firestore().collection("registration_code"),
+  favorite_cenotes: admin.firestore().collection("favorite_cenotes")
 };

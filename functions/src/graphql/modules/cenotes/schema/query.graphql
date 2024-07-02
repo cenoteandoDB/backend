@@ -2,7 +2,8 @@ type Query {
   getCenotes(
     sort: SortField
     pagination: PaginationInput
-    name: String
+    name: String,
+    userId: String
   ): CenoteList!
   cenoteById(id: ID!): Cenote
   cenotesCsv: String

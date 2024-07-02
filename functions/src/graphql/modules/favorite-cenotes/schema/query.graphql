@@ -1,0 +1,4 @@
+type Query {
+  getfavoriteCenotes(pagination: PaginationInput, userId: ID!): FavoriteCenotesList!
+  getfavoriteCenote(id: ID!): FavoriteCenotes
+}

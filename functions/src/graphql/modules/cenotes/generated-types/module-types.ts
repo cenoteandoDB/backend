@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'createdAt' | 'updatedAt';
+    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'createdAt' | 'updatedAt' | 'isFavorite';
     CenoteList: 'cenotes' | 'totalCount';
     CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'county';
     Coordinates: 'latitude' | 'longitude';
@@ -22,8 +22,8 @@ export namespace CenotesModule {
   
   interface DefinedInputFields {
     CoordinatesInput: 'latitude' | 'longitude';
-    NewCenoteInput: 'coordinates';
-    UpdatedCenoteInput: 'id' | 'touristic' | 'type' | 'name' | 'alternativeNames' | 'issues';
+    NewCenoteInput: 'name' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude';
+    UpdatedCenoteInput: 'name' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude';
     PhotoOrMapUploadInput: 'cenoteId' | 'filename' | 'content' | 'extension';
   };
   
@@ -113,6 +113,7 @@ export namespace CenotesModule {
       maps?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
+      isFavorite?: gm.Middleware[];
     };
     CenoteList?: {
       '*'?: gm.Middleware[];

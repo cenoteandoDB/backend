@@ -206,6 +206,7 @@ export class UsersProvider {
       throw new Error("Password does not match.");
     }
 
+<<<<<<< HEAD
     return createToken(user.id);
   }
 
@@ -225,6 +226,51 @@ export class UsersProvider {
 
     if (!snapshot.exists) {
       throw new Error("User does not exist.");
+=======
+    /**
+     * Update user information.
+     *
+     * @param {string} userId the user id to be updated
+     * @param {UpdateUserInfoInput} userInfo user info to be updated
+     * @return {Promise<User>} the new user
+     */
+    async updateUserInfo(userId: string, userInfo: UpdateUserInfoInput): Promise<User> {
+        const snapshot = await usersDB.doc(userId).get();
+
+        if (!snapshot.exists) {
+            throw new Error(`User does not exist.`);
+        }  
+        // Prepare update data object
+        const updateData: { [key: string]: any } = {
+            name: userInfo.name,
+            surname: userInfo.surname,
+            email: userInfo.email,
+            updatedAt: new Date().toISOString(),
+        };
+        if(userInfo.password){
+            const encryptedPassword = await encryptPassword(userInfo.password);
+            updateData.password = encryptedPassword;
+        }
+        if (userInfo.phone !== undefined) {
+            updateData.phone = userInfo.phone;
+        }
+        if (userInfo.role !== undefined) {
+            updateData.role = userInfo.role;
+        }
+    
+        // Remove undefined fields from updateData
+        Object.keys(updateData).forEach(key => {
+            if (updateData[key] === undefined) {
+                delete updateData[key];
+            }
+        });
+        
+        const updatedUser = await usersDB.doc(userId).get();
+        await usersDB.doc(userId).update(updateData);
+       
+      
+        return updatedUser.data() as User;
+>>>>>>> 56695d9 (Cenote List Changes)
     }
 
     // Prepare update data object

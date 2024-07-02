@@ -7,22 +7,23 @@ input CoordinatesInput {
 }
 
 input NewCenoteInput {
-  coordinates: CoordinatesInput!
+    name: String
+    state: String
+    municipality: String
+    type: CenoteType
+    touristic: Boolean!
+    latitude: Latitude
+    longitude: Longitude
 }
 
 input UpdatedCenoteInput {
-  id: ID!
-  touristic: Boolean
-  # location: CenoteLocation
-  type: CenoteType
-  name: String
-  alternativeNames: [String!]
-
-  issues: [CenoteIssue]
-  # social: CenoteSocialData
-
-  # references: [Reference!]
-  # species: [Species!]
+    name: String
+    state: String
+    municipality: String
+    type: CenoteType
+    touristic: Boolean!
+    latitude: Latitude
+    longitude: Longitude
 }
 
 input PhotoOrMapUploadInput {
@@ -35,7 +36,7 @@ input PhotoOrMapUploadInput {
 type Mutation {
   # Mutation fields go here
   createCenote(new_cenote: NewCenoteInput!): Cenote
-  updateCenote(updated_cenote: UpdatedCenoteInput!): Cenote
+  updateCenote(cenoteId: String!, updated_cenote: UpdatedCenoteInput!): Cenote
   deleteCenote(id: ID!): Boolean
   uploadPhoto(photoInput: PhotoOrMapUploadInput!): Boolean
   uploadMap(mapInput: PhotoOrMapUploadInput!): Boolean

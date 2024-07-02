@@ -35,11 +35,11 @@ type Cenote {
   type: CenoteType
 
   touristic: Boolean!
-  latitude: Latitude!
-  longitude: Longitude!
+  latitude: Latitude
+  longitude: Longitude
 
-  variable_count: Int!
-  reference_count: Int!
+  variable_count: Int
+  reference_count: Int
   species_count: Int!
 
   photos: [URL!]
@@ -47,6 +47,8 @@ type Cenote {
 
   createdAt: DateTime
   updatedAt: DateTime
+
+  isFavorite: Boolean!
 
   # social: CenoteSocialData
 

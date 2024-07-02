@@ -4,7 +4,11 @@ import * as gm from "graphql-modules";
 export namespace ReferencesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable';
+<<<<<<< HEAD
     Query: 'getReferences' | 'getReferenceById';
+=======
+    Query: 'getReferences' | 'referenceById';
+>>>>>>> 56695d9 (Cenote List Changes)
     Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'pdf_url' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'cenotes_count' | 'species_count' | 'createdAt' | 'updatedAt';
     ReferenceList: 'references' | 'totalCount';
   };
@@ -61,7 +65,11 @@ export namespace ReferencesModule {
     Query?: {
       '*'?: gm.Middleware[];
       getReferences?: gm.Middleware[];
+<<<<<<< HEAD
       getReferenceById?: gm.Middleware[];
+=======
+      referenceById?: gm.Middleware[];
+>>>>>>> 56695d9 (Cenote List Changes)
     };
     Reference?: {
       '*'?: gm.Middleware[];

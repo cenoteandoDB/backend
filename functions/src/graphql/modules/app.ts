@@ -8,6 +8,7 @@ import { MofModule } from "./mof";
 import { MapLayersModule } from "./map-layers";
 import { LayersProvider } from "./gcp/gcp.dataSource";
 import { ReferencesModule } from "./references";
+import { FavoriteCenotesModule } from "./favorite-cenotes";
 
 export const CenoteandoApp = createApplication({
   modules: [
@@ -19,6 +20,7 @@ export const CenoteandoApp = createApplication({
     MofModule,
     AuditLogsModule,
     MapLayersModule,
+    FavoriteCenotesModule
   ],
   providers: [LayersProvider],
   middlewares: {},

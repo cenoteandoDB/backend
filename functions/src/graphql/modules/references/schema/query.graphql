@@ -1,6 +1,11 @@
 
 
 type Query {
+<<<<<<< HEAD
   getReferences(sort: SortField, pagination: PaginationInput, title: String): ReferenceList!
   getReferenceById(id: ID!): Reference
+=======
+  getReferences( sort: SortField, pagination: PaginationInput, title: String): ReferenceList!
+  referenceById(id: ID!): Reference
+>>>>>>> 56695d9 (Cenote List Changes)
 }

@@ -9,16 +9,16 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
   createCenote: async (parent, args, contextValue, info) => {
     const cenote = await cenotesProvider.createCenote(
       args.new_cenote,
-      args.new_cenote.coordinates,
     );
     AuditLogsProvider.save(cenote.firestore_id, "NEW_CENOTE", args.new_cenote);
 
     return cenote;
   },
   updateCenote: async (parent, args, contextValue, info) => {
-    const cenote = await cenotesProvider.updateCenote(args.updated_cenote);
+    const cenote = await cenotesProvider.updateCenote(args.cenoteId, args.updated_cenote);
+
     AuditLogsProvider.save(
-      args.updated_cenote.id,
+      args.cenoteId,
       "UPDATED_CENOTE",
       args.updated_cenote,
     );
