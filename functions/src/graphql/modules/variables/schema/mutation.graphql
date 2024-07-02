@@ -1,15 +1,16 @@
 input NewVariableInput {
   name: String!
   description: String!
-  category: VariableCategory!
-  accessLevel: AccessLevel!
   type: VariableType!
+  accessLevel: AccessLevel!
   theme: VariableTheme!
   sphere: VariableSphere!
+  category: VariableCategory!
   origin: VariableOrigin!
-  units: String #SHOULD be an enum
+  units: String
   methodology: String
   timeseries: Boolean!
+  cenote_count: Int
 }
 
 input UpdateVariableInput {
@@ -17,16 +18,19 @@ input UpdateVariableInput {
   name: String!
   description: String!
   type: VariableType!
-  units: String #SHOULD be an enum
-  timeseries: Boolean!
+  units: String
   accessLevel: AccessLevel!
   theme: VariableTheme!
+  sphere: VariableSphere!
+  category: VariableCategory!
   origin: VariableOrigin!
   methodology: String
+  timeseries: Boolean!
+  cenote_count: Int
 }
 
 type Mutation {
   createVariable(new_variable: NewVariableInput!): Variable
-  updateVariable(updated_variable: UpdateVariableInput!): Variable
+  updateVariable(firestore_id: String!, updated_variable: UpdateVariableInput!): Variable
   deleteVariable(id: ID!): Boolean!
 }

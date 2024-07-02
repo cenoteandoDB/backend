@@ -1,4 +1,6 @@
+
+
 type Query {
-  references: [Reference!]
-  referenceById(id: ID!): Reference
+  getReferences(sort: SortField, pagination: PaginationInput, title: String): ReferenceList!
+  getReferenceById(id: ID!): Reference
 }

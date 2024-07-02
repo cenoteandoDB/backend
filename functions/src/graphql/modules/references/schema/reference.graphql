@@ -46,3 +46,9 @@ type Reference {
   createdAt: DateTime
   updatedAt: DateTime
 }
+
+
+type ReferenceList {
+  references: [Reference!]!
+  totalCount: Int!
+}

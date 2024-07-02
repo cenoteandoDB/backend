@@ -52,12 +52,12 @@ export type Cenote = {
   latitude: Scalars['Latitude'];
   longitude: Scalars['Longitude'];
   maps?: Maybe<Array<Scalars['URL']>>;
-  municipality?: Maybe<Scalars['String']>;
+  municipality: Scalars['String'];
   name: Scalars['String'];
   photos?: Maybe<Array<Scalars['URL']>>;
   reference_count: Scalars['Int'];
   species_count: Scalars['Int'];
-  state?: Maybe<Scalars['String']>;
+  state: Scalars['String'];
   touristic: Scalars['Boolean'];
   type?: Maybe<CenoteType>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -489,6 +489,7 @@ export type MutationUpdateUserInfoArgs = {
 
 
 export type MutationUpdateVariableArgs = {
+  firestore_id: Scalars['String'];
   updated_variable: UpdateVariableInput;
 };
 
@@ -527,6 +528,7 @@ export type NewSpeciesInput = {
 export type NewVariableInput = {
   accessLevel: AccessLevel;
   category: VariableCategory;
+  cenote_count?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   methodology?: InputMaybe<Scalars['String']>;
@@ -578,6 +580,8 @@ export type Query = {
   getCenoteDataByTheme?: Maybe<Array<VariableWithData>>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
   getCenotes: CenoteList;
+  getReferenceById?: Maybe<Reference>;
+  getReferences: ReferenceList;
   getUserByEmail?: Maybe<User>;
   getUserById?: Maybe<User>;
   getUserByName: Array<User>;
@@ -588,8 +592,6 @@ export type Query = {
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
-  referenceById?: Maybe<Reference>;
-  references?: Maybe<Array<Reference>>;
   species?: Maybe<Array<Maybe<Species>>>;
   speciesByGBIFId?: Maybe<Species>;
   speciesByINaturalistId?: Maybe<Species>;
@@ -640,6 +642,18 @@ export type QueryGetCenotesArgs = {
 };
 
 
+export type QueryGetReferenceByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetReferencesArgs = {
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<SortField>;
+  title?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryGetUserByEmailArgs = {
   email: Scalars['String'];
 };
@@ -686,11 +700,6 @@ export type QueryINaturalistSearchArgs = {
 
 
 export type QueryLayerArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryReferenceByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -745,6 +754,12 @@ export type Reference = {
   uploaded_mendeley: Scalars['Boolean'];
   url?: Maybe<Scalars['String']>;
   validated_mendeley: Scalars['Boolean'];
+};
+
+export type ReferenceList = {
+  __typename?: 'ReferenceList';
+  references: Array<Reference>;
+  totalCount: Scalars['Int'];
 };
 
 export type ReferenceType =
@@ -830,6 +845,8 @@ export type UpdateUserInfoInput = {
 
 export type UpdateVariableInput = {
   accessLevel: AccessLevel;
+  category: VariableCategory;
+  cenote_count?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   firestore_id: Scalars['ID'];
@@ -838,6 +855,7 @@ export type UpdateVariableInput = {
   multiple?: InputMaybe<Scalars['Boolean']>;
   name: Scalars['String'];
   origin: VariableOrigin;
+  sphere: VariableSphere;
   theme: VariableTheme;
   timeseries: Scalars['Boolean'];
   type: VariableType;
@@ -902,20 +920,19 @@ export type UserRole =
 
 export type Variable = {
   __typename?: 'Variable';
-  accessLevel?: Maybe<AccessLevel>;
-  category?: Maybe<VariableCategory>;
-  cenote_count?: Maybe<Scalars['Int']>;
+  accessLevel: AccessLevel;
+  category: VariableCategory;
+  cenote_count: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateTime']>;
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   firestore_id?: Maybe<Scalars['ID']>;
-  id?: Maybe<Scalars['ID']>;
   methodology?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  origin?: Maybe<VariableOrigin>;
-  sphere?: Maybe<VariableSphere>;
-  theme?: Maybe<VariableTheme>;
-  timeseries?: Maybe<Scalars['Boolean']>;
-  type?: Maybe<VariableType>;
+  origin: VariableOrigin;
+  sphere: VariableSphere;
+  theme: VariableTheme;
+  timeseries: Scalars['Boolean'];
+  type: VariableType;
   units?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -1191,6 +1208,7 @@ export type ResolversTypes = {
   ProfileData: ResolverTypeWrapper<ProfileData>;
   Query: ResolverTypeWrapper<{}>;
   Reference: ResolverTypeWrapper<Reference>;
+  ReferenceList: ResolverTypeWrapper<ReferenceList>;
   ReferenceType: ReferenceType;
   RegisterGovernInput: RegisterGovernInput;
   RegisterInvestigatorInput: RegisterInvestigatorInput;
@@ -1267,6 +1285,7 @@ export type ResolversParentTypes = {
   ProfileData: ProfileData;
   Query: {};
   Reference: Reference;
+  ReferenceList: ReferenceList;
   RegisterGovernInput: RegisterGovernInput;
   RegisterInvestigatorInput: RegisterInvestigatorInput;
   RegisterStudentInput: RegisterStudentInput;
@@ -1312,12 +1331,12 @@ export type CenoteResolvers<ContextType = any, ParentType extends ResolversParen
   latitude?: Resolver<ResolversTypes['Latitude'], ParentType, ContextType>;
   longitude?: Resolver<ResolversTypes['Longitude'], ParentType, ContextType>;
   maps?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
-  municipality?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  municipality?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   photos?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
   reference_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   species_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   touristic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['CenoteType']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -1493,7 +1512,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateCenotePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateCenotePermissionsArgs, 'cenotePermissions' | 'userId'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
   updateUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, 'userId' | 'userInfo'>>;
-  updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'updated_variable'>>;
+  updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'firestore_id' | 'updated_variable'>>;
   updateVariablePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateVariablePermissionsArgs, 'userId' | 'variablePermissions'>>;
   uploadMap?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadMapArgs, 'mapInput'>>;
   uploadPhoto?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'photoInput'>>;
@@ -1524,6 +1543,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getCenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
+  getReferenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryGetReferenceByIdArgs, 'id'>>;
+  getReferences?: Resolver<ResolversTypes['ReferenceList'], ParentType, ContextType, Partial<QueryGetReferencesArgs>>;
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
   getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
@@ -1534,8 +1555,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
-  referenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryReferenceByIdArgs, 'id'>>;
-  references?: Resolver<Maybe<Array<ResolversTypes['Reference']>>, ParentType, ContextType>;
   species?: Resolver<Maybe<Array<Maybe<ResolversTypes['Species']>>>, ParentType, ContextType>;
   speciesByGBIFId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByGbifIdArgs, 'gbifId'>>;
   speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalistId'>>;
@@ -1574,6 +1593,12 @@ export type ReferenceResolvers<ContextType = any, ParentType extends ResolversPa
   uploaded_mendeley?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   validated_mendeley?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ReferenceListResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReferenceList'] = ResolversParentTypes['ReferenceList']> = {
+  references?: Resolver<Array<ResolversTypes['Reference']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1621,20 +1646,19 @@ export type UserListResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
-  accessLevel?: Resolver<Maybe<ResolversTypes['AccessLevel']>, ParentType, ContextType>;
-  category?: Resolver<Maybe<ResolversTypes['VariableCategory']>, ParentType, ContextType>;
-  cenote_count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  accessLevel?: Resolver<ResolversTypes['AccessLevel'], ParentType, ContextType>;
+  category?: Resolver<ResolversTypes['VariableCategory'], ParentType, ContextType>;
+  cenote_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firestore_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   methodology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  origin?: Resolver<Maybe<ResolversTypes['VariableOrigin']>, ParentType, ContextType>;
-  sphere?: Resolver<Maybe<ResolversTypes['VariableSphere']>, ParentType, ContextType>;
-  theme?: Resolver<Maybe<ResolversTypes['VariableTheme']>, ParentType, ContextType>;
-  timeseries?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  type?: Resolver<Maybe<ResolversTypes['VariableType']>, ParentType, ContextType>;
+  origin?: Resolver<ResolversTypes['VariableOrigin'], ParentType, ContextType>;
+  sphere?: Resolver<ResolversTypes['VariableSphere'], ParentType, ContextType>;
+  theme?: Resolver<ResolversTypes['VariableTheme'], ParentType, ContextType>;
+  timeseries?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['VariableType'], ParentType, ContextType>;
   units?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1761,6 +1785,7 @@ export type Resolvers<ContextType = any> = {
   ProfileData?: ProfileDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Reference?: ReferenceResolvers<ContextType>;
+  ReferenceList?: ReferenceListResolvers<ContextType>;
   Species?: SpeciesResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;

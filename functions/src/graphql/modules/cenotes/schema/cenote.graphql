@@ -30,8 +30,8 @@ type Cenote {
 
   name: String!
   altnames: [String!]!
-  state: String
-  municipality: String
+  state: String!
+  municipality: String!
   type: CenoteType
 
   touristic: Boolean!
