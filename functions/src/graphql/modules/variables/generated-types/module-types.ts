@@ -19,8 +19,8 @@ export namespace VariablesModule {
   };
   
   interface DefinedInputFields {
-    NewVariableInput: 'name' | 'description' | 'type' | 'units' | 'timeseries' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'methodology' | 'cenote_count';
-    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'timeseries' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'methodology' | 'cenote_count';
+    NewVariableInput: 'name' | 'description' | 'type' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'units' | 'methodology' | 'timeseries' | 'cenote_count';
+    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'methodology' | 'timeseries' | 'cenote_count';
   };
   
   export type NewVariableInput = Pick<Types.NewVariableInput, DefinedInputFields['NewVariableInput']>;

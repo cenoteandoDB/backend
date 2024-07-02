@@ -922,7 +922,7 @@ export type Variable = {
   __typename?: 'Variable';
   accessLevel: AccessLevel;
   category: VariableCategory;
-  cenote_count?: Maybe<Scalars['Int']>;
+  cenote_count: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateTime']>;
   description: Scalars['String'];
   firestore_id?: Maybe<Scalars['ID']>;
@@ -1648,7 +1648,7 @@ export type UserListResolvers<ContextType = any, ParentType extends ResolversPar
 export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
   accessLevel?: Resolver<ResolversTypes['AccessLevel'], ParentType, ContextType>;
   category?: Resolver<ResolversTypes['VariableCategory'], ParentType, ContextType>;
-  cenote_count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  cenote_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firestore_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;

@@ -2,8 +2,6 @@ input NewVariableInput {
   name: String!
   description: String!
   type: VariableType!
-  units: String
-  timeseries: Boolean!
   accessLevel: AccessLevel!
   theme: VariableTheme!
   sphere: VariableSphere!
@@ -21,13 +19,11 @@ input UpdateVariableInput {
   description: String!
   type: VariableType!
   units: String
-  timeseries: Boolean!
   accessLevel: AccessLevel!
   theme: VariableTheme!
   sphere: VariableSphere!
   category: VariableCategory!
   origin: VariableOrigin!
-  units: String
   methodology: String
   timeseries: Boolean!
   cenote_count: Int
