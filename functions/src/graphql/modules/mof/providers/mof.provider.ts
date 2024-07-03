@@ -9,6 +9,7 @@ import {
   Variable,
   DeleteMofInput,
 } from "../../../generated-types/graphql";
+import { VariableProvider } from "../../variables/providers/variable.provider";
 
 const mofDB = db.mofs;
 const variableDB = db.variables;
@@ -200,5 +201,22 @@ export class MofProvider {
       lastTimestamp: lastTimestamp?.timestamp,
       measurements,
     });
+  }
+
+  async getThemesByCenote(cenoteId: string): Promise<string[]> {
+    const variableProvider = new VariableProvider();
+    const cenoteData = await this.getCenoteData(cenoteId);
+
+    const variablesIds = cenoteData.map(item => item.variableId);
+
+    const themes: string[] = [];
+    for (const variableId of variablesIds) {
+      const variable = await variableProvider.getVariableById(variableId);
+      if (!themes.includes(variable.theme)) {
+        themes.push(variable.theme);
+      }
+    }
+
+    return themes;
   }
 }

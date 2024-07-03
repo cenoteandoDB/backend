@@ -105,7 +105,7 @@ export class UsersProvider {
    *
    * @return {Promise<UsersModule.User>}
    */
-  static async getUserById(id: string): Promise<User> {
+  async getUserById(id: string): Promise<User> {
     const snapshot = await usersDB.doc(id).get();
 
     if (!snapshot.exists) {
@@ -437,5 +437,67 @@ export class UsersProvider {
       throw new Error(`Profile data for user ${id} not found.`);
     }
     return user.profileData;
+  }
+
+  /**
+   * Get user favourite cenotes.
+   *
+   * @param {string} id - The identifier of the user to fetch favourite cenotes.
+   *
+   * @return {Promise<string[]>} the list of favouriteCenotes
+   */
+  async getFavouriteCenotes(id: string): Promise<string[]> {
+    const user = await this.getUserById(id);
+    
+    return user.favouriteCenotes;
+  }
+
+  /**
+   * Adds a cenote to the list of favourite cenotes of a user.
+   *
+   * @param {string} id - The identifier of the user to fetch favourite cenotes.
+   *
+   * @return {Promise<boolean>} the list of favouriteCenotes
+   */
+  async addFavouriteCenote(userId: string, cenoteId: string): Promise<boolean> {
+    const user = await this.getUserById(userId);
+    // TODO should validate that cenote exists
+
+    const userFavouriteCenotes = user.favouriteCenotes
+    if (userFavouriteCenotes.includes(cenoteId)) {
+      return true;
+    } else {
+      userFavouriteCenotes.push(cenoteId);
+      await usersDB.doc(userId).update({
+        favouriteCenotes: userFavouriteCenotes,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+    
+    return true;
+  }
+
+  /**
+   * Removes a cenote from the list of favourite cenotes of a user.
+   *
+   * @param {string} id - The identifier of the user to remove the cenote.
+   *
+   * @return {Promise<boolean>} flag to indicate if operation was valid
+   */
+  async removeFavouriteCenote(userId: string, cenoteId: string): Promise<boolean> {
+    const user = await this.getUserById(userId);
+
+    const userFavouriteCenotes = user.favouriteCenotes
+    const index = userFavouriteCenotes.indexOf(cenoteId);
+
+    if (index !== -1) {
+      userFavouriteCenotes.splice(index, 1);
+      await usersDB.doc(userId).update({
+        favouriteCenotes: userFavouriteCenotes,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    return true;
   }
 }

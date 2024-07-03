@@ -57,4 +57,10 @@ export const MutationResolver: UsersModule.Resolvers["Mutation"] = {
   registerGovern: (parent, args, contextValue, info) => {
     return usersProvider.register(args.userInfo, "GOVERN", args.profileData);
   },
+  addFavouriteCenote: (parent, args, contextValue, info) => {
+    return usersProvider.addFavouriteCenote(args.userId, args.cenoteId);
+  },
+  removeFavouriteCenote: (parent, args, contextValue, info) => {
+    return usersProvider.removeFavouriteCenote(args.userId, args.cenoteId);
+  },
 };

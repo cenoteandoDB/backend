@@ -68,3 +68,14 @@ type CenoteList {
   cenotes: [Cenote!]!
   totalCount: Int!
 }
+
+type FavouriteCenote {
+  firestore_id: ID!
+  cenoteando_id: ID!
+  name: String!
+  type: CenoteType
+  touristic: Boolean!
+  state: String!
+  municipality: String!
+  thumbnail: String!
+}

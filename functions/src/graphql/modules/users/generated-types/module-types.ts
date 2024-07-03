@@ -3,10 +3,10 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
-    Mutation: 'login' | 'inviteUser' | 'register' | 'registerTourist' | 'registerStudent' | 'registerTeacher' | 'registerInvestigator' | 'registerGovern' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'deleteUser';
-    Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode';
+    Mutation: 'login' | 'inviteUser' | 'register' | 'registerTourist' | 'registerStudent' | 'registerTeacher' | 'registerInvestigator' | 'registerGovern' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'addFavouriteCenote' | 'removeFavouriteCenote' | 'deleteUser';
+    Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode' | 'getFavouriteCenotes';
     ProfileData: 'companyName' | 'companyUrl' | 'school' | 'degree' | 'subject' | 'googleScholar' | 'orchid' | 'researchGate' | 'linkedin' | 'govern_type' | 'govern_institution';
-    User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'createdAt' | 'updatedAt';
+    User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'favouriteCenotes' | 'createdAt' | 'updatedAt';
     UserList: 'users' | 'totalCount';
   };
   
@@ -87,6 +87,8 @@ export namespace UsersModule {
       updateUserInfo?: gm.Middleware[];
       updateCenotePermissions?: gm.Middleware[];
       updateVariablePermissions?: gm.Middleware[];
+      addFavouriteCenote?: gm.Middleware[];
+      removeFavouriteCenote?: gm.Middleware[];
       deleteUser?: gm.Middleware[];
     };
     Query?: {
@@ -96,6 +98,7 @@ export namespace UsersModule {
       getUserByEmail?: gm.Middleware[];
       getUserByName?: gm.Middleware[];
       verifyCode?: gm.Middleware[];
+      getFavouriteCenotes?: gm.Middleware[];
     };
     ProfileData?: {
       '*'?: gm.Middleware[];
@@ -129,6 +132,7 @@ export namespace UsersModule {
       variableViewBlackList?: gm.Middleware[];
       variableEditWhiteList?: gm.Middleware[];
       variableEditBlackList?: gm.Middleware[];
+      favouriteCenotes?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

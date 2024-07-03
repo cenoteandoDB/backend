@@ -5,5 +5,5 @@ type Query {
     name: String
   ): VariableList!
   getVariableById(id: ID!): Variable
-  getVariablesByTheme(theme: VariableTheme!): [Variable]
+  getVariablesByTheme(theme: VariableTheme!): [Variable!]!
 }

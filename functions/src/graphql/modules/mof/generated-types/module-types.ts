@@ -6,7 +6,7 @@ export namespace MofModule {
     MeasurementOrFact: 'timestamp' | 'value';
     VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
     Mutation: 'createMof' | 'deleteMof';
-    Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData';
+    Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote';
   };
   
   interface DefinedInputFields {
@@ -66,6 +66,7 @@ export namespace MofModule {
       getCenoteDataByTheme?: gm.Middleware[];
       getCenoteDataByVariable?: gm.Middleware[];
       getCenoteData?: gm.Middleware[];
+      getThemesByCenote?: gm.Middleware[];
     };
   };
 }

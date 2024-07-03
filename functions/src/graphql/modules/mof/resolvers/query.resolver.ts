@@ -11,7 +11,12 @@ export const QueryResolver: MofModule.Resolvers["Query"] = {
   getCenoteDataByVariable: (parent, args, contextValue, info) => {
     return mofProvider.cenoteDataByVariable(args.cenoteId, args.variableId);
   },
+
   getCenoteData: (parent, args, contextValue, info) => {
     return mofProvider.getCenoteData(args.cenoteId);
+  },
+
+  getThemesByCenote: (parent, args, contextValue, info) => {
+    return mofProvider.getThemesByCenote(args.cenoteId);
   },
 };

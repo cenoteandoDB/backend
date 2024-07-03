@@ -8,7 +8,7 @@ export const QueryResolver: UsersModule.Resolvers["Query"] = {
     return usersProvider.getUsers(args.sort, args.pagination, args.name);
   },
   getUserById: (parent, args, contextValue, info) => {
-    return UsersProvider.getUserById(args.id);
+    return usersProvider.getUserById(args.id);
   },
   getUserByEmail: (parent, args, contextValue, info) => {
     return usersProvider.getUserByEmail(args.email);
@@ -18,5 +18,8 @@ export const QueryResolver: UsersModule.Resolvers["Query"] = {
   },
   verifyCode: (parent, args, contextValue, info) => {
     return usersProvider.verifyCode(args.code);
+  },
+  getFavouriteCenotes: (parent, args, contextValue, info) => {
+    return usersProvider.getFavouriteCenotes(args.id);
   },
 };

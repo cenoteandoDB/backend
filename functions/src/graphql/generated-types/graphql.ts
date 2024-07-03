@@ -136,6 +136,18 @@ export type DeleteMofInput = {
   variableId: Scalars['ID'];
 };
 
+export type FavouriteCenote = {
+  __typename?: 'FavouriteCenote';
+  cenoteando_id: Scalars['ID'];
+  firestore_id: Scalars['ID'];
+  municipality: Scalars['String'];
+  name: Scalars['String'];
+  state: Scalars['String'];
+  thumbnail: Scalars['String'];
+  touristic: Scalars['Boolean'];
+  type?: Maybe<CenoteType>;
+};
+
 export type GbifNameType =
   | 'BLACKLISTED'
   | 'CANDIDATUS'
@@ -345,6 +357,7 @@ export type MeasurementOrFact = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addFavouriteCenote?: Maybe<Scalars['Boolean']>;
   create?: Maybe<MapLayer>;
   createCenote?: Maybe<Cenote>;
   createMof?: Maybe<VariableWithData>;
@@ -362,6 +375,7 @@ export type Mutation = {
   registerStudent?: Maybe<User>;
   registerTeacher?: Maybe<User>;
   registerTourist?: Maybe<User>;
+  removeFavouriteCenote?: Maybe<Scalars['Boolean']>;
   updateCenote?: Maybe<Cenote>;
   updateCenotePermissions?: Maybe<User>;
   updateSpecies?: Maybe<Species>;
@@ -370,6 +384,12 @@ export type Mutation = {
   updateVariablePermissions?: Maybe<User>;
   uploadMap?: Maybe<Scalars['Boolean']>;
   uploadPhoto?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationAddFavouriteCenoteArgs = {
+  cenoteId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
@@ -463,6 +483,12 @@ export type MutationRegisterTeacherArgs = {
 export type MutationRegisterTouristArgs = {
   profileData: RegisterTouristInput;
   userInfo: RegisterUserInput;
+};
+
+
+export type MutationRemoveFavouriteCenoteArgs = {
+  cenoteId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
@@ -580,15 +606,18 @@ export type Query = {
   getCenoteDataByTheme?: Maybe<Array<VariableWithData>>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
   getCenotes: CenoteList;
+  getFavouriteCenotes: Array<Scalars['String']>;
   getReferenceById?: Maybe<Reference>;
   getReferences: ReferenceList;
+  getThemesByCenote: Array<Scalars['String']>;
   getUserByEmail?: Maybe<User>;
   getUserById?: Maybe<User>;
   getUserByName: Array<User>;
+  getUserFavouriteCenotes: Array<FavouriteCenote>;
   getUsers: UserList;
   getVariableById?: Maybe<Variable>;
   getVariables: VariableList;
-  getVariablesByTheme?: Maybe<Array<Maybe<Variable>>>;
+  getVariablesByTheme: Array<Variable>;
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
@@ -642,6 +671,11 @@ export type QueryGetCenotesArgs = {
 };
 
 
+export type QueryGetFavouriteCenotesArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type QueryGetReferenceByIdArgs = {
   id: Scalars['ID'];
 };
@@ -651,6 +685,11 @@ export type QueryGetReferencesArgs = {
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<SortField>;
   title?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetThemesByCenoteArgs = {
+  cenoteId: Scalars['ID'];
 };
 
 
@@ -666,6 +705,13 @@ export type QueryGetUserByIdArgs = {
 
 export type QueryGetUserByNameArgs = {
   name: Scalars['String'];
+};
+
+
+export type QueryGetUserFavouriteCenotesArgs = {
+  favouriteCenotes: Array<Scalars['String']>;
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<SortField>;
 };
 
 
@@ -886,6 +932,7 @@ export type User = {
   cenoteViewWhiteList: Array<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   email: Scalars['EmailAddress'];
+  favouriteCenotes: Array<Scalars['String']>;
   id: Scalars['ID'];
   name: Scalars['String'];
   password: Scalars['String'];
@@ -1181,6 +1228,7 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   DeleteMofInput: DeleteMofInput;
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+  FavouriteCenote: ResolverTypeWrapper<FavouriteCenote>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   GBIFNameType: GbifNameType;
   GBIFNameUsage: ResolverTypeWrapper<GbifNameUsage>;
@@ -1264,6 +1312,7 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime'];
   DeleteMofInput: DeleteMofInput;
   EmailAddress: Scalars['EmailAddress'];
+  FavouriteCenote: FavouriteCenote;
   Float: Scalars['Float'];
   GBIFNameUsage: GbifNameUsage;
   GBIFSuggestion: GbifSuggestion;
@@ -1402,6 +1451,18 @@ export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<Resolv
   name: 'EmailAddress';
 }
 
+export type FavouriteCenoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['FavouriteCenote'] = ResolversParentTypes['FavouriteCenote']> = {
+  cenoteando_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  firestore_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  municipality?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  thumbnail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  touristic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['CenoteType']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GbifNameUsageResolvers<ContextType = any, ParentType extends ResolversParentTypes['GBIFNameUsage'] = ResolversParentTypes['GBIFNameUsage']> = {
   authorship?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   basionym?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1491,6 +1552,7 @@ export type MeasurementOrFactResolvers<ContextType = any, ParentType extends Res
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
   create?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<MutationCreateArgs, 'input'>>;
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
   createMof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<MutationCreateMofArgs, 'new_mof'>>;
@@ -1508,6 +1570,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   registerStudent?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterStudentArgs, 'profileData' | 'userInfo'>>;
   registerTeacher?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterTeacherArgs, 'profileData' | 'userInfo'>>;
   registerTourist?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterTouristArgs, 'profileData' | 'userInfo'>>;
+  removeFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateCenotePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateCenotePermissionsArgs, 'cenotePermissions' | 'userId'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
@@ -1543,15 +1606,18 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getCenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
+  getFavouriteCenotes?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryGetFavouriteCenotesArgs, 'id'>>;
   getReferenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryGetReferenceByIdArgs, 'id'>>;
   getReferences?: Resolver<ResolversTypes['ReferenceList'], ParentType, ContextType, Partial<QueryGetReferencesArgs>>;
+  getThemesByCenote?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryGetThemesByCenoteArgs, 'cenoteId'>>;
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
   getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
+  getUserFavouriteCenotes?: Resolver<Array<ResolversTypes['FavouriteCenote']>, ParentType, ContextType, RequireFields<QueryGetUserFavouriteCenotesArgs, 'favouriteCenotes'>>;
   getUsers?: Resolver<ResolversTypes['UserList'], ParentType, ContextType, Partial<QueryGetUsersArgs>>;
   getVariableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariableByIdArgs, 'id'>>;
   getVariables?: Resolver<ResolversTypes['VariableList'], ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
-  getVariablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
+  getVariablesByTheme?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
   iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
@@ -1624,6 +1690,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   cenoteViewWhiteList?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
+  favouriteCenotes?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1774,6 +1841,7 @@ export type Resolvers<ContextType = any> = {
   Coordinates?: CoordinatesResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
+  FavouriteCenote?: FavouriteCenoteResolvers<ContextType>;
   GBIFNameUsage?: GbifNameUsageResolvers<ContextType>;
   GBIFSuggestion?: GbifSuggestionResolvers<ContextType>;
   JSON?: GraphQLScalarType;
