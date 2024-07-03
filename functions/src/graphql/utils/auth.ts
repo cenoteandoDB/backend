@@ -73,7 +73,8 @@ export function validateAuth(authorizationHeader: string): Promise<User> | null 
   const userId = decodeToken(token);
 
   try {
-    return UsersProvider.getUserById(userId);
+    const usersProvider = new UsersProvider();
+    return usersProvider.getUserById(userId);
   } catch (error) {
     return null;
   }

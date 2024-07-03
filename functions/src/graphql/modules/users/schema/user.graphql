@@ -63,6 +63,8 @@ type User {
   variableEditWhiteList: [String!]!
   variableEditBlackList: [String!]!
 
+  favouriteCenotes:[String!]!
+
   createdAt: DateTime!
   updatedAt: DateTime!
 }

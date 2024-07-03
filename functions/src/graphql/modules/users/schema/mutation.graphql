@@ -92,5 +92,7 @@ type Mutation {
     userId: String!
     variablePermissions: UpdateVariablePermissions!
   ): User
+  addFavouriteCenote(userId: ID!, cenoteId: ID!): Boolean
+  removeFavouriteCenote(userId: ID!, cenoteId: ID!): Boolean
   deleteUser(userId: ID!): Boolean!
 }
