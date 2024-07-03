@@ -136,6 +136,18 @@ export type DeleteMofInput = {
   variableId: Scalars['ID'];
 };
 
+export type FavouriteCenote = {
+  __typename?: 'FavouriteCenote';
+  cenoteando_id: Scalars['ID'];
+  firestore_id: Scalars['ID'];
+  municipality: Scalars['String'];
+  name: Scalars['String'];
+  state: Scalars['String'];
+  thumbnail: Scalars['String'];
+  touristic: Scalars['Boolean'];
+  type?: Maybe<CenoteType>;
+};
+
 export type GbifNameType =
   | 'BLACKLISTED'
   | 'CANDIDATUS'
@@ -601,10 +613,11 @@ export type Query = {
   getUserByEmail?: Maybe<User>;
   getUserById?: Maybe<User>;
   getUserByName: Array<User>;
+  getUserFavouriteCenotes: Array<FavouriteCenote>;
   getUsers: UserList;
   getVariableById?: Maybe<Variable>;
   getVariables: VariableList;
-  getVariablesByTheme?: Maybe<Array<Maybe<Variable>>>;
+  getVariablesByTheme: Array<Variable>;
   iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
@@ -692,6 +705,13 @@ export type QueryGetUserByIdArgs = {
 
 export type QueryGetUserByNameArgs = {
   name: Scalars['String'];
+};
+
+
+export type QueryGetUserFavouriteCenotesArgs = {
+  favouriteCenotes: Array<Scalars['String']>;
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<SortField>;
 };
 
 
@@ -1208,6 +1228,7 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   DeleteMofInput: DeleteMofInput;
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+  FavouriteCenote: ResolverTypeWrapper<FavouriteCenote>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   GBIFNameType: GbifNameType;
   GBIFNameUsage: ResolverTypeWrapper<GbifNameUsage>;
@@ -1291,6 +1312,7 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime'];
   DeleteMofInput: DeleteMofInput;
   EmailAddress: Scalars['EmailAddress'];
+  FavouriteCenote: FavouriteCenote;
   Float: Scalars['Float'];
   GBIFNameUsage: GbifNameUsage;
   GBIFSuggestion: GbifSuggestion;
@@ -1428,6 +1450,18 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['EmailAddress'], any> {
   name: 'EmailAddress';
 }
+
+export type FavouriteCenoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['FavouriteCenote'] = ResolversParentTypes['FavouriteCenote']> = {
+  cenoteando_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  firestore_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  municipality?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  thumbnail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  touristic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['CenoteType']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type GbifNameUsageResolvers<ContextType = any, ParentType extends ResolversParentTypes['GBIFNameUsage'] = ResolversParentTypes['GBIFNameUsage']> = {
   authorship?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1579,10 +1613,11 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
   getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
+  getUserFavouriteCenotes?: Resolver<Array<ResolversTypes['FavouriteCenote']>, ParentType, ContextType, RequireFields<QueryGetUserFavouriteCenotesArgs, 'favouriteCenotes'>>;
   getUsers?: Resolver<ResolversTypes['UserList'], ParentType, ContextType, Partial<QueryGetUsersArgs>>;
   getVariableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariableByIdArgs, 'id'>>;
   getVariables?: Resolver<ResolversTypes['VariableList'], ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
-  getVariablesByTheme?: Resolver<Maybe<Array<Maybe<ResolversTypes['Variable']>>>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
+  getVariablesByTheme?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
   iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
@@ -1806,6 +1841,7 @@ export type Resolvers<ContextType = any> = {
   Coordinates?: CoordinatesResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
+  FavouriteCenote?: FavouriteCenoteResolvers<ContextType>;
   GBIFNameUsage?: GbifNameUsageResolvers<ContextType>;
   GBIFSuggestion?: GbifSuggestionResolvers<ContextType>;
   JSON?: GraphQLScalarType;

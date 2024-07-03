@@ -19,4 +19,9 @@ export const QueryResolver: CenotesModule.Resolvers["Query"] = {
   cenotesCsv: () => {
     return cenotesProvider.cenotesToCsv();
   },
+  
+  getUserFavouriteCenotes: (parent, args, contextValue, info) => {
+    return cenotesProvider
+      .getUserFavouriteCenotes(args.favouriteCenotes, args.sort, args.pagination);
+  },
 };

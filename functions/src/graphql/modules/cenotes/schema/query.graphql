@@ -13,4 +13,10 @@ type Query {
   # TODO: Curation Pipeline
   # -> Curation queries (query cenote/variable/references/data proposals for review)
   # -> Collaboration queries (query status of proposals, interactive submission validation, etc.)
+
+  getUserFavouriteCenotes(
+    favouriteCenotes: [String!]!
+    sort: SortField
+    pagination: PaginationInput
+  ): [FavouriteCenote!]!
 }

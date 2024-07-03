@@ -9,4 +9,13 @@ export const UserResolver: UsersModule.Resolvers["User"] = {
     parent.cenoteEditWhiteList ? parent.cenoteEditWhiteList : [],
   cenoteEditBlackList: (parent) =>
     parent.cenoteEditBlackList ? parent.cenoteEditBlackList : [],
+
+  variableViewWhiteList: (parent) =>
+    parent.variableViewWhiteList ? parent.variableViewWhiteList : [],
+  variableViewBlackList: (parent) =>
+    parent.variableViewBlackList ? parent.variableViewBlackList : [],
+  variableEditWhiteList: (parent) =>
+    parent.variableEditWhiteList ? parent.variableEditWhiteList : [],
+  variableEditBlackList: (parent) =>
+    parent.variableEditBlackList ? parent.variableEditBlackList : [],
 };
