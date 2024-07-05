@@ -448,14 +448,15 @@ export class UsersProvider {
    */
   async getFavouriteCenotes(id: string): Promise<string[]> {
     const user = await this.getUserById(id);
-    
+
     return user.favouriteCenotes;
   }
 
   /**
    * Adds a cenote to the list of favourite cenotes of a user.
    *
-   * @param {string} id - The identifier of the user to fetch favourite cenotes.
+   * @param {string} userId the identifier of the user to fetch favourite cenotes.
+   * @param {string} cenoteId the cenote id to add to the favourite list.
    *
    * @return {Promise<boolean>} the list of favouriteCenotes
    */
@@ -463,7 +464,7 @@ export class UsersProvider {
     const user = await this.getUserById(userId);
     // TODO should validate that cenote exists
 
-    const userFavouriteCenotes = user.favouriteCenotes
+    const userFavouriteCenotes = user.favouriteCenotes;
     if (userFavouriteCenotes.includes(cenoteId)) {
       return true;
     } else {
@@ -473,21 +474,22 @@ export class UsersProvider {
         updatedAt: new Date().toISOString(),
       });
     }
-    
+
     return true;
   }
 
   /**
    * Removes a cenote from the list of favourite cenotes of a user.
    *
-   * @param {string} id - The identifier of the user to remove the cenote.
+   * @param {string} userId the identifier of the user to remove the cenote.
+   * @param {string} cenoteId the cenote id to remove from the favourite list.
    *
    * @return {Promise<boolean>} flag to indicate if operation was valid
    */
   async removeFavouriteCenote(userId: string, cenoteId: string): Promise<boolean> {
     const user = await this.getUserById(userId);
 
-    const userFavouriteCenotes = user.favouriteCenotes
+    const userFavouriteCenotes = user.favouriteCenotes;
     const index = userFavouriteCenotes.indexOf(cenoteId);
 
     if (index !== -1) {

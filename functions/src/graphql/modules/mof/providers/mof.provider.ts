@@ -10,9 +10,12 @@ import {
   DeleteMofInput,
 } from "../../../generated-types/graphql";
 import { VariableProvider } from "../../variables/providers/variable.provider";
+import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
 
 const mofDB = db.mofs;
 const variableDB = db.variables;
+const cenoteProvider = new CenotesProvider();
+const variableProvider = new VariableProvider();
 
 export class MofProvider {
   /**
@@ -82,9 +85,11 @@ export class MofProvider {
    *
    * @return {Promise<VariableWithData>} the new MoF
    */
-  async createMoF(
-    newMof: NewMeasurementOrFactInput,
-  ): Promise<VariableWithData> {
+  async createMoF(newMof: NewMeasurementOrFactInput,): Promise<VariableWithData> {
+    if (!cenoteProvider.cenoteExistsByCenoteandoId(newMof.cenoteId)) {
+      throw new Error(`Cenote with cenoteando id ${newMof.cenoteId} doesn't exist.`);
+    }
+
     const doc = await mofDB
       .where("cenoteId", "==", newMof.cenoteId)
       .where("variableId", "==", newMof.variableId)
@@ -96,7 +101,7 @@ export class MofProvider {
     };
 
     if (doc.empty) {
-      return await this.createMofBucket(mof, newMof);
+      return await this.createMofBucket(newMof.variableId, mof, newMof);
     } else {
       const bucket = doc.docs[0].data() as VariableWithData;
       return await this.addMof(bucket, mof);
@@ -104,14 +109,25 @@ export class MofProvider {
   }
 
   private async createMofBucket(
+    variableId: string,
     mof: MeasurementOrFact,
     input: NewMeasurementOrFactInput,
   ): Promise<VariableWithData> {
+    const variable = await variableProvider.getVariableById(variableId);
+    const variableIcon = variable.icon ? variable.icon : "";
+    const variableRepresentation = variable.variableRepresentation ?
+      variable.variableRepresentation : "TEXT";
+    const variableUnits = variable.units ? variable.units : "";
+
     const docRef = mofDB.doc();
     await docRef.set({
       id: docRef.id,
       cenoteId: input.cenoteId,
       variableId: input.variableId,
+      variableName: variable.name,
+      variableIcon: variableIcon,
+      variableRepresentation: variableRepresentation,
+      variableUnits: variableUnits,
       measurements: [mof],
       firstTimestamp: new Date(input.timestamp).toISOString(),
       lastTimestamp: new Date(input.timestamp).toISOString(),
@@ -207,7 +223,7 @@ export class MofProvider {
     const variableProvider = new VariableProvider();
     const cenoteData = await this.getCenoteData(cenoteId);
 
-    const variablesIds = cenoteData.map(item => item.variableId);
+    const variablesIds = cenoteData.map((item) => item.variableId);
 
     const themes: string[] = [];
     for (const variableId of variablesIds) {

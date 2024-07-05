@@ -68,6 +68,14 @@ enum VariableCategory {
   SOCIAL
 }
 
+enum VariableRepresentation {
+  ICON
+  CHECK
+  UNITS
+  LIST
+  TEXT
+}
+
 type Variable {
   firestore_id: ID
 
@@ -86,6 +94,9 @@ type Variable {
   theme: VariableTheme!
   sphere: VariableSphere!
   category: VariableCategory!
+
+  icon: String
+  variableRepresentation: VariableRepresentation
 
   cenote_count: Int!
 

@@ -5,7 +5,6 @@ import { VariableProvider } from "../providers/variable.provider";
 const variablesProvider = new VariableProvider();
 
 export const MutationResolver: VariablesModule.Resolvers["Mutation"] = {
-  
   createVariable: async (parent, args, contextValue, info) => {
     const variable = await variablesProvider.createVariable(args.new_variable);
     if (variable.firestore_id) {

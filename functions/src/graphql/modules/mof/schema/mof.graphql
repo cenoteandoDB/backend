@@ -10,6 +10,10 @@ type VariableWithData {
   id: ID!
   cenoteId: ID!
   variableId: ID!
+  variableName: String!
+  variableRepresentation: VariableRepresentation!
+  variableIcon: String
+  variableUnits: String 
   measurements: [MeasurementOrFact!]!
   firstTimestamp: DateTime!
   lastTimestamp: DateTime!

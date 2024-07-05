@@ -5,7 +5,7 @@ export namespace VariablesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable' | 'deleteVariable';
     Query: 'getVariables' | 'getVariableById' | 'getVariablesByTheme';
-    Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'origin' | 'theme' | 'sphere' | 'category' | 'cenote_count' | 'createdAt' | 'updatedAt';
+    Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'origin' | 'theme' | 'sphere' | 'category' | 'icon' | 'variableRepresentation' | 'cenote_count' | 'createdAt' | 'updatedAt';
     VariableList: 'variables' | 'totalCount';
   };
   
@@ -16,6 +16,7 @@ export namespace VariablesModule {
     VariableType: 'NOMINAL' | 'CONTINUOUS' | 'DISCRETE' | 'ORDINAL';
     VariableOrigin: 'FIELD' | 'OFFICE' | 'WEB' | 'FIELD_WEB' | 'FIELD_OFFICE' | 'CALCULATED' | 'CALCULATED_OFFICE';
     VariableCategory: 'LOCATION' | 'LAND' | 'WATER' | 'GEOLOGY' | 'CLIMATE' | 'SPELEDIVING' | 'HIDROLOGY' | 'NUTRIENT' | 'HEAVY_METAL' | 'BIOMARKERS' | 'ORGANOCHLORINE_PESTICIDES' | 'ORGANOPHOSPHATE_PESTICIDES' | 'VOLATILE_HYDROCARBONS' | 'POLYNUCLEAR_AROMATIC_HYDROCARBONS' | 'FARMACEUTIC' | 'OTHER' | 'GOVERN' | 'CULTURE' | 'THREATS' | 'PROTECTION' | 'PROPERTY' | 'INFRASTRUCTURE' | 'ESSENTIAL' | 'BASIC' | 'ADDITIONAL' | 'SOCIAL';
+    VariableRepresentation: 'ICON' | 'CHECK' | 'UNITS' | 'LIST' | 'TEXT';
   };
   
   interface DefinedInputFields {
@@ -37,6 +38,7 @@ export namespace VariablesModule {
   export type VariableList = Pick<Types.VariableList, DefinedFields['VariableList']>;
   export type SortField = Types.SortField;
   export type PaginationInput = Types.PaginationInput;
+  export type VariableRepresentation = DefinedEnumValues['VariableRepresentation'];
   
   export type Scalars = Pick<Types.Scalars, 'DateTime'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
@@ -84,6 +86,8 @@ export namespace VariablesModule {
       theme?: gm.Middleware[];
       sphere?: gm.Middleware[];
       category?: gm.Middleware[];
+      icon?: gm.Middleware[];
+      variableRepresentation?: gm.Middleware[];
       cenote_count?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
