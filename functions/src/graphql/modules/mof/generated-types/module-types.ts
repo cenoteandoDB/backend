@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace MofModule {
   interface DefinedFields {
     MeasurementOrFact: 'timestamp' | 'value';
-    VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
+    VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
     Mutation: 'createMof' | 'deleteMof';
     Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote';
   };
@@ -16,6 +16,7 @@ export namespace MofModule {
   
   export type MeasurementOrFact = Pick<Types.MeasurementOrFact, DefinedFields['MeasurementOrFact']>;
   export type VariableWithData = Pick<Types.VariableWithData, DefinedFields['VariableWithData']>;
+  export type VariableRepresentation = Types.VariableRepresentation;
   export type NewMeasurementOrFactInput = Pick<Types.NewMeasurementOrFactInput, DefinedInputFields['NewMeasurementOrFactInput']>;
   export type DeleteMofInput = Pick<Types.DeleteMofInput, DefinedInputFields['DeleteMofInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
@@ -52,6 +53,10 @@ export namespace MofModule {
       id?: gm.Middleware[];
       cenoteId?: gm.Middleware[];
       variableId?: gm.Middleware[];
+      variableName?: gm.Middleware[];
+      variableRepresentation?: gm.Middleware[];
+      variableIcon?: gm.Middleware[];
+      variableUnits?: gm.Middleware[];
       measurements?: gm.Middleware[];
       firstTimestamp?: gm.Middleware[];
       lastTimestamp?: gm.Middleware[];

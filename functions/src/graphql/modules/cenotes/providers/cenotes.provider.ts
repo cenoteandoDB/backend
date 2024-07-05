@@ -216,43 +216,57 @@ export class CenotesProvider {
   }
 
   /**
-   * Get the user favourite cenotes.
+   * Check if cenote exists by cenoteando id. If it doesn't exist, throws an error.
+   *
+   * @param {ID} cenoteandoId the Cenote id
+   *
+   * @return {Promise<boolean>} if the cenote exists
+   */
+  async cenoteExistsByCenoteandoId(cenoteandoId: string,): Promise<boolean> {
+    const doc = await cenotesDB.where("cenoteando_id", "==", cenoteandoId).get();
+
+    return !doc.empty;
+  }
+
+  /**
+   * Get the user favourite cenotes. Receives a list of cenote ids, using the cenoteando id.
    *
    * @param {string[]} favouriteCenotesIds the user favourite cenotes
+   * @param {SortField} sort optional sort parameter
+   * @param {PaginationInput} pagination optional pagination parameter
    *
    * @return {Promise<FavouriteCenote[]>} the list of favourite cenotes
    */
-  async getUserFavouriteCenotes(favouriteCenotesIds: string[], 
+  async getUserFavouriteCenotes(favouriteCenotesIds: string[],
     sort: SortField | null | undefined = { field: "cenoteando_id", sortOrder: "ASC"},
     pagination: PaginationInput | null = { offset: 0, limit: 25 }): Promise<FavouriteCenote[]> {
+    let query = cenotesDB.where("cenoteando_id", "in", favouriteCenotesIds)
+      .orderBy(
+        sort?.field ?? "name",
+        sort?.sortOrder.toLowerCase() as firestore.OrderByDirection,
+      );
 
-      let query = cenotesDB.where("firestore_id", "in", favouriteCenotesIds)
-        .orderBy(
-          sort?.field ?? "name",
-          sort?.sortOrder.toLowerCase() as firestore.OrderByDirection,
-        );
+    if (pagination) {
+      query = query.offset(pagination.offset).limit(pagination.limit);
+    }
 
-      if (pagination) {
-        query = query.offset(pagination.offset).limit(pagination.limit);
-      }
+    const cenotesSnapshot = await query.get();
 
-      const cenotesSnapshot = await query.get();
-      
-      const favouriteCenotesList: FavouriteCenote[] = cenotesSnapshot.docs.map( (doc: any) => {
-        const cenote = doc.data() as Cenote;
-        const favouriteCenote: FavouriteCenote = {
-          firestore_id: cenote.firestore_id,
-          cenoteando_id: cenote.cenoteando_id,
-          name: cenote.name,
-          type: cenote.type,
-          touristic: cenote.touristic,
-          state: cenote.state,
-          municipality: cenote.municipality,
-          thumbnail: "http://example.com/thumbnail.jpg" //TODO
-        };
-        return favouriteCenote;
-      });
+    const favouriteCenotesList: FavouriteCenote[] = cenotesSnapshot.docs.map( (doc: any) => {
+      const cenote = doc.data() as Cenote;
+      const favouriteCenote: FavouriteCenote = {
+        firestore_id: cenote.firestore_id,
+        cenoteando_id: cenote.cenoteando_id,
+        name: cenote.name,
+        type: cenote.type,
+        touristic: cenote.touristic,
+        state: cenote.state,
+        municipality: cenote.municipality,
+        thumbnail: "http://example.com/thumbnail.jpg", // TODO
+      };
+      return favouriteCenote;
+    });
 
-      return favouriteCenotesList;
+    return favouriteCenotesList;
   }
 }

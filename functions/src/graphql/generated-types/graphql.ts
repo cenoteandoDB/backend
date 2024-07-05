@@ -973,6 +973,7 @@ export type Variable = {
   createdAt?: Maybe<Scalars['DateTime']>;
   description: Scalars['String'];
   firestore_id?: Maybe<Scalars['ID']>;
+  icon?: Maybe<Scalars['String']>;
   methodology?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   origin: VariableOrigin;
@@ -982,6 +983,7 @@ export type Variable = {
   type: VariableType;
   units?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  variableRepresentation?: Maybe<VariableRepresentation>;
 };
 
 export type VariableCategory =
@@ -1027,6 +1029,13 @@ export type VariableOrigin =
   | 'OFFICE'
   | 'WEB';
 
+export type VariableRepresentation =
+  | 'CHECK'
+  | 'ICON'
+  | 'LIST'
+  | 'TEXT'
+  | 'UNITS';
+
 export type VariableSphere =
   | 'HUMAN_SOCIO_ECONOMICAL'
   | 'KARSTICO_AMBIENT_SYSTEM';
@@ -1054,7 +1063,11 @@ export type VariableWithData = {
   id: Scalars['ID'];
   lastTimestamp: Scalars['DateTime'];
   measurements: Array<MeasurementOrFact>;
+  variableIcon?: Maybe<Scalars['String']>;
   variableId: Scalars['ID'];
+  variableName: Scalars['String'];
+  variableRepresentation: VariableRepresentation;
+  variableUnits?: Maybe<Scalars['String']>;
 };
 
 export type INaturalistFlagCounts = {
@@ -1282,6 +1295,7 @@ export type ResolversTypes = {
   VariableCategory: VariableCategory;
   VariableList: ResolverTypeWrapper<VariableList>;
   VariableOrigin: VariableOrigin;
+  VariableRepresentation: VariableRepresentation;
   VariableSphere: VariableSphere;
   VariableTheme: VariableTheme;
   VariableType: VariableType;
@@ -1719,6 +1733,7 @@ export type VariableResolvers<ContextType = any, ParentType extends ResolversPar
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firestore_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   methodology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   origin?: Resolver<ResolversTypes['VariableOrigin'], ParentType, ContextType>;
@@ -1728,6 +1743,7 @@ export type VariableResolvers<ContextType = any, ParentType extends ResolversPar
   type?: Resolver<ResolversTypes['VariableType'], ParentType, ContextType>;
   units?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  variableRepresentation?: Resolver<Maybe<ResolversTypes['VariableRepresentation']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1743,7 +1759,11 @@ export type VariableWithDataResolvers<ContextType = any, ParentType extends Reso
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastTimestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   measurements?: Resolver<Array<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
+  variableIcon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   variableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  variableName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  variableRepresentation?: Resolver<ResolversTypes['VariableRepresentation'], ParentType, ContextType>;
+  variableUnits?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
