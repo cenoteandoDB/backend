@@ -35,6 +35,11 @@ export const StorageProvider = {
     return uploadFile(filename, map.content);
   },
 
+  uploadReference: async (pdfName: string, pdfBase64: string): Promise<boolean> => {
+    const filename = `references/${pdfName}.pdf`;
+    return uploadFile(filename, pdfBase64);
+  },
+
   getReference: async (name: string): Promise<string> => {
     const result = await getSignedUrls(`references/${name}.pdf`);
     return result.at(0)!;

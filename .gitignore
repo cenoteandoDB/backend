@@ -73,3 +73,6 @@ compose-dev.yaml
 
 # Google Storage credentials
 functions/credentials/cenoteando.json
+
+# Excel files with cenoteando data
+scripts/*.csv

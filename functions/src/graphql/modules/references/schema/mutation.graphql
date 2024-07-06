@@ -1,33 +1,69 @@
-input NewVariableInput {
-  name: String
-  description: String
-  type: VariableType
-  units: String #SHOULD be an enum
-  enumValues: [String]
-  timeseries: Boolean
-  multiple: Boolean
-  accessLevel: AccessLevel
-  theme: VariableTheme
-  origin: VariableOrigin
-  methodology: String
+input NewReferenceInput {
+  cenoteando_id: ID # Reference ID in Cenoteando project excel files
+  type: ReferenceType!
+  unique_code: String
+  title: String!
+  short_name: String
+  date_primary: Int
+  authors: [String!]!
+  journal_name: String
+  issue: String
+  institution: String
+  date_secondary: Int
+  book: String
+  pages: String
+  doi: String
+  url: String
+  keywords: [String!]
+
+  has_pdf: Boolean!
+  pdf_name: String
+  pdf_base64: String
+
+  mendeley_ref: Boolean!
+  uploaded_mendeley: Boolean!
+  validated_mendeley: Boolean!
+  uploaded_dropbox: Boolean!
+  uploaded_gcp: Boolean!
+
+  referenced_cenotes: [String!]!
+  referenced_species: [String!]!
 }
 
-input UpdateVariableInput {
-  id: ID!
-  name: String
-  description: String
-  type: VariableType
-  units: String #SHOULD be an enum
-  enumValues: [String]
-  timeseries: Boolean
-  multiple: Boolean
-  accessLevel: AccessLevel
-  theme: VariableTheme
-  origin: VariableOrigin
-  methodology: String
+input UpdatedReferenceInput {
+  cenoteando_id: ID # Reference ID in Cenoteando project excel files
+  firestore_id: ID! # Reference ID in Firestore
+  type: ReferenceType!
+  unique_code: String!
+  title: String!
+  short_name: String
+  date_primary: Int
+  authors: [String!]!
+  journal_name: String
+  issue: String
+  institution: String
+  date_secondary: Int
+  book: String
+  pages: String
+  doi: String
+  url: String
+  keywords: [String!]
+
+  has_pdf: Boolean!
+  pdf_name: String
+  pdf_url: String
+
+  mendeley_ref: Boolean!
+  uploaded_mendeley: Boolean!
+  validated_mendeley: Boolean!
+  uploaded_dropbox: Boolean!
+  uploaded_gcp: Boolean!
+
+  referenced_cenotes: [String!]!
+  referenced_species: [String!]!
 }
 
 type Mutation {
-  createVariable(new_variable: NewVariableInput!): Variable
-  updateVariable(updated_variable: UpdateVariableInput!): Variable
+  createReference(new_reference: NewReferenceInput!): Reference
+  updateReference(id: ID!, updated_reference: UpdatedReferenceInput!): Reference
 }
