@@ -3,9 +3,9 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace ReferencesModule {
   interface DefinedFields {
-    Mutation: 'createVariable' | 'updateVariable';
+    Mutation: 'createReference' | 'updateReference';
     Query: 'getReferences' | 'getReferenceById';
-    Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'pdf_url' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'cenotes_count' | 'species_count' | 'createdAt' | 'updatedAt';
+    Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'pdf_url' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'referenced_cenotes' | 'referenced_species' | 'createdAt' | 'updatedAt';
     ReferenceList: 'references' | 'totalCount';
   };
   
@@ -14,24 +14,19 @@ export namespace ReferencesModule {
   };
   
   interface DefinedInputFields {
-    NewVariableInput: 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
-    UpdateVariableInput: 'id' | 'name' | 'description' | 'type' | 'units' | 'enumValues' | 'timeseries' | 'multiple' | 'accessLevel' | 'theme' | 'origin' | 'methodology';
+    NewReferenceInput: 'cenoteando_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'pdf_base64' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'referenced_cenotes' | 'referenced_species';
+    UpdatedReferenceInput: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'pdf_url' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'referenced_cenotes' | 'referenced_species';
   };
   
-  export type NewVariableInput = Pick<Types.NewVariableInput, DefinedInputFields['NewVariableInput']>;
-  export type VariableType = Types.VariableType;
-  export type AccessLevel = Types.AccessLevel;
-  export type VariableTheme = Types.VariableTheme;
-  export type VariableOrigin = Types.VariableOrigin;
-  export type UpdateVariableInput = Pick<Types.UpdateVariableInput, DefinedInputFields['UpdateVariableInput']>;
+  export type NewReferenceInput = Pick<Types.NewReferenceInput, DefinedInputFields['NewReferenceInput']>;
+  export type ReferenceType = DefinedEnumValues['ReferenceType'];
+  export type UpdatedReferenceInput = Pick<Types.UpdatedReferenceInput, DefinedInputFields['UpdatedReferenceInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
-  export type Variable = Types.Variable;
+  export type Reference = Pick<Types.Reference, DefinedFields['Reference']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type ReferenceList = Pick<Types.ReferenceList, DefinedFields['ReferenceList']>;
   export type SortField = Types.SortField;
   export type PaginationInput = Types.PaginationInput;
-  export type Reference = Pick<Types.Reference, DefinedFields['Reference']>;
-  export type ReferenceType = DefinedEnumValues['ReferenceType'];
   
   export type Scalars = Pick<Types.Scalars, 'DateTime'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
@@ -55,8 +50,8 @@ export namespace ReferencesModule {
     };
     Mutation?: {
       '*'?: gm.Middleware[];
-      createVariable?: gm.Middleware[];
-      updateVariable?: gm.Middleware[];
+      createReference?: gm.Middleware[];
+      updateReference?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];
@@ -90,8 +85,8 @@ export namespace ReferencesModule {
       validated_mendeley?: gm.Middleware[];
       uploaded_dropbox?: gm.Middleware[];
       uploaded_gcp?: gm.Middleware[];
-      cenotes_count?: gm.Middleware[];
-      species_count?: gm.Middleware[];
+      referenced_cenotes?: gm.Middleware[];
+      referenced_species?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

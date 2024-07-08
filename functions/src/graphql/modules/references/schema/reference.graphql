@@ -12,8 +12,8 @@ enum ReferenceType {
 }
 
 type Reference {
-  cenoteando_id: ID! # Reference ID in Cenoteando project excel files
-  firestore_id: ID! # Reference ID in Firestore
+  cenoteando_id: ID           # Reference ID in Cenoteando project excel files
+  firestore_id: ID!           # Reference ID in Firestore
   type: ReferenceType!
   unique_code: String!
   title: String!
@@ -40,8 +40,8 @@ type Reference {
   uploaded_dropbox: Boolean!
   uploaded_gcp: Boolean!
 
-  cenotes_count: Int!
-  species_count: Int!
+  referenced_cenotes: [String!]!
+  referenced_species: [String!]!
 
   createdAt: DateTime
   updatedAt: DateTime

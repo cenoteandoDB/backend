@@ -1,3 +1,14 @@
+import { AuditLogsProvider } from "../../auditLogs/providers/auditLogs.provider";
 import { ReferencesModule } from "../generated-types/module-types";
+import { ReferenceProvider } from "../providers/reference.provider";
 
-export const MutationResolver: ReferencesModule.Resolvers["Mutation"] = {};
+const referenceProvider = new ReferenceProvider();
+
+export const MutationResolver: ReferencesModule.Resolvers["Mutation"] = {
+    createReference: async (parent, args, contextValue, info) => {
+        const reference = await referenceProvider.createReference(args.new_reference);
+        AuditLogsProvider.save(reference.firestore_id, "NEW_REFERENCE", args.new_reference);
+
+        return reference;
+    },
+};

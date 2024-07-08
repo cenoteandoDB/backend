@@ -361,6 +361,7 @@ export type Mutation = {
   create?: Maybe<MapLayer>;
   createCenote?: Maybe<Cenote>;
   createMof?: Maybe<VariableWithData>;
+  createReference?: Maybe<Reference>;
   createSpecies?: Maybe<Species>;
   createVariable?: Maybe<Variable>;
   deleteCenote?: Maybe<Scalars['Boolean']>;
@@ -378,6 +379,7 @@ export type Mutation = {
   removeFavouriteCenote?: Maybe<Scalars['Boolean']>;
   updateCenote?: Maybe<Cenote>;
   updateCenotePermissions?: Maybe<User>;
+  updateReference?: Maybe<Reference>;
   updateSpecies?: Maybe<Species>;
   updateUserInfo?: Maybe<User>;
   updateVariable?: Maybe<Variable>;
@@ -405,6 +407,11 @@ export type MutationCreateCenoteArgs = {
 
 export type MutationCreateMofArgs = {
   new_mof: NewMeasurementOrFactInput;
+};
+
+
+export type MutationCreateReferenceArgs = {
+  new_reference: NewReferenceInput;
 };
 
 
@@ -503,6 +510,12 @@ export type MutationUpdateCenotePermissionsArgs = {
 };
 
 
+export type MutationUpdateReferenceArgs = {
+  id: Scalars['ID'];
+  updated_reference: UpdatedReferenceInput;
+};
+
+
 export type MutationUpdateSpeciesArgs = {
   updated_species: UpdateSpeciesInput;
 };
@@ -546,6 +559,35 @@ export type NewMeasurementOrFactInput = {
   variableId: Scalars['ID'];
 };
 
+export type NewReferenceInput = {
+  authors: Array<Scalars['String']>;
+  book?: InputMaybe<Scalars['String']>;
+  cenoteando_id?: InputMaybe<Scalars['ID']>;
+  date_primary?: InputMaybe<Scalars['Int']>;
+  date_secondary?: InputMaybe<Scalars['Int']>;
+  doi?: InputMaybe<Scalars['String']>;
+  has_pdf: Scalars['Boolean'];
+  institution?: InputMaybe<Scalars['String']>;
+  issue?: InputMaybe<Scalars['String']>;
+  journal_name?: InputMaybe<Scalars['String']>;
+  keywords?: InputMaybe<Array<Scalars['String']>>;
+  mendeley_ref: Scalars['Boolean'];
+  pages?: InputMaybe<Scalars['String']>;
+  pdf_base64?: InputMaybe<Scalars['String']>;
+  pdf_name?: InputMaybe<Scalars['String']>;
+  referenced_cenotes: Array<Scalars['String']>;
+  referenced_species: Array<Scalars['String']>;
+  short_name?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+  type: ReferenceType;
+  unique_code?: InputMaybe<Scalars['String']>;
+  uploaded_dropbox: Scalars['Boolean'];
+  uploaded_gcp: Scalars['Boolean'];
+  uploaded_mendeley: Scalars['Boolean'];
+  url?: InputMaybe<Scalars['String']>;
+  validated_mendeley: Scalars['Boolean'];
+};
+
 export type NewSpeciesInput = {
   gbifId?: InputMaybe<Scalars['ID']>;
   iNaturalistId?: InputMaybe<Scalars['ID']>;
@@ -556,9 +598,7 @@ export type NewVariableInput = {
   category: VariableCategory;
   cenote_count?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
-  enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   methodology?: InputMaybe<Scalars['String']>;
-  multiple?: InputMaybe<Scalars['Boolean']>;
   name: Scalars['String'];
   origin: VariableOrigin;
   sphere: VariableSphere;
@@ -773,8 +813,7 @@ export type Reference = {
   __typename?: 'Reference';
   authors: Array<Scalars['String']>;
   book?: Maybe<Scalars['String']>;
-  cenoteando_id: Scalars['ID'];
-  cenotes_count: Scalars['Int'];
+  cenoteando_id?: Maybe<Scalars['ID']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   date_primary?: Maybe<Scalars['Int']>;
   date_secondary?: Maybe<Scalars['Int']>;
@@ -789,8 +828,9 @@ export type Reference = {
   pages?: Maybe<Scalars['String']>;
   pdf_name?: Maybe<Scalars['String']>;
   pdf_url?: Maybe<Scalars['String']>;
+  referenced_cenotes: Array<Scalars['String']>;
+  referenced_species: Array<Scalars['String']>;
   short_name?: Maybe<Scalars['String']>;
-  species_count: Scalars['Int'];
   title: Scalars['String'];
   type: ReferenceType;
   unique_code: Scalars['String'];
@@ -894,11 +934,8 @@ export type UpdateVariableInput = {
   category: VariableCategory;
   cenote_count?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
-  enumValues?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   firestore_id: Scalars['ID'];
-  id: Scalars['ID'];
   methodology?: InputMaybe<Scalars['String']>;
-  multiple?: InputMaybe<Scalars['Boolean']>;
   name: Scalars['String'];
   origin: VariableOrigin;
   sphere: VariableSphere;
@@ -922,6 +959,36 @@ export type UpdatedCenoteInput = {
   name?: InputMaybe<Scalars['String']>;
   touristic?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<CenoteType>;
+};
+
+export type UpdatedReferenceInput = {
+  authors: Array<Scalars['String']>;
+  book?: InputMaybe<Scalars['String']>;
+  cenoteando_id?: InputMaybe<Scalars['ID']>;
+  date_primary?: InputMaybe<Scalars['Int']>;
+  date_secondary?: InputMaybe<Scalars['Int']>;
+  doi?: InputMaybe<Scalars['String']>;
+  firestore_id: Scalars['ID'];
+  has_pdf: Scalars['Boolean'];
+  institution?: InputMaybe<Scalars['String']>;
+  issue?: InputMaybe<Scalars['String']>;
+  journal_name?: InputMaybe<Scalars['String']>;
+  keywords?: InputMaybe<Array<Scalars['String']>>;
+  mendeley_ref: Scalars['Boolean'];
+  pages?: InputMaybe<Scalars['String']>;
+  pdf_name?: InputMaybe<Scalars['String']>;
+  pdf_url?: InputMaybe<Scalars['String']>;
+  referenced_cenotes: Array<Scalars['String']>;
+  referenced_species: Array<Scalars['String']>;
+  short_name?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+  type: ReferenceType;
+  unique_code: Scalars['String'];
+  uploaded_dropbox: Scalars['Boolean'];
+  uploaded_gcp: Scalars['Boolean'];
+  uploaded_mendeley: Scalars['Boolean'];
+  url?: InputMaybe<Scalars['String']>;
+  validated_mendeley: Scalars['Boolean'];
 };
 
 export type User = {
@@ -1262,6 +1329,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
+  NewReferenceInput: NewReferenceInput;
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
@@ -1287,6 +1355,7 @@ export type ResolversTypes = {
   UpdateVariableInput: UpdateVariableInput;
   UpdateVariablePermissions: UpdateVariablePermissions;
   UpdatedCenoteInput: UpdatedCenoteInput;
+  UpdatedReferenceInput: UpdatedReferenceInput;
   User: ResolverTypeWrapper<User>;
   UserList: ResolverTypeWrapper<UserList>;
   UserProfile: UserProfile;
@@ -1341,6 +1410,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
+  NewReferenceInput: NewReferenceInput;
   NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
@@ -1364,6 +1434,7 @@ export type ResolversParentTypes = {
   UpdateVariableInput: UpdateVariableInput;
   UpdateVariablePermissions: UpdateVariablePermissions;
   UpdatedCenoteInput: UpdatedCenoteInput;
+  UpdatedReferenceInput: UpdatedReferenceInput;
   User: User;
   UserList: UserList;
   Variable: Variable;
@@ -1570,6 +1641,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   create?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<MutationCreateArgs, 'input'>>;
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
   createMof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<MutationCreateMofArgs, 'new_mof'>>;
+  createReference?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<MutationCreateReferenceArgs, 'new_reference'>>;
   createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
   deleteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCenoteArgs, 'id'>>;
@@ -1587,6 +1659,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   removeFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateCenotePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateCenotePermissionsArgs, 'cenotePermissions' | 'userId'>>;
+  updateReference?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<MutationUpdateReferenceArgs, 'id' | 'updated_reference'>>;
   updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
   updateUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, 'userId' | 'userInfo'>>;
   updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'firestore_id' | 'updated_variable'>>;
@@ -1646,8 +1719,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type ReferenceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Reference'] = ResolversParentTypes['Reference']> = {
   authors?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   book?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  cenoteando_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  cenotes_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  cenoteando_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   date_primary?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   date_secondary?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1662,8 +1734,9 @@ export type ReferenceResolvers<ContextType = any, ParentType extends ResolversPa
   pages?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pdf_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pdf_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  referenced_cenotes?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  referenced_species?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   short_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  species_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['ReferenceType'], ParentType, ContextType>;
   unique_code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
