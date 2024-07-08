@@ -43,8 +43,8 @@ type Reference {
   referenced_cenotes: [String!]!
   referenced_species: [String!]!
 
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 

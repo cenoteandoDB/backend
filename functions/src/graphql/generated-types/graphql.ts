@@ -814,7 +814,7 @@ export type Reference = {
   authors: Array<Scalars['String']>;
   book?: Maybe<Scalars['String']>;
   cenoteando_id?: Maybe<Scalars['ID']>;
-  createdAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
   date_primary?: Maybe<Scalars['Int']>;
   date_secondary?: Maybe<Scalars['Int']>;
   doi?: Maybe<Scalars['String']>;
@@ -834,7 +834,7 @@ export type Reference = {
   title: Scalars['String'];
   type: ReferenceType;
   unique_code: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
   uploaded_dropbox: Scalars['Boolean'];
   uploaded_gcp: Scalars['Boolean'];
   uploaded_mendeley: Scalars['Boolean'];
@@ -1720,7 +1720,7 @@ export type ReferenceResolvers<ContextType = any, ParentType extends ResolversPa
   authors?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   book?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   cenoteando_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   date_primary?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   date_secondary?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   doi?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1740,7 +1740,7 @@ export type ReferenceResolvers<ContextType = any, ParentType extends ResolversPa
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['ReferenceType'], ParentType, ContextType>;
   unique_code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   uploaded_dropbox?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   uploaded_gcp?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   uploaded_mendeley?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;

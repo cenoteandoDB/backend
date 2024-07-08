@@ -3,7 +3,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-COLLECTION_NAME="references"
+COLLECTION_NAME="references_test"
 cred = credentials.Certificate("../../functions/credentials/cenoteando.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
@@ -66,8 +66,8 @@ def process_and_insert(data, count):
     reference["validated_mendeley"] = process_boolean(data["Validated_Citation_Mendeley"])
     reference["uploaded_dropbox"] = process_boolean(data["PDF_Uploaded_DropBox"])
     reference["uploaded_gcp"] = process_boolean(data["PDF_Uploaded_GoogleCloud"])
-    reference["cenotes_count"] = len(data["Unique_Cenote_Code"].split(",")) if data["Mentioned_Sinkhole_Cenote"] != "0" else 0
-    reference["species_count"] = len(data["Unique_Sp_Code"].split(",")) if data["Mentioned_Species"] != "0" else 0
+    reference["referenced_cenotes"] = []
+    reference["referenced_species"] = []
 
     doc_ref = db.collection(COLLECTION_NAME).document()
     reference["firestore_id"] = doc_ref.id
@@ -79,6 +79,7 @@ with open('confirmed-references.csv', newline='', encoding='utf-8-sig') as csvfi
     reader = csv.DictReader(csvfile, delimiter=";")
     count = 0
     for row in reader:
+        print(count)
         process_and_insert(row, count)
         count += 1
     

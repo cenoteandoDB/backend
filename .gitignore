@@ -75,4 +75,4 @@ compose-dev.yaml
 functions/credentials/cenoteando.json
 
 # Excel files with cenoteando data
-scripts/*.csv
+*.csv
