@@ -11,4 +11,11 @@ export const MutationResolver: ReferencesModule.Resolvers["Mutation"] = {
 
         return reference;
     },
+
+    updateReference: async (parent, args, contextValue, info) => {
+        const reference = await referenceProvider.updateReference(args.id, args.updated_reference);
+        AuditLogsProvider.save(reference.firestore_id, "UPDATED_REFERENCE", args.updated_reference);
+
+        return reference;
+    },
 };
