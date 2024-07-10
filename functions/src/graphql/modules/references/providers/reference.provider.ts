@@ -131,7 +131,7 @@ export class ReferenceProvider {
    *
    * @return {Promise<Cenote>} the updated cenote
    */
-    async updateCenote(referenceId: string, updatedReference: UpdatedReferenceInput)
+    async updateReference(referenceId: string, updatedReference: UpdatedReferenceInput)
     : Promise<Reference> {
       const referenceDoc = await this.getReferenceById(referenceId);
   
