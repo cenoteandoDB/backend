@@ -1,9 +1,6 @@
 type Query {
-  species: [Species]
+  species: [Species!]!
   speciesById(id: ID!): Species
-  speciesByGBIFId(gbifId: ID!): Species
-  speciesByINaturalistId(iNaturalistId: ID!): Species
-  speciesCsv: String
-  gbifSpeciesSuggestion(q: String!, rank: GBIFTaxonomicRank): [GBIFSuggestion!]
-  iNaturalistSearch(q: String!, perPage: Int): iNaturalistSearchTaxonResponse!
+  speciesByGbifId(gbifId: ID!): Species
+  speciesByINaturalistId(inaturalistId: ID!): Species
 }

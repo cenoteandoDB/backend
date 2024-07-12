@@ -45,16 +45,16 @@ type Cenote {
   photos: [URL!]
   maps: [URL!]
 
+  referencesIds: [String!]!
+  references: [Reference!]!
+
+  speciesIds: [String!]!
+  species: [Species!]!
+
   createdAt: DateTime
   updatedAt: DateTime
 
   # social: CenoteSocialData
-
-  # references: [Reference!]
-  # species: [Species!]
-
-  # TODO: Define how this data is fetched by the frontend.
-  # data: [VariableWithData]
 
   # creator: User
   # contributors: [User]

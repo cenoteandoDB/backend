@@ -3,7 +3,7 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace ReferencesModule {
   interface DefinedFields {
-    Mutation: 'createReference' | 'updateReference';
+    Mutation: 'createReference' | 'updateReference' | 'deleteReference';
     Query: 'getReferences' | 'getReferenceById';
     Reference: 'cenoteando_id' | 'firestore_id' | 'type' | 'unique_code' | 'title' | 'short_name' | 'date_primary' | 'authors' | 'journal_name' | 'issue' | 'institution' | 'date_secondary' | 'book' | 'pages' | 'doi' | 'url' | 'keywords' | 'has_pdf' | 'pdf_name' | 'pdf_url' | 'mendeley_ref' | 'uploaded_mendeley' | 'validated_mendeley' | 'uploaded_dropbox' | 'uploaded_gcp' | 'referenced_cenotes' | 'referenced_species' | 'createdAt' | 'updatedAt';
     ReferenceList: 'references' | 'totalCount';
@@ -52,6 +52,7 @@ export namespace ReferencesModule {
       '*'?: gm.Middleware[];
       createReference?: gm.Middleware[];
       updateReference?: gm.Middleware[];
+      deleteReference?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];

@@ -8,7 +8,7 @@ export namespace AuditLogsModule {
   };
   
   interface DefinedEnumValues {
-    AuditLogType: 'NEW_CENOTE' | 'UPDATED_CENOTE' | 'DELETE_CENOTE' | 'NEW_REFERENCE' | 'UPDATED_REFERENCE' | 'NEW_VARIABLE' | 'UPDATED_VARIABLE';
+    AuditLogType: 'NEW_CENOTE' | 'UPDATED_CENOTE' | 'DELETE_CENOTE' | 'NEW_REFERENCE' | 'UPDATED_REFERENCE' | 'DELETE_REFERENCE' | 'NEW_VARIABLE' | 'UPDATED_VARIABLE' | 'DELETE_VARIABLE';
   };
   
   export type AuditLogType = DefinedEnumValues['AuditLogType'];

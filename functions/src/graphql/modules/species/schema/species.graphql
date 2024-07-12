@@ -2,13 +2,13 @@
 scalar DateTime
 
 type Species {
-  _id: ID!
+  id: ID!
 
   gbifId: ID
-  iNaturalistId: ID
+  inaturalistId: ID
 
-  gbifDetails: GBIFNameUsage
-  iNaturalistDetails: iNaturalistTaxonRecord
+  name: String!
+  thumbnail: String
 
   createdAt: DateTime
   updatedAt: DateTime

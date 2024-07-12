@@ -66,4 +66,5 @@ input UpdatedReferenceInput {
 type Mutation {
   createReference(new_reference: NewReferenceInput!): Reference
   updateReference(id: ID!, updated_reference: UpdatedReferenceInput!): Reference
+  deleteReference(id: ID!): Boolean
 }
