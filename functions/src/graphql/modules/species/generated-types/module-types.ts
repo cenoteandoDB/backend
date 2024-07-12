@@ -12,9 +12,8 @@ export namespace SpeciesModule {
     iNaturalistPhotoDimensions: 'height' | 'width';
     iNaturalistFlagCounts: 'resolved' | 'unresolved';
     iNaturalistTaxonPhoto: 'taxon_id' | 'photo';
-    Mutation: 'createSpecies' | 'updateSpecies';
-    Query: 'species' | 'speciesById' | 'speciesByGBIFId' | 'speciesByINaturalistId' | 'speciesCsv' | 'gbifSpeciesSuggestion' | 'iNaturalistSearch';
-    Species: '_id' | 'gbifId' | 'iNaturalistId' | 'gbifDetails' | 'iNaturalistDetails' | 'createdAt' | 'updatedAt';
+    Query: 'species' | 'speciesById' | 'speciesByGbifId' | 'speciesByINaturalistId';
+    Species: 'id' | 'gbifId' | 'inaturalistId' | 'name' | 'thumbnail' | 'createdAt' | 'updatedAt';
   };
   
   interface DefinedEnumValues {
@@ -22,11 +21,6 @@ export namespace SpeciesModule {
     GBIFTaxonomicRank: 'ABERRATION' | 'BIOVAR' | 'CHEMOFORM' | 'CHEMOVAR' | 'CLASS' | 'COHORT' | 'CONVARIETY' | 'CULTIVAR' | 'CULTIVAR_GROUP' | 'DOMAIN' | 'FAMILY' | 'FORM' | 'FORMA_SPECIALIS' | 'GENUS' | 'GRANDORDER' | 'GREX' | 'INFRACLASS' | 'INFRACOHORT' | 'INFRAFAMILY' | 'INFRAGENERIC_NAME' | 'INFRAGENUS' | 'INFRAKINGDOM' | 'INFRALEGION' | 'INFRAORDER' | 'INFRAPHYLUM' | 'INFRASPECIFIC_NAME' | 'INFRASUBSPECIFIC_NAME' | 'INFRATRIBE' | 'KINGDOM' | 'LEGION' | 'MAGNORDER' | 'MORPH' | 'MORPHOVAR' | 'NATIO' | 'ORDER' | 'OTHER' | 'PARVCLASS' | 'PARVORDER' | 'PATHOVAR' | 'PHAGOVAR' | 'PHYLUM' | 'PROLES' | 'RACE' | 'SECTION' | 'SERIES' | 'SEROVAR' | 'SPECIES' | 'SPECIES_AGGREGATE' | 'STRAIN' | 'SUBCLASS' | 'SUBCOHORT' | 'SUBFAMILY' | 'SUBFORM' | 'SUBGENUS' | 'SUBKINGDOM' | 'SUBLEGION' | 'SUBORDER' | 'SUBPHYLUM' | 'SUBSECTION' | 'SUBSERIES' | 'SUBSPECIES' | 'SUBTRIBE' | 'SUBVARIETY' | 'SUPERCLASS' | 'SUPERCOHORT' | 'SUPERFAMILY' | 'SUPERKINGDOM' | 'SUPERLEGION' | 'SUPERORDER' | 'SUPERPHYLUM' | 'SUPERTRIBE' | 'SUPRAGENERIC_NAME' | 'TRIBE' | 'UNRANKED' | 'VARIETY';
     GBIFOrigin: 'AUTONYM' | 'BASIONYM_PLACEHOLDER' | 'DENORMED_CLASSIFICATION' | 'EX_AUTHOR_SYNONYM' | 'IMPLICIT_NAME' | 'MISSING_ACCEPTED' | 'OTHER' | 'PROPARTE' | 'SOURCE' | 'VERBATIM_ACCEPTED' | 'VERBATIM_BASIONYM' | 'VERBATIM_PARENT';
     GBIFTaxonomicStatus: 'ACCEPTED' | 'DOUBTFUL' | 'HETEROTYPIC_SYNONYM' | 'HOMOTYPIC_SYNONYM' | 'MISAPPLIED' | 'PROPARTE_SYNONYM' | 'SYNONYM';
-  };
-  
-  interface DefinedInputFields {
-    NewSpeciesInput: 'gbifId' | 'iNaturalistId';
-    UpdateSpeciesInput: 'id' | 'gbifId' | 'iNaturalistId';
   };
   
   export type GBIFSuggestion = Pick<Types.GbifSuggestion, DefinedFields['GBIFSuggestion']>;
@@ -42,11 +36,8 @@ export namespace SpeciesModule {
   export type iNaturalistFlagCounts = Pick<Types.INaturalistFlagCounts, DefinedFields['iNaturalistFlagCounts']>;
   export type iNaturalistTaxonPhoto = Pick<Types.INaturalistTaxonPhoto, DefinedFields['iNaturalistTaxonPhoto']>;
   export type iNaturalistPhotoDimensions = Pick<Types.INaturalistPhotoDimensions, DefinedFields['iNaturalistPhotoDimensions']>;
-  export type NewSpeciesInput = Pick<Types.NewSpeciesInput, DefinedInputFields['NewSpeciesInput']>;
-  export type UpdateSpeciesInput = Pick<Types.UpdateSpeciesInput, DefinedInputFields['UpdateSpeciesInput']>;
-  export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
-  export type Species = Pick<Types.Species, DefinedFields['Species']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type Species = Pick<Types.Species, DefinedFields['Species']>;
   
   export type Scalars = Pick<Types.Scalars, 'JSON' | 'DateTime'>;
   export type JsonScalarConfig = Types.JsonScalarConfig;
@@ -61,7 +52,6 @@ export namespace SpeciesModule {
   export type iNaturalistPhotoDimensionsResolvers = Pick<Types.INaturalistPhotoDimensionsResolvers, DefinedFields['iNaturalistPhotoDimensions'] | '__isTypeOf'>;
   export type iNaturalistFlagCountsResolvers = Pick<Types.INaturalistFlagCountsResolvers, DefinedFields['iNaturalistFlagCounts'] | '__isTypeOf'>;
   export type iNaturalistTaxonPhotoResolvers = Pick<Types.INaturalistTaxonPhotoResolvers, DefinedFields['iNaturalistTaxonPhoto'] | '__isTypeOf'>;
-  export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields['Mutation']>;
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
   export type SpeciesResolvers = Pick<Types.SpeciesResolvers, DefinedFields['Species'] | '__isTypeOf'>;
   
@@ -75,7 +65,6 @@ export namespace SpeciesModule {
     iNaturalistPhotoDimensions?: iNaturalistPhotoDimensionsResolvers;
     iNaturalistFlagCounts?: iNaturalistFlagCountsResolvers;
     iNaturalistTaxonPhoto?: iNaturalistTaxonPhotoResolvers;
-    Mutation?: MutationResolvers;
     Query?: QueryResolvers;
     Species?: SpeciesResolvers;
     JSON?: Types.Resolvers['JSON'];
@@ -216,28 +205,20 @@ export namespace SpeciesModule {
       taxon_id?: gm.Middleware[];
       photo?: gm.Middleware[];
     };
-    Mutation?: {
-      '*'?: gm.Middleware[];
-      createSpecies?: gm.Middleware[];
-      updateSpecies?: gm.Middleware[];
-    };
     Query?: {
       '*'?: gm.Middleware[];
       species?: gm.Middleware[];
       speciesById?: gm.Middleware[];
-      speciesByGBIFId?: gm.Middleware[];
+      speciesByGbifId?: gm.Middleware[];
       speciesByINaturalistId?: gm.Middleware[];
-      speciesCsv?: gm.Middleware[];
-      gbifSpeciesSuggestion?: gm.Middleware[];
-      iNaturalistSearch?: gm.Middleware[];
     };
     Species?: {
       '*'?: gm.Middleware[];
-      _id?: gm.Middleware[];
+      id?: gm.Middleware[];
       gbifId?: gm.Middleware[];
-      iNaturalistId?: gm.Middleware[];
-      gbifDetails?: gm.Middleware[];
-      iNaturalistDetails?: gm.Middleware[];
+      inaturalistId?: gm.Middleware[];
+      name?: gm.Middleware[];
+      thumbnail?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

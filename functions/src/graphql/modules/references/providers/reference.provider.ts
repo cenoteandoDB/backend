@@ -1,7 +1,12 @@
 /* eslint-disable require-jsdoc */
 import { ID } from "graphql-modules/shared/types";
 import { db } from "../../database/db";
-import { NewReferenceInput, PaginationInput, Reference, ReferenceList, SortField, UpdatedReferenceInput }
+import { NewReferenceInput,
+  PaginationInput,
+  Reference,
+  ReferenceList,
+  SortField,
+  UpdatedReferenceInput }
   from "../../../generated-types/graphql";
 import { firestore } from "firebase-admin";
 import { StorageProvider } from "../../gcp/gcp.provider";
@@ -79,7 +84,6 @@ export class ReferenceProvider {
    * @return {Promise<Reference>} the reference
    */
   async createReference(newReference: NewReferenceInput): Promise<Reference> {
-
     const docRef = referenceDB.doc();
     await docRef.set({
       firestore_id: docRef.id,
@@ -102,10 +106,8 @@ export class ReferenceProvider {
       doi: newReference.doi ? newReference.doi : null,
       url: newReference.url ? newReference.url : null,
       keywords: newReference.keywords ? newReference.keywords : [],
-    
       has_pdf: newReference.has_pdf,
       pdf_name: newReference.pdf_name ? newReference.pdf_name : null,
-    
       mendeley_ref: newReference.mendeley_ref,
       uploaded_mendeley: newReference.uploaded_mendeley,
       validated_mendeley: newReference.validated_mendeley,
@@ -124,23 +126,56 @@ export class ReferenceProvider {
     return snapshot.data() as Reference;
   }
 
-    /**
-   * Updates a reference.
+  /**
+   * Updates a reference by id.
    *
+   * @param {string} referenceId the reference id to be updated
    * @param {UpdatedReferenceInput} updatedReference the information to update the reference
    *
    * @return {Promise<Cenote>} the updated cenote
    */
-    async updateReference(referenceId: string, updatedReference: UpdatedReferenceInput)
-    : Promise<Reference> {
-      const referenceDoc = await this.getReferenceById(referenceId);
-  
-      await referenceDB.doc(referenceDoc.firestore_id).update({
-        ...updatedReference,
-        updatedAt: new Date().toISOString(),
-      });
-  
-      const reference = await referenceDB.doc(referenceDoc.firestore_id).get();
-      return reference.data() as Reference;
+  async updateReference(referenceId: string, updatedReference: UpdatedReferenceInput)
+  : Promise<Reference> {
+    const referenceDoc = await this.getReferenceById(referenceId);
+
+    await referenceDB.doc(referenceDoc.firestore_id).update({
+      ...updatedReference,
+      updatedAt: new Date().toISOString(),
+    });
+
+    const reference = await referenceDB.doc(referenceDoc.firestore_id).get();
+    return reference.data() as Reference;
+  }
+
+  /**
+   * Delete a reference by id.
+   *
+   * @param {ID} id of the reference to delete
+   *
+   * @return {Promise<Boolean>} true if deleted
+   */
+  async deleteReference(id: ID): Promise<boolean> {
+    const doc = await referenceDB.doc(id).get();
+
+    if (!doc.exists) {
+      throw new Error("Reference not found.");
     }
+
+    await referenceDB.doc(id).delete();
+
+    return true;
+  }
+
+  /**
+   * Get reference from a list of ids.
+   *
+   * @param {string[]} referenceIds the list of referece ids to load
+   *
+   * @return {Promise<Reference[]>} the reference list
+   */
+  async getCenoteReferences(referenceIds: string[]): Promise<Reference[]> {
+    const referencesSnapshot = await referenceDB.where("firestore_id", "in", referenceIds).get();
+
+    return referencesSnapshot.docs.map((doc: any) => doc.data() as Reference);
+  }
 }

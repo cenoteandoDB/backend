@@ -1,4 +1,6 @@
 import { StorageProvider } from "../../gcp/gcp.provider";
+import { ReferenceProvider } from "../../references/providers/reference.provider";
+import { SpeciesProvider } from "../../species/providers/species.provider";
 import { CenotesModule } from "../generated-types/module-types";
 
 export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
@@ -6,4 +8,12 @@ export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
   touristic: (parent) => (parent.touristic != null ? parent.touristic : false),
   photos: (parent) => StorageProvider.getPhotos(parent.firestore_id),
   maps: (parent) => StorageProvider.getMaps(parent.firestore_id),
+  references: (parent) => {
+    const referenceProvider = new ReferenceProvider();
+    return referenceProvider.getCenoteReferences(parent.referencesIds);
+  },
+  species: (parent) => {
+    const speciesProvider = new SpeciesProvider();
+    return speciesProvider.getCenoteSpecies(parent.speciesIds);
+  },
 };

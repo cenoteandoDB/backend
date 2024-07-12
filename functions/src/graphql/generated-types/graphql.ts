@@ -36,6 +36,8 @@ export type AuditLog = {
 
 export type AuditLogType =
   | 'DELETE_CENOTE'
+  | 'DELETE_REFERENCE'
+  | 'DELETE_VARIABLE'
   | 'NEW_CENOTE'
   | 'NEW_REFERENCE'
   | 'NEW_VARIABLE'
@@ -56,6 +58,10 @@ export type Cenote = {
   name: Scalars['String'];
   photos?: Maybe<Array<Scalars['URL']>>;
   reference_count: Scalars['Int'];
+  references: Array<Reference>;
+  referencesIds: Array<Scalars['String']>;
+  species: Array<Species>;
+  speciesIds: Array<Scalars['String']>;
   species_count: Scalars['Int'];
   state: Scalars['String'];
   touristic: Scalars['Boolean'];
@@ -362,10 +368,10 @@ export type Mutation = {
   createCenote?: Maybe<Cenote>;
   createMof?: Maybe<VariableWithData>;
   createReference?: Maybe<Reference>;
-  createSpecies?: Maybe<Species>;
   createVariable?: Maybe<Variable>;
   deleteCenote?: Maybe<Scalars['Boolean']>;
   deleteMof?: Maybe<Scalars['Boolean']>;
+  deleteReference?: Maybe<Scalars['Boolean']>;
   deleteUser: Scalars['Boolean'];
   deleteVariable: Scalars['Boolean'];
   inviteUser: Scalars['Boolean'];
@@ -380,7 +386,6 @@ export type Mutation = {
   updateCenote?: Maybe<Cenote>;
   updateCenotePermissions?: Maybe<User>;
   updateReference?: Maybe<Reference>;
-  updateSpecies?: Maybe<Species>;
   updateUserInfo?: Maybe<User>;
   updateVariable?: Maybe<Variable>;
   updateVariablePermissions?: Maybe<User>;
@@ -415,11 +420,6 @@ export type MutationCreateReferenceArgs = {
 };
 
 
-export type MutationCreateSpeciesArgs = {
-  new_species: NewSpeciesInput;
-};
-
-
 export type MutationCreateVariableArgs = {
   new_variable: NewVariableInput;
 };
@@ -432,6 +432,11 @@ export type MutationDeleteCenoteArgs = {
 
 export type MutationDeleteMofArgs = {
   delete_mof_input: DeleteMofInput;
+};
+
+
+export type MutationDeleteReferenceArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -516,11 +521,6 @@ export type MutationUpdateReferenceArgs = {
 };
 
 
-export type MutationUpdateSpeciesArgs = {
-  updated_species: UpdateSpeciesInput;
-};
-
-
 export type MutationUpdateUserInfoArgs = {
   userId: Scalars['String'];
   userInfo: UpdateUserInfoInput;
@@ -588,11 +588,6 @@ export type NewReferenceInput = {
   validated_mendeley: Scalars['Boolean'];
 };
 
-export type NewSpeciesInput = {
-  gbifId?: InputMaybe<Scalars['ID']>;
-  iNaturalistId?: InputMaybe<Scalars['ID']>;
-};
-
 export type NewVariableInput = {
   accessLevel: AccessLevel;
   category: VariableCategory;
@@ -641,7 +636,6 @@ export type Query = {
   cenoteById?: Maybe<Cenote>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
-  gbifSpeciesSuggestion?: Maybe<Array<GbifSuggestion>>;
   getCenoteData?: Maybe<Array<VariableWithData>>;
   getCenoteDataByTheme?: Maybe<Array<VariableWithData>>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
@@ -658,14 +652,12 @@ export type Query = {
   getVariableById?: Maybe<Variable>;
   getVariables: VariableList;
   getVariablesByTheme: Array<Variable>;
-  iNaturalistSearch: INaturalistSearchTaxonResponse;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
-  species?: Maybe<Array<Maybe<Species>>>;
-  speciesByGBIFId?: Maybe<Species>;
+  species: Array<Species>;
+  speciesByGbifId?: Maybe<Species>;
   speciesByINaturalistId?: Maybe<Species>;
   speciesById?: Maybe<Species>;
-  speciesCsv?: Maybe<Scalars['String']>;
   verifyCode?: Maybe<User>;
 };
 
@@ -678,12 +670,6 @@ export type QueryAuditLogsArgs = {
 
 export type QueryCenoteByIdArgs = {
   id: Scalars['ID'];
-};
-
-
-export type QueryGbifSpeciesSuggestionArgs = {
-  q: Scalars['String'];
-  rank?: InputMaybe<GbifTaxonomicRank>;
 };
 
 
@@ -779,12 +765,6 @@ export type QueryGetVariablesByThemeArgs = {
 };
 
 
-export type QueryINaturalistSearchArgs = {
-  perPage?: InputMaybe<Scalars['Int']>;
-  q: Scalars['String'];
-};
-
-
 export type QueryLayerArgs = {
   id: Scalars['ID'];
 };
@@ -796,7 +776,7 @@ export type QuerySpeciesByGbifIdArgs = {
 
 
 export type QuerySpeciesByINaturalistIdArgs = {
-  iNaturalistId: Scalars['ID'];
+  inaturalistId: Scalars['ID'];
 };
 
 
@@ -898,12 +878,12 @@ export type SortOrder =
 
 export type Species = {
   __typename?: 'Species';
-  _id: Scalars['ID'];
   createdAt?: Maybe<Scalars['DateTime']>;
-  gbifDetails?: Maybe<GbifNameUsage>;
   gbifId?: Maybe<Scalars['ID']>;
-  iNaturalistDetails?: Maybe<INaturalistTaxonRecord>;
-  iNaturalistId?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
+  inaturalistId?: Maybe<Scalars['ID']>;
+  name: Scalars['String'];
+  thumbnail?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -912,12 +892,6 @@ export type UpdateCenotePermissions = {
   cenoteEditWhiteList: Array<Scalars['String']>;
   cenoteViewBlackList: Array<Scalars['String']>;
   cenoteViewWhiteList: Array<Scalars['String']>;
-};
-
-export type UpdateSpeciesInput = {
-  gbifId?: InputMaybe<Scalars['ID']>;
-  iNaturalistId?: InputMaybe<Scalars['ID']>;
-  id: Scalars['ID'];
 };
 
 export type UpdateUserInfoInput = {
@@ -1330,7 +1304,6 @@ export type ResolversTypes = {
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewReferenceInput: NewReferenceInput;
-  NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
@@ -1350,7 +1323,6 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
   UpdateCenotePermissions: UpdateCenotePermissions;
-  UpdateSpeciesInput: UpdateSpeciesInput;
   UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
   UpdateVariablePermissions: UpdateVariablePermissions;
@@ -1411,7 +1383,6 @@ export type ResolversParentTypes = {
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewReferenceInput: NewReferenceInput;
-  NewSpeciesInput: NewSpeciesInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
@@ -1429,7 +1400,6 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   URL: Scalars['URL'];
   UpdateCenotePermissions: UpdateCenotePermissions;
-  UpdateSpeciesInput: UpdateSpeciesInput;
   UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
   UpdateVariablePermissions: UpdateVariablePermissions;
@@ -1469,6 +1439,10 @@ export type CenoteResolvers<ContextType = any, ParentType extends ResolversParen
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   photos?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
   reference_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  references?: Resolver<Array<ResolversTypes['Reference']>, ParentType, ContextType>;
+  referencesIds?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  species?: Resolver<Array<ResolversTypes['Species']>, ParentType, ContextType>;
+  speciesIds?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   species_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   state?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   touristic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -1642,10 +1616,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
   createMof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<MutationCreateMofArgs, 'new_mof'>>;
   createReference?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<MutationCreateReferenceArgs, 'new_reference'>>;
-  createSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationCreateSpeciesArgs, 'new_species'>>;
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
   deleteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCenoteArgs, 'id'>>;
   deleteMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMofArgs, 'delete_mof_input'>>;
+  deleteReference?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteReferenceArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'userId'>>;
   deleteVariable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteVariableArgs, 'id'>>;
   inviteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
@@ -1660,7 +1634,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateCenotePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateCenotePermissionsArgs, 'cenotePermissions' | 'userId'>>;
   updateReference?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<MutationUpdateReferenceArgs, 'id' | 'updated_reference'>>;
-  updateSpecies?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<MutationUpdateSpeciesArgs, 'updated_species'>>;
   updateUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, 'userId' | 'userInfo'>>;
   updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'firestore_id' | 'updated_variable'>>;
   updateVariablePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateVariablePermissionsArgs, 'userId' | 'variablePermissions'>>;
@@ -1688,7 +1661,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  gbifSpeciesSuggestion?: Resolver<Maybe<Array<ResolversTypes['GBIFSuggestion']>>, ParentType, ContextType, RequireFields<QueryGbifSpeciesSuggestionArgs, 'q'>>;
   getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
   getCenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
@@ -1705,14 +1677,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getVariableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariableByIdArgs, 'id'>>;
   getVariables?: Resolver<ResolversTypes['VariableList'], ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
   getVariablesByTheme?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
-  iNaturalistSearch?: Resolver<ResolversTypes['iNaturalistSearchTaxonResponse'], ParentType, ContextType, RequireFields<QueryINaturalistSearchArgs, 'q'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
-  species?: Resolver<Maybe<Array<Maybe<ResolversTypes['Species']>>>, ParentType, ContextType>;
-  speciesByGBIFId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByGbifIdArgs, 'gbifId'>>;
-  speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'iNaturalistId'>>;
+  species?: Resolver<Array<ResolversTypes['Species']>, ParentType, ContextType>;
+  speciesByGbifId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByGbifIdArgs, 'gbifId'>>;
+  speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'inaturalistId'>>;
   speciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByIdArgs, 'id'>>;
-  speciesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   verifyCode?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryVerifyCodeArgs, 'code'>>;
 };
 
@@ -1756,12 +1726,12 @@ export type ReferenceListResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type SpeciesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Species'] = ResolversParentTypes['Species']> = {
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  gbifDetails?: Resolver<Maybe<ResolversTypes['GBIFNameUsage']>, ParentType, ContextType>;
   gbifId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  iNaturalistDetails?: Resolver<Maybe<ResolversTypes['iNaturalistTaxonRecord']>, ParentType, ContextType>;
-  iNaturalistId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  inaturalistId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  thumbnail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

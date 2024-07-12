@@ -4,7 +4,7 @@ admin.initializeApp();
 export const db = {
   users: admin.firestore().collection("users"),
   cenotes: admin.firestore().collection("cenotes_test"),
-  species: admin.firestore().collection("species_bronze"),
+  species: admin.firestore().collection("species_test"),
   variables: admin.firestore().collection("variables_test"),
   references: admin.firestore().collection("references_test"),
   map_layers: admin.firestore().collection("map_layers"),

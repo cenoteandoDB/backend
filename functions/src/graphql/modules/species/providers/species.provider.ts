@@ -1,107 +1,84 @@
-import { ID, Maybe } from "graphql-modules/shared/types";
-import {
-  GbifSuggestion,
-  GbifTaxonomicRank,
-  INaturalistSearchTaxonResponse,
-  NewSpeciesInput,
-  Species,
-  UpdateSpeciesInput,
-} from "../../../generated-types/graphql";
+import { ID } from "graphql-modules/shared/types";
+import { Species } from "../../../generated-types/graphql";
 import { db } from "../../database/db";
-
-import axios from "axios";
 
 const speciesDB = db.species;
 
-export const SpeciesProvider = {
-  getSpecies: async () => {
+/**
+ * The Species provider.
+ */
+export class SpeciesProvider {
+  /**
+   * Get all species.
+   *
+   * @return {Promise<Species>} list with all references
+   */
+  async getSpecies(): Promise<Species[]> {
     const species = await speciesDB.get();
-    return species.docs.map((doc) => doc.data() as Species);
-  },
+    return species.docs.map((doc: any) => doc.data() as Species);
+  }
 
-  getSpeciesById: async (id: ID) => {
-    const snapshot = await speciesDB.doc(id).get();
-    return snapshot.data() as Species;
-  },
+  /**
+   * Get species by id.
+   *
+   * @param {ID} id the id of the species to get
+   *
+   * @return {Promise<Species>} the species
+   */
+  async getSpeciesById(id: ID): Promise<Species> {
+    const snapshot = await speciesDB.where("id", "==", id).get();
 
-  getSpeciesByGBIFId: async (gbifId: ID) => {
+    if (snapshot.empty) {
+      throw new Error("Species not found");
+    }
+
+    return snapshot.docs[0].data() as Species;
+  }
+
+  /**
+   * Get species by GBIF id.
+   *
+   * @param {ID} gbifId the GBIF id of the species to get
+   *
+   * @return {Promise<Species>} the species
+   */
+  async getSpeciesByGbifId(gbifId: ID): Promise<Species> {
     const snapshot = await speciesDB.where("gbifId", "==", gbifId).get();
+
+    if (snapshot.empty) {
+      throw new Error("Species not found");
+    }
+
     return snapshot.docs[0].data() as Species;
-  },
+  }
 
-  getSpeciesByINaturalistId: async (iNaturalistId: ID) => {
-    const snapshot = await speciesDB
-      .where("iNaturalistId", "==", iNaturalistId)
-      .get();
+  /**
+   * Get species by iNaturalist id.
+   *
+   * @param {ID} iNaturalistId the iNaturalist id of the species to get
+   *
+   * @return {Promise<Species>} the species
+   */
+  async getSpeciesByINaturalistId(iNaturalistId: ID): Promise<Species> {
+    const snapshot = await speciesDB.where("inaturalistId", "==", iNaturalistId).get();
+
+    if (snapshot.empty) {
+      throw new Error("Species not found");
+    }
+
     return snapshot.docs[0].data() as Species;
-  },
+  }
 
-  getGBIFSpeciesSuggestions: async (
-    q: string,
-    rank: Maybe<GbifTaxonomicRank>,
-  ) => {
-    const url = "http://api.gbif.org/v1/species/suggest";
-    const response = await axios.get(url, {
-      params: { q: q, rank: rank?.toString() },
-    });
-    const data = response.data;
-    const suggestions: [GbifSuggestion] = data.reduce(
-      (res: [GbifSuggestion], item: any) => {
-        res.push({
-          key: item.key,
-          rank: item.rank,
-          canonicalName: item.canonicalName,
-          class: item.class,
-          family: item.family,
-          genus: item.genus,
-          kingdom: item.kingdom,
-          order: item.order,
-          phylum: item.phylum,
-          species: item.species,
-        } as GbifSuggestion);
-        return res;
-      },
-      [],
-    );
-    return suggestions;
-  },
+  /**
+   * Get species from a list of ids.
+   *
+   * @param {string[]} speciesIds the list of species ids to load
+   *
+   * @return {Promise<Species[]>} the species list
+   */
+  async getCenoteSpecies(speciesIds: string[]): Promise<Species[]> {
+    const speciesSnapshot = await speciesDB.where("id", "in", speciesIds).get();
 
-  getINaturalistSearch: async (q: string, perPage: Maybe<number>) => {
-    const url = "https://api.inaturalist.org/v1/search";
-    const response = await axios.get(url, {
-      params: { q: q, perPage: perPage },
-    });
-    return response.data as INaturalistSearchTaxonResponse;
-  },
-
-  // TODO: implement species to csv
-  speciesToCsv: () => "",
-
-  // TODO: Make sure no duplicates exist already
-  // TODO: Get GBIF and iNaturalist details if id is given
-  createSpecies: async (newSpecies: NewSpeciesInput) => {
-    const docRef = speciesDB.doc();
-
-    await docRef.set({
-      id: docRef.id,
-      createdAt: new Date().toISOString(),
-      ...newSpecies,
-    });
-
-    const snapshot = await speciesDB.doc(docRef.id).get();
-    return snapshot.data() as Species;
-  },
-
-  // TODO: Make sure no duplicates exist already
-  // TODO: Get updated GBIF and iNaturalist details if id is changed
-  updateSpecies: async (updatedSpecies: UpdateSpeciesInput) => {
-    await speciesDB.doc(updatedSpecies.id).update({
-      gbifId: updatedSpecies.gbifId,
-      iNaturalistId: updatedSpecies.iNaturalistId,
-      updatedAt: new Date().toISOString(),
-    });
-
-    const snapshot = await speciesDB.doc(updatedSpecies.id).get();
-    return snapshot.data() as Species;
-  },
-};
+    return speciesSnapshot.docs.map((doc: any) => doc.data() as Species);
+  }
+}

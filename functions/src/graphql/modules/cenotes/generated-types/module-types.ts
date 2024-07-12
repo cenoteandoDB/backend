@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'createdAt' | 'updatedAt';
+    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'referencesIds' | 'references' | 'speciesIds' | 'species' | 'createdAt' | 'updatedAt';
     CenoteList: 'cenotes' | 'totalCount';
     FavouriteCenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'type' | 'touristic' | 'state' | 'municipality' | 'thumbnail';
     CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'county';
@@ -32,6 +32,8 @@ export namespace CenotesModule {
   export type CenoteIssue = DefinedEnumValues['CenoteIssue'];
   export type CityDistances = Pick<Types.CityDistances, DefinedFields['CityDistances']>;
   export type Cenote = Pick<Types.Cenote, DefinedFields['Cenote']>;
+  export type Reference = Types.Reference;
+  export type Species = Types.Species;
   export type CenoteList = Pick<Types.CenoteList, DefinedFields['CenoteList']>;
   export type FavouriteCenote = Pick<Types.FavouriteCenote, DefinedFields['FavouriteCenote']>;
   export type CenoteLocation = Pick<Types.CenoteLocation, DefinedFields['CenoteLocation']>;
@@ -115,6 +117,10 @@ export namespace CenotesModule {
       species_count?: gm.Middleware[];
       photos?: gm.Middleware[];
       maps?: gm.Middleware[];
+      referencesIds?: gm.Middleware[];
+      references?: gm.Middleware[];
+      speciesIds?: gm.Middleware[];
+      species?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };
