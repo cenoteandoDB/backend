@@ -9,10 +9,12 @@ export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
   photos: (parent) => StorageProvider.getPhotos(parent.firestore_id),
   maps: (parent) => StorageProvider.getMaps(parent.firestore_id),
   references: (parent) => {
+    if (!parent.referencesIds) return [];
     const referenceProvider = new ReferenceProvider();
     return referenceProvider.getCenoteReferences(parent.referencesIds);
   },
   species: (parent) => {
+    if (!parent.speciesIds) return [];
     const speciesProvider = new SpeciesProvider();
     return speciesProvider.getCenoteSpecies(parent.speciesIds);
   },

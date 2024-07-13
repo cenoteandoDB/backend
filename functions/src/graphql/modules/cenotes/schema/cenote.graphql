@@ -45,11 +45,11 @@ type Cenote {
   photos: [URL!]
   maps: [URL!]
 
-  referencesIds: [String!]!
-  references: [Reference!]!
+  referencesIds: [String!]
+  references: [Reference!]
 
-  speciesIds: [String!]!
-  species: [Species!]!
+  speciesIds: [String!]
+  species: [Species!]
 
   createdAt: DateTime
   updatedAt: DateTime
