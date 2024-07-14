@@ -152,13 +152,26 @@ export class VariableProvider {
    * @return {Promise<Boolean>} true if deleted
    */
   async deleteVariable(id: ID): Promise<boolean> {
+    await this.variableExists(id);
+
+    await variableDB.doc(id).delete();
+    return true;
+  }
+
+  /**
+   * Verify if a variable exists by id.
+   *
+   * @param {ID} id of the variable to verify
+   *
+   * @return {Promise<Boolean>} true if exists. Throws exception otherwise
+   */
+  async variableExists(id: ID): Promise<boolean> {
     const snapshot = await variableDB.doc(id).get();
 
     if (!snapshot.exists) {
       throw new Error("Variable does not exist.");
     }
 
-    await variableDB.doc(id).delete();
     return true;
-  }
+  } 
 }

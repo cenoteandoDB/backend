@@ -22,12 +22,22 @@ enum GovernType {
   MUNICIPAL
 }
 
+enum Degree {
+  PRIMARY
+  SECOUNDARY
+  BACHELOR
+  MASTER
+  DOCTORATE
+  DIPLOMATE
+  SPECIALIZATION
+}
+
 type ProfileData {
   companyName: String
   companyUrl: String
 
   school: String
-  degree: String
+  degree: Degree
   subject: String
 
   googleScholar: String
@@ -63,7 +73,8 @@ type User {
   variableEditWhiteList: [String!]!
   variableEditBlackList: [String!]!
 
-  favouriteCenotes:[String!]!
+  favouriteCenotesIds: [String!]!
+  favouriteCenotes: [FavouriteCenote!]!
 
   createdAt: DateTime!
   updatedAt: DateTime!

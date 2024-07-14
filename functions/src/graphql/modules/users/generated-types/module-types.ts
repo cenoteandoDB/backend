@@ -4,9 +4,9 @@ import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
     Mutation: 'login' | 'inviteUser' | 'register' | 'registerTourist' | 'registerStudent' | 'registerTeacher' | 'registerInvestigator' | 'registerGovern' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'addFavouriteCenote' | 'removeFavouriteCenote' | 'deleteUser';
-    Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode' | 'getFavouriteCenotes';
+    Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode';
     ProfileData: 'companyName' | 'companyUrl' | 'school' | 'degree' | 'subject' | 'googleScholar' | 'orchid' | 'researchGate' | 'linkedin' | 'govern_type' | 'govern_institution';
-    User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'favouriteCenotes' | 'createdAt' | 'updatedAt';
+    User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'favouriteCenotesIds' | 'favouriteCenotes' | 'createdAt' | 'updatedAt';
     UserList: 'users' | 'totalCount';
   };
   
@@ -15,6 +15,7 @@ export namespace UsersModule {
     UserRole: 'BASIC' | 'CURATOR' | 'ADMIN';
     UserProfile: 'TOURIST' | 'TEACHER' | 'STUDENT' | 'GOVERN' | 'INVESTIGATOR';
     GovernType: 'FEDERAL' | 'STATE' | 'MUNICIPAL';
+    Degree: 'PRIMARY' | 'SECOUNDARY' | 'BACHELOR' | 'MASTER' | 'DOCTORATE' | 'DIPLOMATE' | 'SPECIALIZATION';
   };
   
   interface DefinedInputFields {
@@ -48,7 +49,9 @@ export namespace UsersModule {
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type UserList = Pick<Types.UserList, DefinedFields['UserList']>;
   export type UserProfile = DefinedEnumValues['UserProfile'];
+  export type Degree = DefinedEnumValues['Degree'];
   export type ProfileData = Pick<Types.ProfileData, DefinedFields['ProfileData']>;
+  export type FavouriteCenote = Types.FavouriteCenote;
   
   export type Scalars = Pick<Types.Scalars, 'EmailAddress' | 'DateTime'>;
   export type EmailAddressScalarConfig = Types.EmailAddressScalarConfig;
@@ -98,7 +101,6 @@ export namespace UsersModule {
       getUserByEmail?: gm.Middleware[];
       getUserByName?: gm.Middleware[];
       verifyCode?: gm.Middleware[];
-      getFavouriteCenotes?: gm.Middleware[];
     };
     ProfileData?: {
       '*'?: gm.Middleware[];
@@ -132,6 +134,7 @@ export namespace UsersModule {
       variableViewBlackList?: gm.Middleware[];
       variableEditWhiteList?: gm.Middleware[];
       variableEditBlackList?: gm.Middleware[];
+      favouriteCenotesIds?: gm.Middleware[];
       favouriteCenotes?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];

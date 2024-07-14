@@ -1,3 +1,4 @@
+import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
 import { UsersModule } from "../generated-types/module-types";
 
 export const UserResolver: UsersModule.Resolvers["User"] = {
@@ -18,4 +19,9 @@ export const UserResolver: UsersModule.Resolvers["User"] = {
     parent.variableEditWhiteList ? parent.variableEditWhiteList : [],
   variableEditBlackList: (parent) =>
     parent.variableEditBlackList ? parent.variableEditBlackList : [],
+  favouriteCenotes: (parent) => {
+    if (!parent.favouriteCenotesIds) return [];
+    const cenotesProvider = new CenotesProvider();
+    return cenotesProvider.getUserFavouriteCenotes(parent.favouriteCenotesIds);
+  },
 };
