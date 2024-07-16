@@ -1,6 +1,7 @@
 import { ID } from "graphql-modules/shared/types";
-import { Species } from "../../../generated-types/graphql";
+import { PaginationInput, SortField, Species, SpeciesList } from "../../../generated-types/graphql";
 import { db } from "../../database/db";
+import { firestore } from "firebase-admin";
 
 const speciesDB = db.species;
 
@@ -13,9 +14,48 @@ export class SpeciesProvider {
    *
    * @return {Promise<Species>} list with all references
    */
-  async getSpecies(): Promise<Species[]> {
-    const species = await speciesDB.get();
-    return species.docs.map((doc: any) => doc.data() as Species);
+  async getSpecies(sort: SortField | null | undefined = {field: "id", sortOrder: "ASC"},
+    pagination: PaginationInput | null = { offset: 0, limit: 25 },
+    name: string | null | undefined): Promise<SpeciesList> {
+    let query: any;
+    let countQuery: any;
+    if (name) {
+      const endSearch = name.replace(/.$/, (c) =>
+        String.fromCharCode(c.charCodeAt(0) + 1),
+      );
+      query = speciesDB
+        .where("name", ">=", name)
+        .where("name", "<", endSearch)
+        .orderBy(
+          sort?.field ?? "name",
+          sort?.sortOrder.toLowerCase() as firestore.OrderByDirection,
+        );
+      countQuery = speciesDB
+        .where("name", ">=", name)
+        .where("name", "<", endSearch);
+    } else {
+      query = speciesDB.orderBy(
+        sort?.field ?? "name",
+        sort?.sortOrder.toLowerCase() as firestore.OrderByDirection,
+      );
+      countQuery = speciesDB;
+    }
+
+    if (pagination) {
+      query = query.offset(pagination.offset).limit(pagination.limit);
+    }
+
+    const [speciesSnapshot, totalCountSnapshot] = await Promise.all([
+      query.get(),
+      countQuery.get(),
+    ]);
+
+    const species = speciesSnapshot.docs.map(
+      (doc: any) => doc.data() as Species,
+    );
+    const totalCount = totalCountSnapshot.size;
+
+    return { species, totalCount };
   }
 
   /**

@@ -269,4 +269,21 @@ export class CenotesProvider {
 
     return favouriteCenotesList;
   }
+
+  /**
+   * Verify if a cenote exists by id.
+   *
+   * @param {ID} id of the cenote to verify
+   *
+   * @return {Promise<Boolean>} true if exists. Throws exception otherwise
+   */
+    async cenoteExists(id: ID): Promise<boolean> {
+      const snapshot = await cenotesDB.doc(id).get();
+  
+      if (!snapshot.exists) {
+        throw new Error("Cenote does not exist.");
+      }
+  
+      return true;
+    } 
 }

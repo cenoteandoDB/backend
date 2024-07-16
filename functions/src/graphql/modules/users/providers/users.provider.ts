@@ -25,6 +25,8 @@ import {
 } from "../../../utils/auth";
 import { db } from "../../database/db";
 import { firestore } from "firebase-admin";
+import { VariableProvider } from "../../variables/providers/variable.provider";
+import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
 
 const usersDB = db.users;
 const registrationCodeDB = db.registration_code;
@@ -125,6 +127,7 @@ export class UsersProvider {
    */
   async getUserByEmail(email: string): Promise<User> {
     const snapshot = await usersDB.where("email", "==", email).get();
+
     if (snapshot.docs.length == 0) {
       throw new Error(`User with email ${email} not found.`);
     }
@@ -221,11 +224,7 @@ export class UsersProvider {
     userId: string,
     userInfo: UpdateUserInfoInput,
   ): Promise<User> {
-    const snapshot = await usersDB.doc(userId).get();
-
-    if (!snapshot.exists) {
-      throw new Error("User does not exist.");
-    }
+    await this.userExists(userId);
 
     // Prepare update data object
     const updateData: { [key: string]: any } = {
@@ -271,18 +270,19 @@ export class UsersProvider {
     userId: string,
     cenotePermissions: UpdateCenotePermissions,
   ): Promise<User> {
-    const snapshot = await usersDB.doc(userId).get();
+    await this.userExists(userId);
 
-    if (!snapshot.exists) {
-      throw new Error("User does not exist.");
-    }
+    const cenotes = [
+      ...cenotePermissions.cenoteViewBlackList,
+      ...cenotePermissions.cenoteViewBlackList,
+      ...cenotePermissions.cenoteEditBlackList,
+      ...cenotePermissions.cenoteEditWhiteList
+    ];
+    const cenoteProvider = new CenotesProvider();
+    cenotes.map((cenote) => cenoteProvider.cenoteExists(cenote));
 
     await usersDB.doc(userId).update({
-      cenoteViewWhiteList: cenotePermissions.cenoteViewWhiteList,
-      cenoteViewBlackList: cenotePermissions.cenoteViewBlackList,
-
-      cenoteEditWhiteList: cenotePermissions.cenoteEditWhiteList,
-      cenoteEditBlackList: cenotePermissions.cenoteEditBlackList,
+      ...cenotePermissions,
       updatedAt: new Date().toISOString(),
     });
 
@@ -303,18 +303,19 @@ export class UsersProvider {
     userId: string,
     variablePermissions: UpdateVariablePermissions,
   ): Promise<User> {
-    const snapshot = await usersDB.doc(userId).get();
+    await this.userExists(userId);
 
-    if (!snapshot.exists) {
-      throw new Error("User does not exist.");
-    }
+    const variables = [
+      ...variablePermissions.variableEditBlackList,
+      ...variablePermissions.variableEditWhiteList,
+      ...variablePermissions.variableViewBlackList,
+      ...variablePermissions.variableViewWhiteList
+    ];
+    const variableProvider = new VariableProvider();
+    variables.map((variable) => variableProvider.variableExists(variable));
 
     await usersDB.doc(userId).update({
-      variableViewWhiteList: variablePermissions.variableViewWhiteList,
-      variableViewBlackList: variablePermissions.variableViewBlackList,
-
-      variableEditWhiteList: variablePermissions.variableEditWhiteList,
-      variableEditBlackList: variablePermissions.variableEditBlackList,
+      ...variablePermissions,
       updatedAt: new Date().toISOString(),
     });
 
@@ -408,11 +409,7 @@ export class UsersProvider {
    * @return {Promise<Boolean>} true if deleted
    */
   async deleteUser(userId: ID): Promise<boolean> {
-    const snapshot = await usersDB.doc(userId).get();
-
-    if (!snapshot.exists) {
-      throw new Error("User does not exist.");
-    }
+    await this.userExists(userId);
 
     await usersDB.doc(userId).delete();
     return true;
@@ -440,19 +437,6 @@ export class UsersProvider {
   }
 
   /**
-   * Get user favourite cenotes.
-   *
-   * @param {string} id - The identifier of the user to fetch favourite cenotes.
-   *
-   * @return {Promise<string[]>} the list of favouriteCenotes
-   */
-  async getFavouriteCenotes(id: string): Promise<string[]> {
-    const user = await this.getUserById(id);
-
-    return user.favouriteCenotes;
-  }
-
-  /**
    * Adds a cenote to the list of favourite cenotes of a user.
    *
    * @param {string} userId the identifier of the user to fetch favourite cenotes.
@@ -464,13 +448,13 @@ export class UsersProvider {
     const user = await this.getUserById(userId);
     // TODO should validate that cenote exists
 
-    const userFavouriteCenotes = user.favouriteCenotes;
+    const userFavouriteCenotes = user.favouriteCenotesIds;
     if (userFavouriteCenotes.includes(cenoteId)) {
       return true;
     } else {
       userFavouriteCenotes.push(cenoteId);
       await usersDB.doc(userId).update({
-        favouriteCenotes: userFavouriteCenotes,
+        favouriteCenotesIds: userFavouriteCenotes,
         updatedAt: new Date().toISOString(),
       });
     }
@@ -489,17 +473,34 @@ export class UsersProvider {
   async removeFavouriteCenote(userId: string, cenoteId: string): Promise<boolean> {
     const user = await this.getUserById(userId);
 
-    const userFavouriteCenotes = user.favouriteCenotes;
+    const userFavouriteCenotes = user.favouriteCenotesIds;
     const index = userFavouriteCenotes.indexOf(cenoteId);
 
     if (index !== -1) {
       userFavouriteCenotes.splice(index, 1);
       await usersDB.doc(userId).update({
-        favouriteCenotes: userFavouriteCenotes,
+        favouriteCenotesIds: userFavouriteCenotes,
         updatedAt: new Date().toISOString(),
       });
     }
 
     return true;
   }
+
+  /**
+   * Verify if a user exists by id.
+   *
+   * @param {ID} id of the user to verify
+   *
+   * @return {Promise<Boolean>} true if exists. Throws exception otherwise
+   */
+  async userExists(id: ID): Promise<boolean> {
+    const snapshot = await usersDB.doc(id).get();
+
+    if (!snapshot.exists) {
+      throw new Error("User does not exist.");
+    }
+
+    return true;
+  } 
 }
