@@ -1,6 +1,10 @@
 type Query {
-  species: [Species!]!
-  speciesById(id: ID!): Species
-  speciesByGbifId(gbifId: ID!): Species
-  speciesByINaturalistId(inaturalistId: ID!): Species
+  getSpecies(
+    sort: SortField
+    pagination: PaginationInput
+    name: String
+  ): SpeciesList!
+  getSpeciesById(id: ID!): Species
+  getSpeciesByGbifId(gbifId: ID!): Species
+  getSpeciesByINaturalistId(inaturalistId: ID!): Species
 }

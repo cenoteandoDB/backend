@@ -651,6 +651,10 @@ export type Query = {
   getCenotes: CenoteList;
   getReferenceById?: Maybe<Reference>;
   getReferences: ReferenceList;
+  getSpecies: SpeciesList;
+  getSpeciesByGbifId?: Maybe<Species>;
+  getSpeciesByINaturalistId?: Maybe<Species>;
+  getSpeciesById?: Maybe<Species>;
   getThemesByCenote: Array<Scalars['String']>;
   getUserByEmail?: Maybe<User>;
   getUserById?: Maybe<User>;
@@ -661,10 +665,6 @@ export type Query = {
   getVariablesByTheme: Array<Variable>;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
-  species: Array<Species>;
-  speciesByGbifId?: Maybe<Species>;
-  speciesByINaturalistId?: Maybe<Species>;
-  speciesById?: Maybe<Species>;
   verifyCode?: Maybe<User>;
 };
 
@@ -716,6 +716,28 @@ export type QueryGetReferencesArgs = {
 };
 
 
+export type QueryGetSpeciesArgs = {
+  name?: InputMaybe<Scalars['String']>;
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<SortField>;
+};
+
+
+export type QueryGetSpeciesByGbifIdArgs = {
+  gbifId: Scalars['ID'];
+};
+
+
+export type QueryGetSpeciesByINaturalistIdArgs = {
+  inaturalistId: Scalars['ID'];
+};
+
+
+export type QueryGetSpeciesByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type QueryGetThemesByCenoteArgs = {
   cenoteId: Scalars['ID'];
 };
@@ -761,21 +783,6 @@ export type QueryGetVariablesByThemeArgs = {
 
 
 export type QueryLayerArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QuerySpeciesByGbifIdArgs = {
-  gbifId: Scalars['ID'];
-};
-
-
-export type QuerySpeciesByINaturalistIdArgs = {
-  inaturalistId: Scalars['ID'];
-};
-
-
-export type QuerySpeciesByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -880,6 +887,12 @@ export type Species = {
   name: Scalars['String'];
   thumbnail?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type SpeciesList = {
+  __typename?: 'SpeciesList';
+  species: Array<Species>;
+  totalCount: Scalars['Int'];
 };
 
 export type UpdateCenotePermissions = {
@@ -1317,6 +1330,7 @@ export type ResolversTypes = {
   SortField: SortField;
   SortOrder: SortOrder;
   Species: ResolverTypeWrapper<Species>;
+  SpeciesList: ResolverTypeWrapper<SpeciesList>;
   String: ResolverTypeWrapper<Scalars['String']>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
   UpdateCenotePermissions: UpdateCenotePermissions;
@@ -1394,6 +1408,7 @@ export type ResolversParentTypes = {
   RegisterUserInput: RegisterUserInput;
   SortField: SortField;
   Species: Species;
+  SpeciesList: SpeciesList;
   String: Scalars['String'];
   URL: Scalars['URL'];
   UpdateCenotePermissions: UpdateCenotePermissions;
@@ -1664,6 +1679,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
   getReferenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryGetReferenceByIdArgs, 'id'>>;
   getReferences?: Resolver<ResolversTypes['ReferenceList'], ParentType, ContextType, Partial<QueryGetReferencesArgs>>;
+  getSpecies?: Resolver<ResolversTypes['SpeciesList'], ParentType, ContextType, Partial<QueryGetSpeciesArgs>>;
+  getSpeciesByGbifId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QueryGetSpeciesByGbifIdArgs, 'gbifId'>>;
+  getSpeciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QueryGetSpeciesByINaturalistIdArgs, 'inaturalistId'>>;
+  getSpeciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QueryGetSpeciesByIdArgs, 'id'>>;
   getThemesByCenote?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryGetThemesByCenoteArgs, 'cenoteId'>>;
   getUserByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByEmailArgs, 'email'>>;
   getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
@@ -1674,10 +1693,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getVariablesByTheme?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;
-  species?: Resolver<Array<ResolversTypes['Species']>, ParentType, ContextType>;
-  speciesByGbifId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByGbifIdArgs, 'gbifId'>>;
-  speciesByINaturalistId?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByINaturalistIdArgs, 'inaturalistId'>>;
-  speciesById?: Resolver<Maybe<ResolversTypes['Species']>, ParentType, ContextType, RequireFields<QuerySpeciesByIdArgs, 'id'>>;
   verifyCode?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryVerifyCodeArgs, 'code'>>;
 };
 
@@ -1728,6 +1743,12 @@ export type SpeciesResolvers<ContextType = any, ParentType extends ResolversPare
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   thumbnail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SpeciesListResolvers<ContextType = any, ParentType extends ResolversParentTypes['SpeciesList'] = ResolversParentTypes['SpeciesList']> = {
+  species?: Resolver<Array<ResolversTypes['Species']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1914,6 +1935,7 @@ export type Resolvers<ContextType = any> = {
   Reference?: ReferenceResolvers<ContextType>;
   ReferenceList?: ReferenceListResolvers<ContextType>;
   Species?: SpeciesResolvers<ContextType>;
+  SpeciesList?: SpeciesListResolvers<ContextType>;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   UserList?: UserListResolvers<ContextType>;

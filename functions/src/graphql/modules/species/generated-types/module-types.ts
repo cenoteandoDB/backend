@@ -12,8 +12,9 @@ export namespace SpeciesModule {
     iNaturalistPhotoDimensions: 'height' | 'width';
     iNaturalistFlagCounts: 'resolved' | 'unresolved';
     iNaturalistTaxonPhoto: 'taxon_id' | 'photo';
-    Query: 'species' | 'speciesById' | 'speciesByGbifId' | 'speciesByINaturalistId';
+    Query: 'getSpecies' | 'getSpeciesById' | 'getSpeciesByGbifId' | 'getSpeciesByINaturalistId';
     Species: 'id' | 'gbifId' | 'inaturalistId' | 'name' | 'thumbnail' | 'createdAt' | 'updatedAt';
+    SpeciesList: 'species' | 'totalCount';
   };
   
   interface DefinedEnumValues {
@@ -37,6 +38,9 @@ export namespace SpeciesModule {
   export type iNaturalistTaxonPhoto = Pick<Types.INaturalistTaxonPhoto, DefinedFields['iNaturalistTaxonPhoto']>;
   export type iNaturalistPhotoDimensions = Pick<Types.INaturalistPhotoDimensions, DefinedFields['iNaturalistPhotoDimensions']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
+  export type SpeciesList = Pick<Types.SpeciesList, DefinedFields['SpeciesList']>;
+  export type SortField = Types.SortField;
+  export type PaginationInput = Types.PaginationInput;
   export type Species = Pick<Types.Species, DefinedFields['Species']>;
   
   export type Scalars = Pick<Types.Scalars, 'JSON' | 'DateTime'>;
@@ -54,6 +58,7 @@ export namespace SpeciesModule {
   export type iNaturalistTaxonPhotoResolvers = Pick<Types.INaturalistTaxonPhotoResolvers, DefinedFields['iNaturalistTaxonPhoto'] | '__isTypeOf'>;
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
   export type SpeciesResolvers = Pick<Types.SpeciesResolvers, DefinedFields['Species'] | '__isTypeOf'>;
+  export type SpeciesListResolvers = Pick<Types.SpeciesListResolvers, DefinedFields['SpeciesList'] | '__isTypeOf'>;
   
   export interface Resolvers {
     GBIFSuggestion?: GBIFSuggestionResolvers;
@@ -67,6 +72,7 @@ export namespace SpeciesModule {
     iNaturalistTaxonPhoto?: iNaturalistTaxonPhotoResolvers;
     Query?: QueryResolvers;
     Species?: SpeciesResolvers;
+    SpeciesList?: SpeciesListResolvers;
     JSON?: Types.Resolvers['JSON'];
     DateTime?: Types.Resolvers['DateTime'];
   };
@@ -207,10 +213,10 @@ export namespace SpeciesModule {
     };
     Query?: {
       '*'?: gm.Middleware[];
-      species?: gm.Middleware[];
-      speciesById?: gm.Middleware[];
-      speciesByGbifId?: gm.Middleware[];
-      speciesByINaturalistId?: gm.Middleware[];
+      getSpecies?: gm.Middleware[];
+      getSpeciesById?: gm.Middleware[];
+      getSpeciesByGbifId?: gm.Middleware[];
+      getSpeciesByINaturalistId?: gm.Middleware[];
     };
     Species?: {
       '*'?: gm.Middleware[];
@@ -221,6 +227,11 @@ export namespace SpeciesModule {
       thumbnail?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
+    };
+    SpeciesList?: {
+      '*'?: gm.Middleware[];
+      species?: gm.Middleware[];
+      totalCount?: gm.Middleware[];
     };
   };
 }

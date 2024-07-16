@@ -13,3 +13,8 @@ type Species {
   createdAt: DateTime
   updatedAt: DateTime
 }
+
+type SpeciesList {
+  species: [Species!]!
+  totalCount: Int!
+}
