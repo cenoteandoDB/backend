@@ -11,6 +11,8 @@ input NewVariableInput {
   methodology: String
   timeseries: Boolean!
   cenote_count: Int
+  icon: String
+  variableRepresentation: VariableRepresentation
 }
 
 input UpdateVariableInput {
@@ -27,6 +29,8 @@ input UpdateVariableInput {
   methodology: String
   timeseries: Boolean!
   cenote_count: Int
+  icon: String
+  variableRepresentation: VariableRepresentation
 }
 
 type Mutation {

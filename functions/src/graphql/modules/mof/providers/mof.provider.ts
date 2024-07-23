@@ -8,6 +8,8 @@ import {
   MeasurementOrFact,
   Variable,
   DeleteMofInput,
+  UpdateMofInput,
+  VariableRepresentation,
 } from "../../../generated-types/graphql";
 import { VariableProvider } from "../../variables/providers/variable.provider";
 import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
@@ -67,11 +69,15 @@ export class MofProvider {
   async cenoteDataByVariable(
     cenoteId: ID,
     variableId: ID,
-  ): Promise<VariableWithData> {
+  ): Promise<VariableWithData|null> {
     const mof = await mofDB
       .where("cenoteId", "==", cenoteId)
       .where("variableId", "==", variableId)
       .get();
+    
+    if (mof.empty) {
+      return null;
+    }
     return mof.docs[0].data() as VariableWithData;
   }
 
@@ -186,14 +192,14 @@ export class MofProvider {
       if (mofs.length == 0) {
         mofDB.doc(doc.docs[0].id).delete();
       } else {
-        this.updateMofAfterDelete(docId, bucket, mofs);
+        this.updateMofBucket(docId, bucket, mofs);
       }
     }
 
     return true;
   }
 
-  private async updateMofAfterDelete(
+  private async updateMofBucket(
     docId: string,
     mof: VariableWithData,
     measurements: MeasurementOrFact[],
@@ -234,5 +240,85 @@ export class MofProvider {
     }
 
     return themes;
+  }
+
+  /**
+   * Update a Measurement or Fact of a cenote.
+   * Uses the old value and old timestamp to identify the MoF to be updated. After updating a value,
+   * updates the first and last timestamp if needed
+   *
+   * @param {UpdateMofInput} deletMofInput MoF to delete
+   *
+   * @return {Promise<boolean>} if the update succeded
+   */
+  async updateMoF(updateMofInput: UpdateMofInput): Promise<boolean> {
+    const doc = await mofDB
+      .where("cenoteId", "==", updateMofInput.cenoteId)
+      .where("variableId", "==", updateMofInput.variableId)
+      .get();
+
+    if (doc.empty) {
+      return false;
+    }
+
+    const bucket = doc.docs[0].data() as VariableWithData;
+    const docId = doc.docs[0].id;
+
+    let modified = false;
+    const measurements = bucket.measurements.map(
+      (mof: MeasurementOrFact) => {
+        if (mof.timestamp == updateMofInput.oldTimestamp.toISOString() &&
+          mof.value == updateMofInput.oldValue) {
+          modified = true;
+          return {timestamp: updateMofInput.timestamp.toISOString(), value: updateMofInput.value};
+        } else {
+          return mof;
+        }
+      }
+    );
+
+    if (!modified) {
+      return false;
+    }
+
+    const firstTimestamp = measurements.reduce(
+      (min: MeasurementOrFact | null, current: MeasurementOrFact) => {
+        return !min || current.timestamp < min.timestamp ? current : min;
+      },
+      null,
+    );
+
+    const lastTimestamp = measurements.reduce(
+      (max: MeasurementOrFact | null, current: MeasurementOrFact) => {
+        return !max || current.timestamp > max.timestamp ? current : max;
+      },
+      null,
+    );
+
+    await mofDB.doc(docId).update({
+      firstTimestamp: firstTimestamp?.timestamp,
+      lastTimestamp: lastTimestamp?.timestamp,
+      measurements,
+    });
+
+    return true;
+  }
+
+  async updateMofVariableInfo(
+    variableId: string,
+    units: string | null | undefined,
+    icon: string | null | undefined,
+    variableRepresentation: VariableRepresentation | null | undefined
+  ): Promise<boolean> {
+    const mofs = await mofDB.where("variableId", "==", variableId).get();
+    mofs.forEach(async (mof) => {
+      await mofDB.doc(mof.id).update({
+        units: units,
+        icon: icon,
+        variableRepresentation: variableRepresentation
+      });
+    })
+
+    return true;
   }
 }

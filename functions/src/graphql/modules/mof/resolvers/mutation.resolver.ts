@@ -10,4 +10,7 @@ export const MutationResolver: MofModule.Resolvers["Mutation"] = {
   deleteMof: (parent, args, contextValue, info) => {
     return mofProvider.deleteMoF(args.delete_mof_input);
   },
+  updateMof: (parent, args, contextValue, info) => {
+    return mofProvider.updateMoF(args.update_mof_input);
+  },
 };

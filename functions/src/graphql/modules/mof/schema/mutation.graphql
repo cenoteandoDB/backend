@@ -15,7 +15,17 @@ input DeleteMofInput {
   timestamp: DateTime!
 }
 
+input UpdateMofInput {
+  variableId: ID!
+  cenoteId: ID!
+  oldValue: String!
+  oldTimestamp: DateTime!
+  value: String!
+  timestamp: DateTime!
+}
+
 type Mutation {
   createMof(new_mof: NewMeasurementOrFactInput!): VariableWithData
   deleteMof(delete_mof_input: DeleteMofInput!): Boolean
+  updateMof(update_mof_input: UpdateMofInput!): Boolean
 }

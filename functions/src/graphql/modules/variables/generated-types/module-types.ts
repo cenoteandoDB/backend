@@ -4,7 +4,7 @@ import * as gm from "graphql-modules";
 export namespace VariablesModule {
   interface DefinedFields {
     Mutation: 'createVariable' | 'updateVariable' | 'deleteVariable';
-    Query: 'getVariables' | 'getVariableById' | 'getVariablesByTheme';
+    Query: 'getVariables' | 'getVariableById' | 'getVariablesByTheme' | 'getVariablesByCategory' | 'getCategoriesByTheme';
     Variable: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'methodology' | 'timeseries' | 'accessLevel' | 'origin' | 'theme' | 'sphere' | 'category' | 'icon' | 'variableRepresentation' | 'cenote_count' | 'createdAt' | 'updatedAt';
     VariableList: 'variables' | 'totalCount';
   };
@@ -20,8 +20,8 @@ export namespace VariablesModule {
   };
   
   interface DefinedInputFields {
-    NewVariableInput: 'name' | 'description' | 'type' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'units' | 'methodology' | 'timeseries' | 'cenote_count';
-    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'methodology' | 'timeseries' | 'cenote_count';
+    NewVariableInput: 'name' | 'description' | 'type' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'units' | 'methodology' | 'timeseries' | 'cenote_count' | 'icon' | 'variableRepresentation';
+    UpdateVariableInput: 'firestore_id' | 'name' | 'description' | 'type' | 'units' | 'accessLevel' | 'theme' | 'sphere' | 'category' | 'origin' | 'methodology' | 'timeseries' | 'cenote_count' | 'icon' | 'variableRepresentation';
   };
   
   export type NewVariableInput = Pick<Types.NewVariableInput, DefinedInputFields['NewVariableInput']>;
@@ -31,6 +31,7 @@ export namespace VariablesModule {
   export type VariableSphere = DefinedEnumValues['VariableSphere'];
   export type VariableCategory = DefinedEnumValues['VariableCategory'];
   export type VariableOrigin = DefinedEnumValues['VariableOrigin'];
+  export type VariableRepresentation = DefinedEnumValues['VariableRepresentation'];
   export type UpdateVariableInput = Pick<Types.UpdateVariableInput, DefinedInputFields['UpdateVariableInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Variable = Pick<Types.Variable, DefinedFields['Variable']>;
@@ -38,7 +39,6 @@ export namespace VariablesModule {
   export type VariableList = Pick<Types.VariableList, DefinedFields['VariableList']>;
   export type SortField = Types.SortField;
   export type PaginationInput = Types.PaginationInput;
-  export type VariableRepresentation = DefinedEnumValues['VariableRepresentation'];
   
   export type Scalars = Pick<Types.Scalars, 'DateTime'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
@@ -71,6 +71,8 @@ export namespace VariablesModule {
       getVariables?: gm.Middleware[];
       getVariableById?: gm.Middleware[];
       getVariablesByTheme?: gm.Middleware[];
+      getVariablesByCategory?: gm.Middleware[];
+      getCategoriesByTheme?: gm.Middleware[];
     };
     Variable?: {
       '*'?: gm.Middleware[];

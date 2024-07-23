@@ -6,4 +6,6 @@ type Query {
   ): VariableList!
   getVariableById(id: ID!): Variable
   getVariablesByTheme(theme: VariableTheme!): [Variable!]!
+  getVariablesByCategory(category: VariableCategory!): [Variable!]!
+  getCategoriesByTheme(theme: VariableTheme!): [VariableCategory!]!
 }
