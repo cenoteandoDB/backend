@@ -8,6 +8,7 @@ import {
   Variable,
   VariableTheme,
   VariableList,
+  VariableCategory,
 } from "../../../generated-types/graphql";
 import { db } from "../../database/db";
 import { ID } from "graphql-modules/shared/types";
@@ -102,6 +103,32 @@ export class VariableProvider {
   }
 
   /**
+   * Get all variables of a given category.
+   *
+   * @param {VariableCategory} category the variable theme to get
+   *
+   * @return {Promise<Variable[]>} list of variables of a given theme
+   */
+  async getVariablesByCategory(category: VariableCategory): Promise<Variable[]> {
+    const variables = await variableDB.where("category", "==", category).get();
+    return variables.docs.map((doc) => doc.data() as Variable);
+  }
+
+  /**
+   * Get categories by variable theme.
+   *
+   * @param {VariableTheme} theme the variable theme
+   *
+   * @return {Promise<VariableCategory[]>} list of variable categories of a given theme
+   */
+  async getCategoriesByTheme(theme: VariableTheme): Promise<VariableCategory[]> {
+    const variablesSnapshot = await variableDB.where("theme", "==", theme).get();
+    const variables = variablesSnapshot.docs.map((doc) => doc.data() as Variable);
+    const categorySet = new Set(variables.map((variable) => variable.category));
+    return Array.from(categorySet);
+  }
+
+  /**
    * Creates a varaible.
    *
    * @param {NewVariableInput} newVariable the variable input to be created
@@ -135,6 +162,15 @@ export class VariableProvider {
     variableId: string,
     updatedVariable: UpdateVariableInput
   ): Promise<Variable> {
+    //const variable = await this.getVariableById(variableId);
+    /*
+    if (variable.units != updatedVariable.units || variable.icon != updatedVariable.icon ||
+      variable.variableRepresentation != updatedVariable.variableRepresentation) {
+      const mofProvider = new MofProvider();
+      mofProvider.updateMofVariableInfo(variableId, updatedVariable.units, updatedVariable.icon,
+        updatedVariable.variableRepresentation);
+    }
+    */
     await variableDB.doc(variableId).update({
       updatedAt: new Date().toISOString(),
       ...updatedVariable,

@@ -394,6 +394,7 @@ export type Mutation = {
   removeFavouriteCenote?: Maybe<Scalars['Boolean']>;
   updateCenote?: Maybe<Cenote>;
   updateCenotePermissions?: Maybe<User>;
+  updateMof?: Maybe<Scalars['Boolean']>;
   updateReference?: Maybe<Reference>;
   updateUserInfo?: Maybe<User>;
   updateVariable?: Maybe<Variable>;
@@ -524,6 +525,11 @@ export type MutationUpdateCenotePermissionsArgs = {
 };
 
 
+export type MutationUpdateMofArgs = {
+  update_mof_input: UpdateMofInput;
+};
+
+
 export type MutationUpdateReferenceArgs = {
   id: Scalars['ID'];
   updated_reference: UpdatedReferenceInput;
@@ -602,6 +608,7 @@ export type NewVariableInput = {
   category: VariableCategory;
   cenote_count?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
+  icon?: InputMaybe<Scalars['String']>;
   methodology?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   origin: VariableOrigin;
@@ -610,6 +617,7 @@ export type NewVariableInput = {
   timeseries: Scalars['Boolean'];
   type: VariableType;
   units?: InputMaybe<Scalars['String']>;
+  variableRepresentation?: InputMaybe<VariableRepresentation>;
 };
 
 export type PaginationInput = {
@@ -645,6 +653,7 @@ export type Query = {
   cenoteById?: Maybe<Cenote>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
+  getCategoriesByTheme: Array<VariableCategory>;
   getCenoteData?: Maybe<Array<VariableWithData>>;
   getCenoteDataByTheme?: Maybe<Array<VariableWithData>>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
@@ -662,6 +671,7 @@ export type Query = {
   getUsers: UserList;
   getVariableById?: Maybe<Variable>;
   getVariables: VariableList;
+  getVariablesByCategory: Array<Variable>;
   getVariablesByTheme: Array<Variable>;
   layer?: Maybe<MapLayer>;
   layers?: Maybe<Array<Maybe<MapLayer>>>;
@@ -677,6 +687,11 @@ export type QueryAuditLogsArgs = {
 
 export type QueryCenoteByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetCategoriesByThemeArgs = {
+  theme: VariableTheme;
 };
 
 
@@ -774,6 +789,11 @@ export type QueryGetVariablesArgs = {
   name?: InputMaybe<Scalars['String']>;
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<SortField>;
+};
+
+
+export type QueryGetVariablesByCategoryArgs = {
+  category: VariableCategory;
 };
 
 
@@ -902,6 +922,15 @@ export type UpdateCenotePermissions = {
   cenoteViewWhiteList: Array<Scalars['String']>;
 };
 
+export type UpdateMofInput = {
+  cenoteId: Scalars['ID'];
+  oldTimestamp: Scalars['DateTime'];
+  oldValue: Scalars['String'];
+  timestamp: Scalars['DateTime'];
+  value: Scalars['String'];
+  variableId: Scalars['ID'];
+};
+
 export type UpdateUserInfoInput = {
   email: Scalars['EmailAddress'];
   name: Scalars['String'];
@@ -917,6 +946,7 @@ export type UpdateVariableInput = {
   cenote_count?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   firestore_id: Scalars['ID'];
+  icon?: InputMaybe<Scalars['String']>;
   methodology?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   origin: VariableOrigin;
@@ -925,6 +955,7 @@ export type UpdateVariableInput = {
   timeseries: Scalars['Boolean'];
   type: VariableType;
   units?: InputMaybe<Scalars['String']>;
+  variableRepresentation?: InputMaybe<VariableRepresentation>;
 };
 
 export type UpdateVariablePermissions = {
@@ -1334,6 +1365,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
   UpdateCenotePermissions: UpdateCenotePermissions;
+  UpdateMofInput: UpdateMofInput;
   UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
   UpdateVariablePermissions: UpdateVariablePermissions;
@@ -1412,6 +1444,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   URL: Scalars['URL'];
   UpdateCenotePermissions: UpdateCenotePermissions;
+  UpdateMofInput: UpdateMofInput;
   UpdateUserInfoInput: UpdateUserInfoInput;
   UpdateVariableInput: UpdateVariableInput;
   UpdateVariablePermissions: UpdateVariablePermissions;
@@ -1645,6 +1678,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   removeFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateCenotePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateCenotePermissionsArgs, 'cenotePermissions' | 'userId'>>;
+  updateMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateMofArgs, 'update_mof_input'>>;
   updateReference?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<MutationUpdateReferenceArgs, 'id' | 'updated_reference'>>;
   updateUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, 'userId' | 'userInfo'>>;
   updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'firestore_id' | 'updated_variable'>>;
@@ -1673,6 +1707,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  getCategoriesByTheme?: Resolver<Array<ResolversTypes['VariableCategory']>, ParentType, ContextType, RequireFields<QueryGetCategoriesByThemeArgs, 'theme'>>;
   getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
   getCenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
@@ -1690,6 +1725,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUsers?: Resolver<ResolversTypes['UserList'], ParentType, ContextType, Partial<QueryGetUsersArgs>>;
   getVariableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariableByIdArgs, 'id'>>;
   getVariables?: Resolver<ResolversTypes['VariableList'], ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
+  getVariablesByCategory?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariablesByCategoryArgs, 'category'>>;
   getVariablesByTheme?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
   layer?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<QueryLayerArgs, 'id'>>;
   layers?: Resolver<Maybe<Array<Maybe<ResolversTypes['MapLayer']>>>, ParentType, ContextType>;

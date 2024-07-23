@@ -5,13 +5,14 @@ export namespace MofModule {
   interface DefinedFields {
     MeasurementOrFact: 'timestamp' | 'value';
     VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
-    Mutation: 'createMof' | 'deleteMof';
+    Mutation: 'createMof' | 'deleteMof' | 'updateMof';
     Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote';
   };
   
   interface DefinedInputFields {
     NewMeasurementOrFactInput: 'variableId' | 'cenoteId' | 'timestamp' | 'value';
     DeleteMofInput: 'variableId' | 'cenoteId' | 'value' | 'timestamp';
+    UpdateMofInput: 'variableId' | 'cenoteId' | 'oldValue' | 'oldTimestamp' | 'value' | 'timestamp';
   };
   
   export type MeasurementOrFact = Pick<Types.MeasurementOrFact, DefinedFields['MeasurementOrFact']>;
@@ -19,6 +20,7 @@ export namespace MofModule {
   export type VariableRepresentation = Types.VariableRepresentation;
   export type NewMeasurementOrFactInput = Pick<Types.NewMeasurementOrFactInput, DefinedInputFields['NewMeasurementOrFactInput']>;
   export type DeleteMofInput = Pick<Types.DeleteMofInput, DefinedInputFields['DeleteMofInput']>;
+  export type UpdateMofInput = Pick<Types.UpdateMofInput, DefinedInputFields['UpdateMofInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type VariableTheme = Types.VariableTheme;
@@ -65,6 +67,7 @@ export namespace MofModule {
       '*'?: gm.Middleware[];
       createMof?: gm.Middleware[];
       deleteMof?: gm.Middleware[];
+      updateMof?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];

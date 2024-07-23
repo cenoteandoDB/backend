@@ -17,4 +17,10 @@ export const QueryResolver: VariablesModule.Resolvers["Query"] = {
   getVariablesByTheme: (parent, args, contextValue, info) => {
     return variablesProvider.getVariablesByTheme(args.theme);
   },
+  getVariablesByCategory: (parent, args, contextValue, info) => {
+    return variablesProvider.getVariablesByCategory(args.category);
+  },
+  getCategoriesByTheme: (parent, args, contextValue, info) => {
+    return variablesProvider.getCategoriesByTheme(args.theme);
+  },
 };
