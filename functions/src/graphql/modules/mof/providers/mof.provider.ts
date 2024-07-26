@@ -10,6 +10,7 @@ import {
   DeleteMofInput,
   UpdateMofInput,
   VariableRepresentation,
+  MofByCategory,
 } from "../../../generated-types/graphql";
 import { VariableProvider } from "../../variables/providers/variable.provider";
 import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
@@ -26,13 +27,14 @@ export class MofProvider {
    * @param {ID} cenoteId of the cenote to get MoF
    * @param {VariableTheme} theme of the cenote to get MoF
    *
-   * @return {Promise<VariableWithData[]>} list of MoF
+   * @return {Promise<MofByCategory[]>} list of MoF of a theme grouped by category
    */
   async cenoteDataByTheme(
     cenoteId: ID,
     theme: VariableTheme,
-  ): Promise<VariableWithData[]> {
-    const data: VariableWithData[] = [];
+  ): Promise<MofByCategory[]> {
+    const data: { [category: string]: VariableWithData[]} = {};
+
     const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
     const mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
 
@@ -40,10 +42,15 @@ export class MofProvider {
       const variableSnapshot = await variableDB.doc(mof.variableId).get();
       const variable = variableSnapshot.data() as Variable;
       if (variable.theme == theme) {
-        data.push(mof);
+        if (!data[variable.category]) {
+          data[variable.category] = [];
+        }
+        data[variable.category].push(mof);
       }
     }
-    return data;
+
+    // map results to MofByCategory list
+    return Object.keys(data).map((category) => ({category,mofs: data[category]}));
   }
 
   /**
