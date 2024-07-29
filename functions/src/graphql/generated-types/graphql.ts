@@ -370,6 +370,12 @@ export type MeasurementOrFact = {
   value: Scalars['String'];
 };
 
+export type MofByCategory = {
+  __typename?: 'MofByCategory';
+  category: Scalars['String'];
+  mofs: Array<VariableWithData>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addFavouriteCenote?: Maybe<Scalars['Boolean']>;
@@ -655,7 +661,7 @@ export type Query = {
   cenotesCsv?: Maybe<Scalars['String']>;
   getCategoriesByTheme: Array<VariableCategory>;
   getCenoteData?: Maybe<Array<VariableWithData>>;
-  getCenoteDataByTheme?: Maybe<Array<VariableWithData>>;
+  getCenoteDataByTheme: Array<MofByCategory>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
   getCenotes: CenoteList;
   getReferenceById?: Maybe<Reference>;
@@ -1341,6 +1347,7 @@ export type ResolversTypes = {
   MapLayer: ResolverTypeWrapper<MapLayer>;
   MapLayerInput: MapLayerInput;
   MeasurementOrFact: ResolverTypeWrapper<MeasurementOrFact>;
+  MofByCategory: ResolverTypeWrapper<MofByCategory>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1422,6 +1429,7 @@ export type ResolversParentTypes = {
   MapLayer: MapLayer;
   MapLayerInput: MapLayerInput;
   MeasurementOrFact: MeasurementOrFact;
+  MofByCategory: MofByCategory;
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1655,6 +1663,12 @@ export type MeasurementOrFactResolvers<ContextType = any, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MofByCategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['MofByCategory'] = ResolversParentTypes['MofByCategory']> = {
+  category?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mofs?: Resolver<Array<ResolversTypes['VariableWithData']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
   create?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<MutationCreateArgs, 'input'>>;
@@ -1709,7 +1723,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   getCategoriesByTheme?: Resolver<Array<ResolversTypes['VariableCategory']>, ParentType, ContextType, RequireFields<QueryGetCategoriesByThemeArgs, 'theme'>>;
   getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
-  getCenoteDataByTheme?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
+  getCenoteDataByTheme?: Resolver<Array<ResolversTypes['MofByCategory']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
   getReferenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryGetReferenceByIdArgs, 'id'>>;
@@ -1965,6 +1979,7 @@ export type Resolvers<ContextType = any> = {
   Longitude?: GraphQLScalarType;
   MapLayer?: MapLayerResolvers<ContextType>;
   MeasurementOrFact?: MeasurementOrFactResolvers<ContextType>;
+  MofByCategory?: MofByCategoryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   ProfileData?: ProfileDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
