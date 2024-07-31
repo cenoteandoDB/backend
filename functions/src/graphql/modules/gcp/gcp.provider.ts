@@ -47,7 +47,8 @@ export const StorageProvider = {
 };
 
 const getSignedUrls = async (prefix: string): Promise<string[]> => {
-  const [files] = await storage.bucket(bucketName).getFiles({ prefix });
+  let [files] = await storage.bucket(bucketName).getFiles({ prefix });
+  files = files.filter(file => !file.name.endsWith('/'));
 
   const signedUrls = [];
 
