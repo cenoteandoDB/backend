@@ -659,6 +659,7 @@ export type Query = {
   cenoteById?: Maybe<Cenote>;
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
+  generateCenotePhotoUploadUrl: Scalars['String'];
   getCategoriesByTheme: Array<VariableCategory>;
   getCenoteData?: Maybe<Array<VariableWithData>>;
   getCenoteDataByTheme: Array<MofByCategory>;
@@ -693,6 +694,13 @@ export type QueryAuditLogsArgs = {
 
 export type QueryCenoteByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGenerateCenotePhotoUploadUrlArgs = {
+  cenoteId: Scalars['ID'];
+  contentType: Scalars['String'];
+  photoName: Scalars['String'];
 };
 
 
@@ -1721,6 +1729,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenoteById?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<QueryCenoteByIdArgs, 'id'>>;
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  generateCenotePhotoUploadUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryGenerateCenotePhotoUploadUrlArgs, 'cenoteId' | 'contentType' | 'photoName'>>;
   getCategoriesByTheme?: Resolver<Array<ResolversTypes['VariableCategory']>, ParentType, ContextType, RequireFields<QueryGetCategoriesByThemeArgs, 'theme'>>;
   getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
   getCenoteDataByTheme?: Resolver<Array<ResolversTypes['MofByCategory']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;

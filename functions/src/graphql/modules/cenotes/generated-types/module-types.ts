@@ -13,7 +13,7 @@ export namespace CenotesModule {
     CenoteSocialData: 'comments';
     Comment: 'commenter' | 'comment' | 'review';
     Mutation: 'createCenote' | 'updateCenote' | 'deleteCenote' | 'uploadPhoto' | 'uploadMap';
-    Query: 'getCenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds';
+    Query: 'getCenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds' | 'generateCenotePhotoUploadUrl';
   };
   
   interface DefinedEnumValues {
@@ -182,6 +182,7 @@ export namespace CenotesModule {
       cenoteById?: gm.Middleware[];
       cenotesCsv?: gm.Middleware[];
       cenotesBounds?: gm.Middleware[];
+      generateCenotePhotoUploadUrl?: gm.Middleware[];
     };
   };
 }

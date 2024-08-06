@@ -1,3 +1,4 @@
+import { StorageProvider } from "../../gcp/gcp.provider";
 import { CenotesModule } from "../generated-types/module-types";
 import { CenotesProvider } from "../providers/cenotes.provider";
 
@@ -18,5 +19,10 @@ export const QueryResolver: CenotesModule.Resolvers["Query"] = {
 
   cenotesCsv: () => {
     return cenotesProvider.cenotesToCsv();
+  },
+
+  generateCenotePhotoUploadUrl: (parent, args, contextValue, info) => {
+    return StorageProvider
+      .generateCenotePhotoUploadUrl(args.cenoteId, args.photoName, args.contentType);
   },
 };

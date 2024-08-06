@@ -44,6 +44,13 @@ export const StorageProvider = {
     const result = await getSignedUrls(`references/${name}.pdf`);
     return result.at(0)!;
   },
+  generateCenotePhotoUploadUrl: async (cenoteId: string, 
+                                      photoName: string, 
+                                      contentType: string): Promise<string> => {
+    const fileName = `photos/${cenoteId}/${photoName}`
+    
+    return generateUploadUrl(fileName, contentType);
+  }
 };
 
 const getSignedUrls = async (prefix: string): Promise<string[]> => {
@@ -86,3 +93,18 @@ const uploadFile = async (
 
   return true;
 };
+
+const generateUploadUrl = async (fileName: string, contentType: string): Promise<string> => {
+  const bucket = storage.bucket(bucketName);
+
+  const [url] = await bucket
+    .file(fileName)
+    .getSignedUrl({
+      action: 'write',
+      version: 'v4',
+      contentType: contentType,
+      expires: Date.now() + 15 * 60 * 1000,
+    });
+
+  return url;
+}
