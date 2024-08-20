@@ -4,18 +4,17 @@ import { db } from "../../database/db";
 import {
   VariableTheme,
   VariableWithData,
-  NewMeasurementOrFactInput,
   MeasurementOrFact,
   Variable,
-  DeleteMofInput,
-  UpdateMofInput,
   VariableRepresentation,
   MofByCategory,
+  MofModificationRequest,
 } from "../../../generated-types/graphql";
 import { VariableProvider } from "../../variables/providers/variable.provider";
 import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
 
 const mofDB = db.mofs;
+const requestMofModificationDB = db.requestMofsModification;
 const variableDB = db.variables;
 const cenoteProvider = new CenotesProvider();
 const variableProvider = new VariableProvider();
@@ -88,6 +87,43 @@ export class MofProvider {
     return mof.docs[0].data() as VariableWithData;
   }
 
+  async requestMofModification(request: MofModificationRequest): Promise<boolean> {
+    if (!cenoteProvider.cenoteExistsByCenoteandoId(request.cenoteId)) {
+      throw new Error(`Cenote with cenoteando id ${request.cenoteId} doesn't exist.`);
+    }
+
+    const docRef = requestMofModificationDB.doc();
+    await docRef.set({
+      firestore_id: docRef.id,
+      createdAt: new Date().toISOString(),
+      ...request,
+    });
+
+    return true;
+  }
+
+  async acceptMofRequest(requestMofCreateId: string): Promise<boolean> {
+    const requestDoc = await requestMofModificationDB.doc(requestMofCreateId).get();
+    const requestCreateMof = requestDoc.data() as MofModificationRequest;
+
+    switch (requestCreateMof.type) {
+      case "CREATE": {
+        return this.createMoF(requestCreateMof);
+      }
+      case "UPDATE": {
+        return this.updateMoF(requestCreateMof);
+      }
+      case "DELETE": {
+        return this.deleteMoF(requestCreateMof);
+      }
+    }
+  }
+
+  async rejectMofRequest(requestMofCreateId: string): Promise<boolean> {
+    await requestMofModificationDB.doc(requestMofCreateId).delete();
+    return true;
+  }
+
   /**
    * Creates a Measurement or Fact.
    * If MoF bucket doesn't yet exist, creates new one.
@@ -96,37 +132,28 @@ export class MofProvider {
    * @param {NewMeasurementOrFactInput} newMof new MoF with
    * value and timestamp
    *
-   * @return {Promise<VariableWithData>} the new MoF
+   * @return {Promise<boolean>} the new MoF
    */
-  async createMoF(newMof: NewMeasurementOrFactInput,): Promise<VariableWithData> {
-    if (!cenoteProvider.cenoteExistsByCenoteandoId(newMof.cenoteId)) {
-      throw new Error(`Cenote with cenoteando id ${newMof.cenoteId} doesn't exist.`);
-    }
-
+  async createMoF(requestCreateMof: MofModificationRequest): Promise<boolean> {
     const doc = await mofDB
-      .where("cenoteId", "==", newMof.cenoteId)
-      .where("variableId", "==", newMof.variableId)
-      .get();
-
-    const mof: MeasurementOrFact = {
-      value: newMof.value,
-      timestamp: new Date(newMof.timestamp).toISOString(),
-    };
+      .where("cenoteId", "==", requestCreateMof.cenoteId)
+      .where("variableId", "==", requestCreateMof.variableId)
+      .get();  
 
     if (doc.empty) {
-      return await this.createMofBucket(newMof.variableId, mof, newMof);
+      await this.createMofBucket(requestCreateMof);
     } else {
       const bucket = doc.docs[0].data() as VariableWithData;
-      return await this.addMof(bucket, mof);
+      await this.addMof(bucket, requestCreateMof.mof);
     }
+
+    return true;
   }
 
   private async createMofBucket(
-    variableId: string,
-    mof: MeasurementOrFact,
-    input: NewMeasurementOrFactInput,
+    mofCreationRequest: MofModificationRequest,
   ): Promise<VariableWithData> {
-    const variable = await variableProvider.getVariableById(variableId);
+    const variable = await variableProvider.getVariableById(mofCreationRequest.variableId);
     const variableIcon = variable.icon ? variable.icon : "";
     const variableRepresentation = variable.variableRepresentation ?
       variable.variableRepresentation : "TEXT";
@@ -135,15 +162,15 @@ export class MofProvider {
     const docRef = mofDB.doc();
     await docRef.set({
       id: docRef.id,
-      cenoteId: input.cenoteId,
-      variableId: input.variableId,
+      cenoteId: mofCreationRequest.cenoteId,
+      variableId: mofCreationRequest.variableId,
       variableName: variable.name,
       variableIcon: variableIcon,
       variableRepresentation: variableRepresentation,
       variableUnits: variableUnits,
-      measurements: [mof],
-      firstTimestamp: new Date(input.timestamp).toISOString(),
-      lastTimestamp: new Date(input.timestamp).toISOString(),
+      measurements: [mofCreationRequest.mof],
+      firstTimestamp: mofCreationRequest.mof.timestamp,
+      lastTimestamp: mofCreationRequest.mof.timestamp,
     });
 
     const snapshot = await mofDB.doc(docRef.id).get();
@@ -180,10 +207,10 @@ export class MofProvider {
    *
    * @return {Promise<VariableWithData>} the new MoF
    */
-  async deleteMoF(deletMofInput: DeleteMofInput): Promise<boolean> {
+  async deleteMoF(requestDeleteMof: MofModificationRequest): Promise<boolean> {
     const doc = await mofDB
-      .where("cenoteId", "==", deletMofInput.cenoteId)
-      .where("variableId", "==", deletMofInput.variableId)
+      .where("cenoteId", "==", requestDeleteMof.cenoteId)
+      .where("variableId", "==", requestDeleteMof.variableId)
       .get();
 
     if (!doc.empty) {
@@ -192,8 +219,8 @@ export class MofProvider {
 
       const mofs = bucket.measurements.filter(
         (mof: any) =>
-          mof.timestamp !== deletMofInput.timestamp.toISOString() &&
-          mof.value !== deletMofInput.value,
+          mof.timestamp !== requestDeleteMof.mof.timestamp &&
+          mof.value !== requestDeleteMof.mof.value,
       );
 
       if (mofs.length == 0) {
@@ -254,14 +281,14 @@ export class MofProvider {
    * Uses the old value and old timestamp to identify the MoF to be updated. After updating a value,
    * updates the first and last timestamp if needed
    *
-   * @param {UpdateMofInput} deletMofInput MoF to delete
+   * @param {string} updateMofRequestId MoF to delete
    *
    * @return {Promise<boolean>} if the update succeded
    */
-  async updateMoF(updateMofInput: UpdateMofInput): Promise<boolean> {
+  async updateMoF(requestUpdateMof: MofModificationRequest): Promise<boolean> {
     const doc = await mofDB
-      .where("cenoteId", "==", updateMofInput.cenoteId)
-      .where("variableId", "==", updateMofInput.variableId)
+      .where("cenoteId", "==", requestUpdateMof.cenoteId)
+      .where("variableId", "==", requestUpdateMof.variableId)
       .get();
 
     if (doc.empty) {
@@ -274,10 +301,12 @@ export class MofProvider {
     let modified = false;
     const measurements = bucket.measurements.map(
       (mof: MeasurementOrFact) => {
-        if (mof.timestamp == updateMofInput.oldTimestamp.toISOString() &&
-          mof.value == updateMofInput.oldValue) {
+        if (mof.timestamp == requestUpdateMof.old_mof?.timestamp &&
+          mof.value == requestUpdateMof.old_mof?.value) {
           modified = true;
-          return {timestamp: updateMofInput.timestamp.toISOString(), value: updateMofInput.value};
+          return {
+            timestamp: requestUpdateMof.mof.timestamp, 
+            value: requestUpdateMof.mof.value};
         } else {
           return mof;
         }
