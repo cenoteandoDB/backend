@@ -9,6 +9,7 @@ export const db = {
   references: admin.firestore().collection("references_test"),
   map_layers: admin.firestore().collection("map_layers"),
   mofs: admin.firestore().collection("mof_test"),
+  requestMofsModification: admin.firestore().collection("mof_request_modification"),
   audit_logs: admin.firestore().collection("audit_logs"),
   cenotes_species: admin.firestore().collection("audit_logs"),
   registration_code: admin.firestore().collection("registration_code"),

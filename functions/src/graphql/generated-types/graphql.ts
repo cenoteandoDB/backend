@@ -376,16 +376,24 @@ export type MofByCategory = {
   mofs: Array<VariableWithData>;
 };
 
+export type MofModificationRequest = {
+  __typename?: 'MofModificationRequest';
+  cenoteId: Scalars['ID'];
+  mof: MeasurementOrFact;
+  old_mof?: Maybe<MeasurementOrFact>;
+  type: RequestType;
+  variableId: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  acceptMofRequest?: Maybe<Scalars['Boolean']>;
   addFavouriteCenote?: Maybe<Scalars['Boolean']>;
   create?: Maybe<MapLayer>;
   createCenote?: Maybe<Cenote>;
-  createMof?: Maybe<VariableWithData>;
   createReference?: Maybe<Reference>;
   createVariable?: Maybe<Variable>;
   deleteCenote?: Maybe<Scalars['Boolean']>;
-  deleteMof?: Maybe<Scalars['Boolean']>;
   deleteReference?: Maybe<Scalars['Boolean']>;
   deleteUser: Scalars['Boolean'];
   deleteVariable: Scalars['Boolean'];
@@ -397,16 +405,24 @@ export type Mutation = {
   registerStudent?: Maybe<User>;
   registerTeacher?: Maybe<User>;
   registerTourist?: Maybe<User>;
+  rejectMofRequest?: Maybe<Scalars['Boolean']>;
   removeFavouriteCenote?: Maybe<Scalars['Boolean']>;
+  requestCreateMof?: Maybe<Scalars['Boolean']>;
+  requestDeleteMof?: Maybe<Scalars['Boolean']>;
+  requestUpdateMof?: Maybe<Scalars['Boolean']>;
   updateCenote?: Maybe<Cenote>;
   updateCenotePermissions?: Maybe<User>;
-  updateMof?: Maybe<Scalars['Boolean']>;
   updateReference?: Maybe<Reference>;
   updateUserInfo?: Maybe<User>;
   updateVariable?: Maybe<Variable>;
   updateVariablePermissions?: Maybe<User>;
   uploadMap?: Maybe<Scalars['Boolean']>;
   uploadPhoto?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationAcceptMofRequestArgs = {
+  update_mof_id: Scalars['ID'];
 };
 
 
@@ -426,11 +442,6 @@ export type MutationCreateCenoteArgs = {
 };
 
 
-export type MutationCreateMofArgs = {
-  new_mof: NewMeasurementOrFactInput;
-};
-
-
 export type MutationCreateReferenceArgs = {
   new_reference: NewReferenceInput;
 };
@@ -443,11 +454,6 @@ export type MutationCreateVariableArgs = {
 
 export type MutationDeleteCenoteArgs = {
   id: Scalars['ID'];
-};
-
-
-export type MutationDeleteMofArgs = {
-  delete_mof_input: DeleteMofInput;
 };
 
 
@@ -514,9 +520,29 @@ export type MutationRegisterTouristArgs = {
 };
 
 
+export type MutationRejectMofRequestArgs = {
+  update_mof_id: Scalars['ID'];
+};
+
+
 export type MutationRemoveFavouriteCenoteArgs = {
   cenoteId: Scalars['ID'];
   userId: Scalars['ID'];
+};
+
+
+export type MutationRequestCreateMofArgs = {
+  new_mof: NewMeasurementOrFactInput;
+};
+
+
+export type MutationRequestDeleteMofArgs = {
+  delete_mof_input: DeleteMofInput;
+};
+
+
+export type MutationRequestUpdateMofArgs = {
+  update_mof_input: UpdateMofInput;
 };
 
 
@@ -528,11 +554,6 @@ export type MutationUpdateCenoteArgs = {
 export type MutationUpdateCenotePermissionsArgs = {
   cenotePermissions: UpdateCenotePermissions;
   userId: Scalars['String'];
-};
-
-
-export type MutationUpdateMofArgs = {
-  update_mof_input: UpdateMofInput;
 };
 
 
@@ -902,6 +923,11 @@ export type RegisterUserInput = {
   phone?: InputMaybe<Scalars['String']>;
   surname: Scalars['String'];
 };
+
+export type RequestType =
+  | 'CREATE'
+  | 'DELETE'
+  | 'UPDATE';
 
 export type SortField = {
   field: Scalars['String'];
@@ -1356,6 +1382,7 @@ export type ResolversTypes = {
   MapLayerInput: MapLayerInput;
   MeasurementOrFact: ResolverTypeWrapper<MeasurementOrFact>;
   MofByCategory: ResolverTypeWrapper<MofByCategory>;
+  MofModificationRequest: ResolverTypeWrapper<MofModificationRequest>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1373,6 +1400,7 @@ export type ResolversTypes = {
   RegisterStudentInput: RegisterStudentInput;
   RegisterTouristInput: RegisterTouristInput;
   RegisterUserInput: RegisterUserInput;
+  RequestType: RequestType;
   SortField: SortField;
   SortOrder: SortOrder;
   Species: ResolverTypeWrapper<Species>;
@@ -1438,6 +1466,7 @@ export type ResolversParentTypes = {
   MapLayerInput: MapLayerInput;
   MeasurementOrFact: MeasurementOrFact;
   MofByCategory: MofByCategory;
+  MofModificationRequest: MofModificationRequest;
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1677,15 +1706,23 @@ export type MofByCategoryResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MofModificationRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['MofModificationRequest'] = ResolversParentTypes['MofModificationRequest']> = {
+  cenoteId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  mof?: Resolver<ResolversTypes['MeasurementOrFact'], ParentType, ContextType>;
+  old_mof?: Resolver<Maybe<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['RequestType'], ParentType, ContextType>;
+  variableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  acceptMofRequest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAcceptMofRequestArgs, 'update_mof_id'>>;
   addFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
   create?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<MutationCreateArgs, 'input'>>;
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
-  createMof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<MutationCreateMofArgs, 'new_mof'>>;
   createReference?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<MutationCreateReferenceArgs, 'new_reference'>>;
   createVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationCreateVariableArgs, 'new_variable'>>;
   deleteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCenoteArgs, 'id'>>;
-  deleteMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMofArgs, 'delete_mof_input'>>;
   deleteReference?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteReferenceArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'userId'>>;
   deleteVariable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteVariableArgs, 'id'>>;
@@ -1697,10 +1734,13 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   registerStudent?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterStudentArgs, 'profileData' | 'userInfo'>>;
   registerTeacher?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterTeacherArgs, 'profileData' | 'userInfo'>>;
   registerTourist?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterTouristArgs, 'profileData' | 'userInfo'>>;
+  rejectMofRequest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRejectMofRequestArgs, 'update_mof_id'>>;
   removeFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
+  requestCreateMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRequestCreateMofArgs, 'new_mof'>>;
+  requestDeleteMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRequestDeleteMofArgs, 'delete_mof_input'>>;
+  requestUpdateMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRequestUpdateMofArgs, 'update_mof_input'>>;
   updateCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationUpdateCenoteArgs, 'updated_cenote'>>;
   updateCenotePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateCenotePermissionsArgs, 'cenotePermissions' | 'userId'>>;
-  updateMof?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateMofArgs, 'update_mof_input'>>;
   updateReference?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<MutationUpdateReferenceArgs, 'id' | 'updated_reference'>>;
   updateUserInfo?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, 'userId' | 'userInfo'>>;
   updateVariable?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<MutationUpdateVariableArgs, 'firestore_id' | 'updated_variable'>>;
@@ -1989,6 +2029,7 @@ export type Resolvers<ContextType = any> = {
   MapLayer?: MapLayerResolvers<ContextType>;
   MeasurementOrFact?: MeasurementOrFactResolvers<ContextType>;
   MofByCategory?: MofByCategoryResolvers<ContextType>;
+  MofModificationRequest?: MofModificationRequestResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   ProfileData?: ProfileDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

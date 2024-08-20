@@ -25,7 +25,9 @@ input UpdateMofInput {
 }
 
 type Mutation {
-  createMof(new_mof: NewMeasurementOrFactInput!): VariableWithData
-  deleteMof(delete_mof_input: DeleteMofInput!): Boolean
-  updateMof(update_mof_input: UpdateMofInput!): Boolean
+  requestCreateMof(new_mof: NewMeasurementOrFactInput!): Boolean
+  requestDeleteMof(delete_mof_input: DeleteMofInput!): Boolean
+  requestUpdateMof(update_mof_input: UpdateMofInput!): Boolean
+  acceptMofRequest(update_mof_id: ID!): Boolean
+  rejectMofRequest(update_mof_id: ID!): Boolean  
 }
