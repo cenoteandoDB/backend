@@ -379,6 +379,7 @@ export type MofByCategory = {
 export type MofModificationRequest = {
   __typename?: 'MofModificationRequest';
   cenoteId: Scalars['ID'];
+  firestore_id?: Maybe<Scalars['ID']>;
   mof: MeasurementOrFact;
   old_mof?: Maybe<MeasurementOrFact>;
   type: RequestType;
@@ -686,6 +687,7 @@ export type Query = {
   getCenoteDataByTheme: Array<MofByCategory>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
   getCenotes: CenoteList;
+  getMofModificationRequests: Array<MofModificationRequest>;
   getReferenceById?: Maybe<Reference>;
   getReferences: ReferenceList;
   getSpecies: SpeciesList;
@@ -1708,6 +1710,7 @@ export type MofByCategoryResolvers<ContextType = any, ParentType extends Resolve
 
 export type MofModificationRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['MofModificationRequest'] = ResolversParentTypes['MofModificationRequest']> = {
   cenoteId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  firestore_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   mof?: Resolver<ResolversTypes['MeasurementOrFact'], ParentType, ContextType>;
   old_mof?: Resolver<Maybe<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['RequestType'], ParentType, ContextType>;
@@ -1775,6 +1778,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getCenoteDataByTheme?: Resolver<Array<ResolversTypes['MofByCategory']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
+  getMofModificationRequests?: Resolver<Array<ResolversTypes['MofModificationRequest']>, ParentType, ContextType>;
   getReferenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryGetReferenceByIdArgs, 'id'>>;
   getReferences?: Resolver<ResolversTypes['ReferenceList'], ParentType, ContextType, Partial<QueryGetReferencesArgs>>;
   getSpecies?: Resolver<ResolversTypes['SpeciesList'], ParentType, ContextType, Partial<QueryGetSpeciesArgs>>;

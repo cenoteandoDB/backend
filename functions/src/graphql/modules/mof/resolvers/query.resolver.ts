@@ -19,4 +19,8 @@ export const QueryResolver: MofModule.Resolvers["Query"] = {
   getThemesByCenote: (parent, args, contextValue, info) => {
     return mofProvider.getThemesByCenote(args.cenoteId);
   },
+
+  getMofModificationRequests: (parent, args, contextValue, info) => {
+    return mofProvider.getMofModificationRequests();
+  },
 };

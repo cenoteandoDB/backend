@@ -6,9 +6,9 @@ export namespace MofModule {
     MeasurementOrFact: 'timestamp' | 'value';
     VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
     MofByCategory: 'category' | 'mofs';
-    MofModificationRequest: 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof';
+    MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof';
     Mutation: 'requestCreateMof' | 'requestDeleteMof' | 'requestUpdateMof' | 'acceptMofRequest' | 'rejectMofRequest';
-    Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote';
+    Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests';
   };
   
   interface DefinedEnumValues {
@@ -83,6 +83,7 @@ export namespace MofModule {
     };
     MofModificationRequest?: {
       '*'?: gm.Middleware[];
+      firestore_id?: gm.Middleware[];
       type?: gm.Middleware[];
       cenoteId?: gm.Middleware[];
       variableId?: gm.Middleware[];
@@ -103,6 +104,7 @@ export namespace MofModule {
       getCenoteDataByVariable?: gm.Middleware[];
       getCenoteData?: gm.Middleware[];
       getThemesByCenote?: gm.Middleware[];
+      getMofModificationRequests?: gm.Middleware[];
     };
   };
 }
