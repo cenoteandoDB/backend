@@ -3,4 +3,6 @@ type Query {
   getCenoteDataByVariable(cenoteId: ID!, variableId: ID!): VariableWithData
   getCenoteData(cenoteId: ID!): [VariableWithData!]
   getThemesByCenote(cenoteId: ID!): [String!]!
+  
+  getMofModificationRequests: [MofModificationRequest!]!
 }

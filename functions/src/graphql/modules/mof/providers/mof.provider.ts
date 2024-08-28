@@ -276,6 +276,12 @@ export class MofProvider {
     return themes;
   }
 
+  async getMofModificationRequests(): Promise<MofModificationRequest[]> {
+    const mofModificationRequests = await requestMofModificationDB.get();
+
+    return mofModificationRequests.docs.map((doc: any) => doc.data() as MofModificationRequest);
+  }
+
   /**
    * Update a Measurement or Fact of a cenote.
    * Uses the old value and old timestamp to identify the MoF to be updated. After updating a value,
