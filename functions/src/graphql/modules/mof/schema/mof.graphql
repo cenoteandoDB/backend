@@ -37,4 +37,7 @@ type MofModificationRequest {
   variableId: ID!
   mof: MeasurementOrFact!
   old_mof: MeasurementOrFact
+  
+  cenoteName: String
+  variableCategory: VariableCategory
 }
