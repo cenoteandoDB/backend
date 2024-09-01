@@ -6,7 +6,7 @@ export namespace MofModule {
     MeasurementOrFact: 'timestamp' | 'value';
     VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
     MofByCategory: 'category' | 'mofs';
-    MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof';
+    MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof' | 'cenoteName' | 'variableCategory';
     Mutation: 'requestCreateMof' | 'requestDeleteMof' | 'requestUpdateMof' | 'acceptMofRequest' | 'rejectMofRequest';
     Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests';
   };
@@ -27,6 +27,7 @@ export namespace MofModule {
   export type MofByCategory = Pick<Types.MofByCategory, DefinedFields['MofByCategory']>;
   export type RequestType = DefinedEnumValues['RequestType'];
   export type MofModificationRequest = Pick<Types.MofModificationRequest, DefinedFields['MofModificationRequest']>;
+  export type VariableCategory = Types.VariableCategory;
   export type NewMeasurementOrFactInput = Pick<Types.NewMeasurementOrFactInput, DefinedInputFields['NewMeasurementOrFactInput']>;
   export type DeleteMofInput = Pick<Types.DeleteMofInput, DefinedInputFields['DeleteMofInput']>;
   export type UpdateMofInput = Pick<Types.UpdateMofInput, DefinedInputFields['UpdateMofInput']>;
@@ -89,6 +90,8 @@ export namespace MofModule {
       variableId?: gm.Middleware[];
       mof?: gm.Middleware[];
       old_mof?: gm.Middleware[];
+      cenoteName?: gm.Middleware[];
+      variableCategory?: gm.Middleware[];
     };
     Mutation?: {
       '*'?: gm.Middleware[];

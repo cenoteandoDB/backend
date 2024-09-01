@@ -379,10 +379,12 @@ export type MofByCategory = {
 export type MofModificationRequest = {
   __typename?: 'MofModificationRequest';
   cenoteId: Scalars['ID'];
+  cenoteName?: Maybe<Scalars['String']>;
   firestore_id?: Maybe<Scalars['ID']>;
   mof: MeasurementOrFact;
   old_mof?: Maybe<MeasurementOrFact>;
   type: RequestType;
+  variableCategory?: Maybe<VariableCategory>;
   variableId: Scalars['ID'];
 };
 
@@ -1710,10 +1712,12 @@ export type MofByCategoryResolvers<ContextType = any, ParentType extends Resolve
 
 export type MofModificationRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['MofModificationRequest'] = ResolversParentTypes['MofModificationRequest']> = {
   cenoteId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  cenoteName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   firestore_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   mof?: Resolver<ResolversTypes['MeasurementOrFact'], ParentType, ContextType>;
   old_mof?: Resolver<Maybe<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['RequestType'], ParentType, ContextType>;
+  variableCategory?: Resolver<Maybe<ResolversTypes['VariableCategory']>, ParentType, ContextType>;
   variableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

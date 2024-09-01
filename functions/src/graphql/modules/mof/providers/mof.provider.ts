@@ -88,14 +88,15 @@ export class MofProvider {
   }
 
   async requestMofModification(request: MofModificationRequest): Promise<boolean> {
-    if (!cenoteProvider.cenoteExistsByCenoteandoId(request.cenoteId)) {
-      throw new Error(`Cenote with cenoteando id ${request.cenoteId} doesn't exist.`);
-    }
+    const cenote = await cenoteProvider.getCenoteById(request.cenoteId);
+    const variable = await variableProvider.getVariableById(request.variableId);
 
     const docRef = requestMofModificationDB.doc();
     await docRef.set({
       firestore_id: docRef.id,
       createdAt: new Date().toISOString(),
+      cenoteName: cenote.name,
+      variableCategory: variable.category,
       ...request,
     });
 
