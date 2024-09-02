@@ -380,12 +380,20 @@ export type MofModificationRequest = {
   __typename?: 'MofModificationRequest';
   cenoteId: Scalars['ID'];
   cenoteName?: Maybe<Scalars['String']>;
+  creator?: Maybe<Scalars['String']>;
+  creatorId?: Maybe<Scalars['String']>;
   firestore_id?: Maybe<Scalars['ID']>;
   mof: MeasurementOrFact;
   old_mof?: Maybe<MeasurementOrFact>;
   type: RequestType;
   variableCategory?: Maybe<VariableCategory>;
   variableId: Scalars['ID'];
+};
+
+export type MofModificationRequestList = {
+  __typename?: 'MofModificationRequestList';
+  mofModificationRequests: Array<MofModificationRequest>;
+  totalCount: Scalars['Int'];
 };
 
 export type Mutation = {
@@ -689,7 +697,7 @@ export type Query = {
   getCenoteDataByTheme: Array<MofByCategory>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
   getCenotes: CenoteList;
-  getMofModificationRequests: Array<MofModificationRequest>;
+  getMofModificationRequests: MofModificationRequestList;
   getReferenceById?: Maybe<Reference>;
   getReferences: ReferenceList;
   getSpecies: SpeciesList;
@@ -1387,6 +1395,7 @@ export type ResolversTypes = {
   MeasurementOrFact: ResolverTypeWrapper<MeasurementOrFact>;
   MofByCategory: ResolverTypeWrapper<MofByCategory>;
   MofModificationRequest: ResolverTypeWrapper<MofModificationRequest>;
+  MofModificationRequestList: ResolverTypeWrapper<MofModificationRequestList>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1471,6 +1480,7 @@ export type ResolversParentTypes = {
   MeasurementOrFact: MeasurementOrFact;
   MofByCategory: MofByCategory;
   MofModificationRequest: MofModificationRequest;
+  MofModificationRequestList: MofModificationRequestList;
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1713,12 +1723,20 @@ export type MofByCategoryResolvers<ContextType = any, ParentType extends Resolve
 export type MofModificationRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['MofModificationRequest'] = ResolversParentTypes['MofModificationRequest']> = {
   cenoteId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   cenoteName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creator?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creatorId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   firestore_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   mof?: Resolver<ResolversTypes['MeasurementOrFact'], ParentType, ContextType>;
   old_mof?: Resolver<Maybe<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['RequestType'], ParentType, ContextType>;
   variableCategory?: Resolver<Maybe<ResolversTypes['VariableCategory']>, ParentType, ContextType>;
   variableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MofModificationRequestListResolvers<ContextType = any, ParentType extends ResolversParentTypes['MofModificationRequestList'] = ResolversParentTypes['MofModificationRequestList']> = {
+  mofModificationRequests?: Resolver<Array<ResolversTypes['MofModificationRequest']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1782,7 +1800,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getCenoteDataByTheme?: Resolver<Array<ResolversTypes['MofByCategory']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
-  getMofModificationRequests?: Resolver<Array<ResolversTypes['MofModificationRequest']>, ParentType, ContextType>;
+  getMofModificationRequests?: Resolver<ResolversTypes['MofModificationRequestList'], ParentType, ContextType>;
   getReferenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryGetReferenceByIdArgs, 'id'>>;
   getReferences?: Resolver<ResolversTypes['ReferenceList'], ParentType, ContextType, Partial<QueryGetReferencesArgs>>;
   getSpecies?: Resolver<ResolversTypes['SpeciesList'], ParentType, ContextType, Partial<QueryGetSpeciesArgs>>;
@@ -2038,6 +2056,7 @@ export type Resolvers<ContextType = any> = {
   MeasurementOrFact?: MeasurementOrFactResolvers<ContextType>;
   MofByCategory?: MofByCategoryResolvers<ContextType>;
   MofModificationRequest?: MofModificationRequestResolvers<ContextType>;
+  MofModificationRequestList?: MofModificationRequestListResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   ProfileData?: ProfileDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

@@ -70,6 +70,7 @@ export function decodeToken(token: string): string {
 export function validateAuth(authorizationHeader: string): Promise<User> | null {
   const token = authorizationHeader.replace("Bearer ", "");
 
+  console.log(`TOken to process: ${token}`)
   const userId = decodeToken(token);
 
   try {
@@ -78,4 +79,18 @@ export function validateAuth(authorizationHeader: string): Promise<User> | null 
   } catch (error) {
     return null;
   }
+}
+
+/**
+ * Requires authenticated user to proceed request.
+ *
+ * @param {string} authorizationHeader the header with the authorization token
+ * @return {Promise<User>} the user
+ */
+export function requireAuth(authorizationHeader: string): Promise<User> {
+  const user = validateAuth(authorizationHeader);
+  if (user == null) {
+    throw Error("User not authenticated");
+  }
+  return user;
 }

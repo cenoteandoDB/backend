@@ -6,7 +6,8 @@ export namespace MofModule {
     MeasurementOrFact: 'timestamp' | 'value';
     VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
     MofByCategory: 'category' | 'mofs';
-    MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof' | 'cenoteName' | 'variableCategory';
+    MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof' | 'cenoteName' | 'variableCategory' | 'creator' | 'creatorId';
+    MofModificationRequestList: 'mofModificationRequests' | 'totalCount';
     Mutation: 'requestCreateMof' | 'requestDeleteMof' | 'requestUpdateMof' | 'acceptMofRequest' | 'rejectMofRequest';
     Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests';
   };
@@ -28,6 +29,7 @@ export namespace MofModule {
   export type RequestType = DefinedEnumValues['RequestType'];
   export type MofModificationRequest = Pick<Types.MofModificationRequest, DefinedFields['MofModificationRequest']>;
   export type VariableCategory = Types.VariableCategory;
+  export type MofModificationRequestList = Pick<Types.MofModificationRequestList, DefinedFields['MofModificationRequestList']>;
   export type NewMeasurementOrFactInput = Pick<Types.NewMeasurementOrFactInput, DefinedInputFields['NewMeasurementOrFactInput']>;
   export type DeleteMofInput = Pick<Types.DeleteMofInput, DefinedInputFields['DeleteMofInput']>;
   export type UpdateMofInput = Pick<Types.UpdateMofInput, DefinedInputFields['UpdateMofInput']>;
@@ -42,6 +44,7 @@ export namespace MofModule {
   export type VariableWithDataResolvers = Pick<Types.VariableWithDataResolvers, DefinedFields['VariableWithData'] | '__isTypeOf'>;
   export type MofByCategoryResolvers = Pick<Types.MofByCategoryResolvers, DefinedFields['MofByCategory'] | '__isTypeOf'>;
   export type MofModificationRequestResolvers = Pick<Types.MofModificationRequestResolvers, DefinedFields['MofModificationRequest'] | '__isTypeOf'>;
+  export type MofModificationRequestListResolvers = Pick<Types.MofModificationRequestListResolvers, DefinedFields['MofModificationRequestList'] | '__isTypeOf'>;
   export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields['Mutation']>;
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
   
@@ -50,6 +53,7 @@ export namespace MofModule {
     VariableWithData?: VariableWithDataResolvers;
     MofByCategory?: MofByCategoryResolvers;
     MofModificationRequest?: MofModificationRequestResolvers;
+    MofModificationRequestList?: MofModificationRequestListResolvers;
     Mutation?: MutationResolvers;
     Query?: QueryResolvers;
     DateTime?: Types.Resolvers['DateTime'];
@@ -92,6 +96,13 @@ export namespace MofModule {
       old_mof?: gm.Middleware[];
       cenoteName?: gm.Middleware[];
       variableCategory?: gm.Middleware[];
+      creator?: gm.Middleware[];
+      creatorId?: gm.Middleware[];
+    };
+    MofModificationRequestList?: {
+      '*'?: gm.Middleware[];
+      mofModificationRequests?: gm.Middleware[];
+      totalCount?: gm.Middleware[];
     };
     Mutation?: {
       '*'?: gm.Middleware[];

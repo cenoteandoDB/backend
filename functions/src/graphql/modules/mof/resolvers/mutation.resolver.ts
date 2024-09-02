@@ -1,11 +1,14 @@
 import { MofModificationRequest } from "../../../generated-types/graphql";
+import { requireAuth } from "../../../utils/auth";
 import { MofModule } from "../generated-types/module-types";
 import { MofProvider } from "../providers/mof.provider";
 
 const mofProvider = new MofProvider();
 
 export const MutationResolver: MofModule.Resolvers["Mutation"] = {
-  requestCreateMof: (parent, args, contextValue, info) => {
+  requestCreateMof: async (parent, args, contextValue, info) => {
+    const user = await requireAuth(contextValue.token);
+
     const createMofRequest: MofModificationRequest = {
       type: "CREATE",
       cenoteId: args.new_mof.cenoteId,
@@ -15,9 +18,10 @@ export const MutationResolver: MofModule.Resolvers["Mutation"] = {
         timestamp: new Date(args.new_mof.timestamp).toISOString()
       }
     }
-    return mofProvider.requestMofModification(createMofRequest);
+    return mofProvider.requestMofModification(createMofRequest, user);
   },
-  requestDeleteMof: (parent, args, contextValue, info) => {
+  requestDeleteMof: async (parent, args, contextValue, info) => {
+    const user = await requireAuth(contextValue.token);
     const deleteMofRequest: MofModificationRequest = {
       type: "DELETE",
       cenoteId: args.delete_mof_input.cenoteId,
@@ -27,9 +31,10 @@ export const MutationResolver: MofModule.Resolvers["Mutation"] = {
         timestamp: new Date(args.delete_mof_input.timestamp).toISOString()
       }
     }
-    return mofProvider.requestMofModification(deleteMofRequest);
+    return mofProvider.requestMofModification(deleteMofRequest, user);
   },
-  requestUpdateMof: (parent, args, contextValue, info) => {
+  requestUpdateMof: async (parent, args, contextValue, info) => {
+    const user = await requireAuth(contextValue.token);
     const updateMofRequest: MofModificationRequest = {
       type: "UPDATE",
       cenoteId: args.update_mof_input.cenoteId,
@@ -43,7 +48,7 @@ export const MutationResolver: MofModule.Resolvers["Mutation"] = {
         timestamp: new Date(args.update_mof_input.oldTimestamp).toISOString()
       }
     }
-    return mofProvider.requestMofModification(updateMofRequest);
+    return mofProvider.requestMofModification(updateMofRequest, user);
   },
   acceptMofRequest: (parent, args, contextValue, info) => {
     return mofProvider.acceptMofRequest(args.update_mof_id);

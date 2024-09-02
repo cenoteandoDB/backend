@@ -4,5 +4,5 @@ type Query {
   getCenoteData(cenoteId: ID!): [VariableWithData!]
   getThemesByCenote(cenoteId: ID!): [String!]!
   
-  getMofModificationRequests: [MofModificationRequest!]!
+  getMofModificationRequests: MofModificationRequestList!
 }
