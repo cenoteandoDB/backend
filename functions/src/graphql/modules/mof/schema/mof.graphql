@@ -40,4 +40,11 @@ type MofModificationRequest {
   
   cenoteName: String
   variableCategory: VariableCategory
+  creator: String
+  creatorId: String
+}
+
+type MofModificationRequestList {
+  mofModificationRequests: [MofModificationRequest!]!
+  totalCount: Int!
 }

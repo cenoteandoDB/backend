@@ -9,9 +9,14 @@ import {
   VariableRepresentation,
   MofByCategory,
   MofModificationRequest,
+  User,
+  PaginationInput,
+  SortField,
+  MofModificationRequestList,
 } from "../../../generated-types/graphql";
 import { VariableProvider } from "../../variables/providers/variable.provider";
 import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
+import { firestore } from "firebase-admin";
 
 const mofDB = db.mofs;
 const requestMofModificationDB = db.requestMofsModification;
@@ -87,7 +92,7 @@ export class MofProvider {
     return mof.docs[0].data() as VariableWithData;
   }
 
-  async requestMofModification(request: MofModificationRequest): Promise<boolean> {
+  async requestMofModification(request: MofModificationRequest, user: User): Promise<boolean> {
     const cenote = await cenoteProvider.getCenoteById(request.cenoteId);
     const variable = await variableProvider.getVariableById(request.variableId);
 
@@ -97,6 +102,8 @@ export class MofProvider {
       createdAt: new Date().toISOString(),
       cenoteName: cenote.name,
       variableCategory: variable.category,
+      creator: user.name,
+      creatorId: user.id,
       ...request,
     });
 
@@ -277,10 +284,36 @@ export class MofProvider {
     return themes;
   }
 
-  async getMofModificationRequests(): Promise<MofModificationRequest[]> {
-    const mofModificationRequests = await requestMofModificationDB.get();
+  async getMofModificationRequests(
+    sort: SortField | null | undefined = {
+      field: "firestore_id",
+      sortOrder: "ASC",
+    },
+    pagination: PaginationInput | null = {
+      offset: 0,
+      limit: 25
+    }): Promise<MofModificationRequestList> {
+    let query: any;
+    query = requestMofModificationDB.orderBy(
+      sort?.field ?? "createdAt",
+      sort?.sortOrder.toLowerCase() as firestore.OrderByDirection,
+    );
 
-    return mofModificationRequests.docs.map((doc: any) => doc.data() as MofModificationRequest);
+    if (pagination) {
+      query = query.offset(pagination.offset).limit(pagination.limit);
+    }
+
+    const [mofsModificationRequestsSnapshot, totalCountSnapshot] = await Promise.all([
+      query.get(),
+      requestMofModificationDB.get(),
+    ]);
+
+    const mofModificationRequests = mofsModificationRequestsSnapshot.docs.map(
+      (doc: any) => doc.data() as MofModificationRequest,
+    );
+    const totalCount = totalCountSnapshot.size;
+
+    return { mofModificationRequests, totalCount };
   }
 
   /**
