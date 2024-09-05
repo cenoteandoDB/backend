@@ -23,4 +23,8 @@ export const QueryResolver: MofModule.Resolvers["Query"] = {
   getMofModificationRequests: (parent, args, contextValue, info) => {
     return mofProvider.getMofModificationRequests();
   },
+
+  getCenoteVariablesWithoutData: (parent, args, contextValue, info) => {
+    return mofProvider.getCenoteVariablesWithoutData(args.cenoteId);
+  },
 };

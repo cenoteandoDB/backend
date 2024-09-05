@@ -696,6 +696,7 @@ export type Query = {
   getCenoteData?: Maybe<Array<VariableWithData>>;
   getCenoteDataByTheme: Array<MofByCategory>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
+  getCenoteVariablesWithoutData: Array<Variable>;
   getCenotes: CenoteList;
   getMofModificationRequests: MofModificationRequestList;
   getReferenceById?: Maybe<Reference>;
@@ -756,6 +757,11 @@ export type QueryGetCenoteDataByThemeArgs = {
 export type QueryGetCenoteDataByVariableArgs = {
   cenoteId: Scalars['ID'];
   variableId: Scalars['ID'];
+};
+
+
+export type QueryGetCenoteVariablesWithoutDataArgs = {
+  cenoteId: Scalars['ID'];
 };
 
 
@@ -1105,7 +1111,7 @@ export type Variable = {
   cenote_count: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateTime']>;
   description: Scalars['String'];
-  firestore_id?: Maybe<Scalars['ID']>;
+  firestore_id: Scalars['ID'];
   icon?: Maybe<Scalars['String']>;
   methodology?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -1799,6 +1805,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
   getCenoteDataByTheme?: Resolver<Array<ResolversTypes['MofByCategory']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
+  getCenoteVariablesWithoutData?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetCenoteVariablesWithoutDataArgs, 'cenoteId'>>;
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
   getMofModificationRequests?: Resolver<ResolversTypes['MofModificationRequestList'], ParentType, ContextType>;
   getReferenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryGetReferenceByIdArgs, 'id'>>;
@@ -1917,7 +1924,7 @@ export type VariableResolvers<ContextType = any, ParentType extends ResolversPar
   cenote_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  firestore_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  firestore_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   methodology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

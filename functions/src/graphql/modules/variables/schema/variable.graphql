@@ -77,7 +77,7 @@ enum VariableRepresentation {
 }
 
 type Variable {
-  firestore_id: ID
+  firestore_id: ID!
 
   name: String!
   description: String!
