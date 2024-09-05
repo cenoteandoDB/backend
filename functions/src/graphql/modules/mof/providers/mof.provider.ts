@@ -70,6 +70,27 @@ export class MofProvider {
   }
 
   /**
+   * Get list of mof missing from a cenote.
+   *
+   * @param {ID} cenoteId of the cenote to get missing MoF
+   *
+   * @return {Promise<VariableWithData[]>} list of missing MoF
+   */
+  async getCenoteVariablesWithoutData(cenoteId: ID): Promise<Variable[]> {
+    const variablesSnapshot = await variableDB.get();
+    const variables = variablesSnapshot.docs.map((doc) => doc.data() as Variable);
+
+    const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
+    const cenoteMofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
+
+    const variableIdSet = new Set<string>();
+
+    cenoteMofs.forEach((cenoteMof) => variableIdSet.add(cenoteMof.variableId));
+
+    return variables.filter((variable) => !variableIdSet.has(variable.firestore_id));
+  }
+
+  /**
    * Get cenote measurements or facts by variable.
    *
    * @param {ID} cenoteId of the cenote to get MoF

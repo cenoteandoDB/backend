@@ -9,7 +9,7 @@ export namespace MofModule {
     MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof' | 'cenoteName' | 'variableCategory' | 'creator' | 'creatorId';
     MofModificationRequestList: 'mofModificationRequests' | 'totalCount';
     Mutation: 'requestCreateMof' | 'requestDeleteMof' | 'requestUpdateMof' | 'acceptMofRequest' | 'rejectMofRequest';
-    Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests';
+    Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests' | 'getCenoteVariablesWithoutData';
   };
   
   interface DefinedEnumValues {
@@ -36,6 +36,7 @@ export namespace MofModule {
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type VariableTheme = Types.VariableTheme;
+  export type Variable = Types.Variable;
   
   export type Scalars = Pick<Types.Scalars, 'DateTime'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
@@ -119,6 +120,7 @@ export namespace MofModule {
       getCenoteData?: gm.Middleware[];
       getThemesByCenote?: gm.Middleware[];
       getMofModificationRequests?: gm.Middleware[];
+      getCenoteVariablesWithoutData?: gm.Middleware[];
     };
   };
 }
