@@ -388,6 +388,8 @@ export type MofModificationRequest = {
   type: RequestType;
   variableCategory?: Maybe<VariableCategory>;
   variableId: Scalars['ID'];
+  variableSphere?: Maybe<VariableSphere>;
+  variableTheme?: Maybe<VariableTheme>;
 };
 
 export type MofModificationRequestList = {
@@ -1737,6 +1739,8 @@ export type MofModificationRequestResolvers<ContextType = any, ParentType extend
   type?: Resolver<ResolversTypes['RequestType'], ParentType, ContextType>;
   variableCategory?: Resolver<Maybe<ResolversTypes['VariableCategory']>, ParentType, ContextType>;
   variableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  variableSphere?: Resolver<Maybe<ResolversTypes['VariableSphere']>, ParentType, ContextType>;
+  variableTheme?: Resolver<Maybe<ResolversTypes['VariableTheme']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
