@@ -122,6 +122,8 @@ export class MofProvider {
       firestore_id: docRef.id,
       createdAt: new Date().toISOString(),
       cenoteName: cenote.name,
+      variableSphere: variable.sphere,
+      variableTheme: variable.theme,
       variableCategory: variable.category,
       creator: user.name,
       creatorId: user.id,
@@ -137,15 +139,18 @@ export class MofProvider {
 
     switch (requestCreateMof.type) {
       case "CREATE": {
-        return this.createMoF(requestCreateMof);
+        this.createMoF(requestCreateMof);
       }
       case "UPDATE": {
-        return this.updateMoF(requestCreateMof);
+        this.updateMoF(requestCreateMof);
       }
       case "DELETE": {
-        return this.deleteMoF(requestCreateMof);
+        this.deleteMoF(requestCreateMof);
       }
     }
+
+    await requestMofModificationDB.doc(requestMofCreateId).delete();
+    return true;
   }
 
   async rejectMofRequest(requestMofCreateId: string): Promise<boolean> {

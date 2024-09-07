@@ -6,7 +6,7 @@ export namespace MofModule {
     MeasurementOrFact: 'timestamp' | 'value';
     VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
     MofByCategory: 'category' | 'mofs';
-    MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof' | 'cenoteName' | 'variableCategory' | 'creator' | 'creatorId';
+    MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof' | 'cenoteName' | 'variableSphere' | 'variableTheme' | 'variableCategory' | 'creator' | 'creatorId';
     MofModificationRequestList: 'mofModificationRequests' | 'totalCount';
     Mutation: 'requestCreateMof' | 'requestDeleteMof' | 'requestUpdateMof' | 'acceptMofRequest' | 'rejectMofRequest';
     Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests' | 'getCenoteVariablesWithoutData';
@@ -28,6 +28,8 @@ export namespace MofModule {
   export type MofByCategory = Pick<Types.MofByCategory, DefinedFields['MofByCategory']>;
   export type RequestType = DefinedEnumValues['RequestType'];
   export type MofModificationRequest = Pick<Types.MofModificationRequest, DefinedFields['MofModificationRequest']>;
+  export type VariableSphere = Types.VariableSphere;
+  export type VariableTheme = Types.VariableTheme;
   export type VariableCategory = Types.VariableCategory;
   export type MofModificationRequestList = Pick<Types.MofModificationRequestList, DefinedFields['MofModificationRequestList']>;
   export type NewMeasurementOrFactInput = Pick<Types.NewMeasurementOrFactInput, DefinedInputFields['NewMeasurementOrFactInput']>;
@@ -35,7 +37,6 @@ export namespace MofModule {
   export type UpdateMofInput = Pick<Types.UpdateMofInput, DefinedInputFields['UpdateMofInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
-  export type VariableTheme = Types.VariableTheme;
   export type Variable = Types.Variable;
   
   export type Scalars = Pick<Types.Scalars, 'DateTime'>;
@@ -96,6 +97,8 @@ export namespace MofModule {
       mof?: gm.Middleware[];
       old_mof?: gm.Middleware[];
       cenoteName?: gm.Middleware[];
+      variableSphere?: gm.Middleware[];
+      variableTheme?: gm.Middleware[];
       variableCategory?: gm.Middleware[];
       creator?: gm.Middleware[];
       creatorId?: gm.Middleware[];

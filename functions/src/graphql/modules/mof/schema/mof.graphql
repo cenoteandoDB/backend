@@ -39,6 +39,8 @@ type MofModificationRequest {
   old_mof: MeasurementOrFact
   
   cenoteName: String
+  variableSphere: VariableSphere
+  variableTheme: VariableTheme
   variableCategory: VariableCategory
   creator: String
   creatorId: String
