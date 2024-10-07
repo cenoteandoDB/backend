@@ -44,18 +44,18 @@ export const StorageProvider = {
     const result = await getSignedUrls(`references/${name}.pdf`);
     return result.at(0)!;
   },
-  generateCenotePhotoUploadUrl: async (cenoteId: string, 
-                                      photoName: string, 
-                                      contentType: string): Promise<string> => {
-    const fileName = `photos/${cenoteId}/${photoName}`
-    
+
+  generateCenotePhotoUploadUrl: async (cenoteId: string, photoName: string,
+    contentType: string): Promise<string> => {
+    const fileName = `photos/${cenoteId}/${photoName}`;
+
     return generateUploadUrl(fileName, contentType);
-  }
+  },
 };
 
 const getSignedUrls = async (prefix: string): Promise<string[]> => {
   let [files] = await storage.bucket(bucketName).getFiles({ prefix });
-  files = files.filter(file => !file.name.endsWith('/'));
+  files = files.filter((file) => !file.name.endsWith("/"));
 
   const signedUrls = [];
 
@@ -100,11 +100,11 @@ const generateUploadUrl = async (fileName: string, contentType: string): Promise
   const [url] = await bucket
     .file(fileName)
     .getSignedUrl({
-      action: 'write',
-      version: 'v4',
+      action: "write",
+      version: "v4",
       contentType: contentType,
       expires: Date.now() + 15 * 60 * 1000,
     });
 
   return url;
-}
+};

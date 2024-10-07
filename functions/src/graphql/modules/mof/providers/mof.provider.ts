@@ -54,7 +54,7 @@ export class MofProvider {
     }
 
     // map results to MofByCategory list
-    return Object.keys(data).map((category) => ({category,mofs: data[category]}));
+    return Object.keys(data).map((category) => ({category, mofs: data[category]}));
   }
 
   /**
@@ -106,7 +106,7 @@ export class MofProvider {
       .where("cenoteId", "==", cenoteId)
       .where("variableId", "==", variableId)
       .get();
-    
+
     if (mof.empty) {
       return null;
     }
@@ -138,15 +138,18 @@ export class MofProvider {
     const requestCreateMof = requestDoc.data() as MofModificationRequest;
 
     switch (requestCreateMof.type) {
-      case "CREATE": {
-        this.createMoF(requestCreateMof);
-      }
-      case "UPDATE": {
-        this.updateMoF(requestCreateMof);
-      }
-      case "DELETE": {
-        this.deleteMoF(requestCreateMof);
-      }
+    case "CREATE": {
+      this.createMoF(requestCreateMof);
+      break;
+    }
+    case "UPDATE": {
+      this.updateMoF(requestCreateMof);
+      break;
+    }
+    case "DELETE": {
+      this.deleteMoF(requestCreateMof);
+      break;
+    }
     }
 
     await requestMofModificationDB.doc(requestMofCreateId).delete();
@@ -163,7 +166,7 @@ export class MofProvider {
    * If MoF bucket doesn't yet exist, creates new one.
    * Otherwise, adds to existing one.
    *
-   * @param {NewMeasurementOrFactInput} newMof new MoF with
+   * @param {MofModificationRequest} requestCreateMof new MoF with
    * value and timestamp
    *
    * @return {Promise<boolean>} the new MoF
@@ -172,7 +175,7 @@ export class MofProvider {
     const doc = await mofDB
       .where("cenoteId", "==", requestCreateMof.cenoteId)
       .where("variableId", "==", requestCreateMof.variableId)
-      .get();  
+      .get();
 
     if (doc.empty) {
       await this.createMofBucket(requestCreateMof);
@@ -237,7 +240,7 @@ export class MofProvider {
    * Uses the value and timestamp to identify the MoF to be deleted and updates first and
    * last timestamps of bucket. If bucket becomes empty, deletes the entry in the database.
    *
-   * @param {DeleteMofInput} deletMofInput MoF to delete
+   * @param {MofModificationRequest} requestDeleteMof MoF to delete
    *
    * @return {Promise<VariableWithData>} the new MoF
    */
@@ -317,7 +320,7 @@ export class MofProvider {
     },
     pagination: PaginationInput | null = {
       offset: 0,
-      limit: 25
+      limit: 25,
     }): Promise<MofModificationRequestList> {
     let query: any;
     query = requestMofModificationDB.orderBy(
@@ -347,7 +350,7 @@ export class MofProvider {
    * Uses the old value and old timestamp to identify the MoF to be updated. After updating a value,
    * updates the first and last timestamp if needed
    *
-   * @param {string} updateMofRequestId MoF to delete
+   * @param {MofModificationRequest} requestUpdateMof MoF to delete
    *
    * @return {Promise<boolean>} if the update succeded
    */
@@ -371,7 +374,7 @@ export class MofProvider {
           mof.value == requestUpdateMof.old_mof?.value) {
           modified = true;
           return {
-            timestamp: requestUpdateMof.mof.timestamp, 
+            timestamp: requestUpdateMof.mof.timestamp,
             value: requestUpdateMof.mof.value};
         } else {
           return mof;
@@ -417,9 +420,9 @@ export class MofProvider {
       await mofDB.doc(mof.id).update({
         units: units,
         icon: icon,
-        variableRepresentation: variableRepresentation
+        variableRepresentation: variableRepresentation,
       });
-    })
+    });
 
     return true;
   }

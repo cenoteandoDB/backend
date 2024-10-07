@@ -8,5 +8,5 @@ export const MofResolvers: MofModule.Resolvers = {
   Mutation: MutationResolver,
   Query: QueryResolver,
   DateTime: DateTimeResolver,
-  VariableWithData: VariableWithDataResolver
+  VariableWithData: VariableWithDataResolver,
 };

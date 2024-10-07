@@ -277,13 +277,13 @@ export class CenotesProvider {
    *
    * @return {Promise<Boolean>} true if exists. Throws exception otherwise
    */
-    async cenoteExists(id: ID): Promise<boolean> {
-      const snapshot = await cenotesDB.doc(id).get();
-  
-      if (!snapshot.exists) {
-        throw new Error("Cenote does not exist.");
-      }
-  
-      return true;
-    } 
+  async cenoteExists(id: ID): Promise<boolean> {
+    const snapshot = await cenotesDB.doc(id).get();
+
+    if (!snapshot.exists) {
+      throw new Error("Cenote does not exist.");
+    }
+
+    return true;
+  }
 }

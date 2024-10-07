@@ -276,7 +276,7 @@ export class UsersProvider {
       ...cenotePermissions.cenoteViewBlackList,
       ...cenotePermissions.cenoteViewBlackList,
       ...cenotePermissions.cenoteEditBlackList,
-      ...cenotePermissions.cenoteEditWhiteList
+      ...cenotePermissions.cenoteEditWhiteList,
     ];
     const cenoteProvider = new CenotesProvider();
     cenotes.map((cenote) => cenoteProvider.cenoteExists(cenote));
@@ -309,7 +309,7 @@ export class UsersProvider {
       ...variablePermissions.variableEditBlackList,
       ...variablePermissions.variableEditWhiteList,
       ...variablePermissions.variableViewBlackList,
-      ...variablePermissions.variableViewWhiteList
+      ...variablePermissions.variableViewWhiteList,
     ];
     const variableProvider = new VariableProvider();
     variables.map((variable) => variableProvider.variableExists(variable));
@@ -502,5 +502,5 @@ export class UsersProvider {
     }
 
     return true;
-  } 
+  }
 }

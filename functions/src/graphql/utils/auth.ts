@@ -70,7 +70,6 @@ export function decodeToken(token: string): string {
 export function validateAuth(authorizationHeader: string): Promise<User> | null {
   const token = authorizationHeader.replace("Bearer ", "");
 
-  console.log(`TOken to process: ${token}`)
   const userId = decodeToken(token);
 
   try {
