@@ -12,6 +12,10 @@ export class SpeciesProvider {
   /**
    * Get all species.
    *
+   * @param {SortField | null | undefined} sort the sort
+   * @param {PaginationInput | null} pagination the pagination
+   * @param {string | null | undefined} name the name of the species
+   *
    * @return {Promise<Species>} list with all references
    */
   async getSpecies(sort: SortField | null | undefined = {field: "id", sortOrder: "ASC"},

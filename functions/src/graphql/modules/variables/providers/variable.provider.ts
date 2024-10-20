@@ -162,7 +162,7 @@ export class VariableProvider {
     variableId: string,
     updatedVariable: UpdateVariableInput
   ): Promise<Variable> {
-    //const variable = await this.getVariableById(variableId);
+    // const variable = await this.getVariableById(variableId);
     /*
     if (variable.units != updatedVariable.units || variable.icon != updatedVariable.icon ||
       variable.variableRepresentation != updatedVariable.variableRepresentation) {
@@ -209,5 +209,5 @@ export class VariableProvider {
     }
 
     return true;
-  } 
+  }
 }
