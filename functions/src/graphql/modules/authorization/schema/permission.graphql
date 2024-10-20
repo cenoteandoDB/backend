@@ -1,0 +1,25 @@
+# From graphql-scalars
+scalar EmailAddress
+scalar DateTime
+
+enum PermissionType {
+  STATE
+  MUNICIPALITY
+  CENOTE
+  SPHERE
+  THEME
+  CATEGORY
+  VARIABLE
+}
+
+type Permission {
+  firestoreId: String!
+  
+  type: String!
+  canView: Boolean!
+  canEdit: Boolean!
+  canDelete: Boolean!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
