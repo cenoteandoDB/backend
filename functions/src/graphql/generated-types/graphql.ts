@@ -431,7 +431,7 @@ export type Mutation = {
   deleteReference?: Maybe<Scalars['Boolean']>;
   deleteUser: Scalars['Boolean'];
   deleteVariable: Scalars['Boolean'];
-  inviteUser: Scalars['Boolean'];
+  inviteUser: User;
   login: Scalars['String'];
   register: User;
   registerGovern?: Maybe<User>;
@@ -1884,7 +1884,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteReference?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteReferenceArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'userId'>>;
   deleteVariable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteVariableArgs, 'id'>>;
-  inviteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
+  inviteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
   login?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   register?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'userInfo'>>;
   registerGovern?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterGovernArgs, 'profileData' | 'userInfo'>>;

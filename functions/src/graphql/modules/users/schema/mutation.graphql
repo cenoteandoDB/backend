@@ -60,7 +60,7 @@ input RegisterGovernInput {
 
 type Mutation {
   login(email: EmailAddress!, password: String!): String! # Access token
-  inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): Boolean!
+  inviteUser(email: EmailAddress!, name: String!, userRole: UserRole!): User!
   register(userInfo: RegisterUserInput!): User!
   registerTourist(
     userInfo: RegisterUserInput!
