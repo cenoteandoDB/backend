@@ -19,7 +19,7 @@ export class CenotePermissionProvider {
     userPermissions: UserPermission[],
   ): Promise<boolean> {
     
-
+    
     // logic
     return true;
   }
