@@ -1,25 +1,23 @@
-# From graphql-scalars
-scalar EmailAddress
-scalar DateTime
-
 enum PermissionType {
-  STATE
-  MUNICIPALITY
   CENOTE
-  SPHERE
-  THEME
-  CATEGORY
   VARIABLE
 }
 
-type Permission {
-  firestoreId: String!
-  
-  type: String!
+union UserPermission = CenotePermission | VariablePermission
+
+type CenotePermission {
+  permissionType: PermissionType!
+  cenoteId: ID!
   canView: Boolean!
   canEdit: Boolean!
   canDelete: Boolean!
+}
 
-  createdAt: DateTime!
-  updatedAt: DateTime!
+
+type VariablePermission {
+  permissionType: PermissionType!
+  variableId: ID!
+  canView: Boolean!
+  canEdit: Boolean!
+  canDelete: Boolean!
 }

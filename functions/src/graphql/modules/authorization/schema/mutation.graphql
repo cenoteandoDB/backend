@@ -1,26 +1,8 @@
-# From graphql-scalars
-scalar EmailAddress
-
-
 ##########################################################
 ################## Cenotes ###############################
 ##########################################################
 
-input StatePermissionInput {
-  name: String!
-  canView: Boolean!
-  canEdit: Boolean!
-  canDelete: Boolean!
-}
-
-input MunicipalityPermissionInput {
-  name: String!
-  canView: Boolean!
-  canEdit: Boolean!
-  canDelete: Boolean!
-}
-
-input CenotePermissionInput {
+input CenotePermissionInfo {
   cenoteId: ID!
   canView: Boolean!
   canEdit: Boolean!
@@ -29,50 +11,27 @@ input CenotePermissionInput {
 
 input CenotesPermissionInput {
   userId: ID!
-  states: [StatePermissionInput!]
-  municipalities: [MunicipalityPermissionInput!]
-  cenotes: [CenotePermissionInput!]
+
+  cenotes: [CenotePermissionInfo!]
 }
 
 ##########################################################
 ################## Variables #############################
 ##########################################################
 
-input SpherePermissionInput {
-  name: String!
-  canView: Boolean!
-  canEdit: Boolean!
-  canDelete: Boolean!
-}
-
-input ThemePermissionInput {
-  name: String!
-  canView: Boolean!
-  canEdit: Boolean!
-  canDelete: Boolean!
-}
-
-input CategoryPermissionInput {
-  name: String!
-  canView: Boolean!
-  canEdit: Boolean!
-  canDelete: Boolean!
-}
-
-input VariablePermissionInput {
+input VariablePermissionInfo {
   variableId: ID!
   canView: Boolean!
   canEdit: Boolean!
   canDelete: Boolean!
 }
 
+
 input VariablePermissionInput {
   userId: ID!
   cenoteId: ID!
-  spheres: [SpherePermissionInput!]
-  themes: [ThemePermissionInput!]
-  categories: [CategoryPermissionInput!]
-  variables: [CenotePermissionInput!]
+
+  variables: [VariablePermissionInfo!]
 }
 
 

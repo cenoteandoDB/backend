@@ -45,13 +45,6 @@ export type AuditLogType =
   | 'UPDATED_REFERENCE'
   | 'UPDATED_VARIABLE';
 
-export type CategoryPermissionInput = {
-  canDelete: Scalars['Boolean'];
-  canEdit: Scalars['Boolean'];
-  canView: Scalars['Boolean'];
-  name: Scalars['String'];
-};
-
 export type Cenote = {
   __typename?: 'Cenote';
   altnames: Array<Scalars['String']>;
@@ -105,7 +98,16 @@ export type CenoteLocation = {
   state: Scalars['String'];
 };
 
-export type CenotePermissionInput = {
+export type CenotePermission = {
+  __typename?: 'CenotePermission';
+  canDelete: Scalars['Boolean'];
+  canEdit: Scalars['Boolean'];
+  canView: Scalars['Boolean'];
+  cenoteId: Scalars['ID'];
+  permissionType: PermissionType;
+};
+
+export type CenotePermissionInfo = {
   canDelete: Scalars['Boolean'];
   canEdit: Scalars['Boolean'];
   canView: Scalars['Boolean'];
@@ -125,9 +127,7 @@ export type CenoteType =
   | 'WATER_WELL';
 
 export type CenotesPermissionInput = {
-  cenotes?: InputMaybe<Array<CenotePermissionInput>>;
-  municipalities?: InputMaybe<Array<MunicipalityPermissionInput>>;
-  states?: InputMaybe<Array<StatePermissionInput>>;
+  cenotes?: InputMaybe<Array<CenotePermissionInfo>>;
   userId: Scalars['ID'];
 };
 
@@ -419,13 +419,6 @@ export type MofModificationRequestList = {
   totalCount: Scalars['Int'];
 };
 
-export type MunicipalityPermissionInput = {
-  canDelete: Scalars['Boolean'];
-  canEdit: Scalars['Boolean'];
-  canView: Scalars['Boolean'];
-  name: Scalars['String'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   acceptMofRequest?: Maybe<Scalars['Boolean']>;
@@ -438,7 +431,7 @@ export type Mutation = {
   deleteReference?: Maybe<Scalars['Boolean']>;
   deleteUser: Scalars['Boolean'];
   deleteVariable: Scalars['Boolean'];
-  inviteUser: Scalars['Boolean'];
+  inviteUser: User;
   login: Scalars['String'];
   register: User;
   registerGovern?: Maybe<User>;
@@ -705,24 +698,8 @@ export type PaginationInput = {
   offset: Scalars['Int'];
 };
 
-export type Permission = {
-  __typename?: 'Permission';
-  canDelete: Scalars['Boolean'];
-  canEdit: Scalars['Boolean'];
-  canView: Scalars['Boolean'];
-  createdAt: Scalars['DateTime'];
-  firestoreId: Scalars['String'];
-  type: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
-};
-
 export type PermissionType =
-  | 'CATEGORY'
   | 'CENOTE'
-  | 'MUNICIPALITY'
-  | 'SPHERE'
-  | 'STATE'
-  | 'THEME'
   | 'VARIABLE';
 
 export type PhotoOrMapUploadInput = {
@@ -754,14 +731,16 @@ export type Query = {
   cenotesBounds?: Maybe<CenoteBounds>;
   cenotesCsv?: Maybe<Scalars['String']>;
   generateCenotePhotoUploadUrl: Scalars['String'];
+  getAllCenotesPermissions: Array<CenotePermission>;
+  getAllVariablesPermissions?: Maybe<Array<VariablePermission>>;
   getCategoriesByTheme: Array<VariableCategory>;
   getCenoteData?: Maybe<Array<VariableWithData>>;
   getCenoteDataByTheme: Array<MofByCategory>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
+  getCenotePermissions?: Maybe<CenotePermission>;
   getCenoteVariablesWithoutData: Array<Variable>;
   getCenotes: CenoteList;
   getMofModificationRequests: MofModificationRequestList;
-  getPermissions: Array<Permission>;
   getReferenceById?: Maybe<Reference>;
   getReferences: ReferenceList;
   getSpecies: SpeciesList;
@@ -774,6 +753,7 @@ export type Query = {
   getUserByName: Array<User>;
   getUsers: UserList;
   getVariableById?: Maybe<Variable>;
+  getVariablePermissions?: Maybe<VariablePermission>;
   getVariables: VariableList;
   getVariablesByCategory: Array<Variable>;
   getVariablesByTheme: Array<Variable>;
@@ -801,6 +781,18 @@ export type QueryGenerateCenotePhotoUploadUrlArgs = {
 };
 
 
+export type QueryGetAllCenotesPermissionsArgs = {
+  cenoteId: Scalars['ID'];
+  userId: Scalars['ID'];
+};
+
+
+export type QueryGetAllVariablesPermissionsArgs = {
+  cenoteId: Scalars['ID'];
+  userId: Scalars['ID'];
+};
+
+
 export type QueryGetCategoriesByThemeArgs = {
   theme: VariableTheme;
 };
@@ -823,6 +815,13 @@ export type QueryGetCenoteDataByVariableArgs = {
 };
 
 
+export type QueryGetCenotePermissionsArgs = {
+  cenoteId: Scalars['ID'];
+  userId: Scalars['ID'];
+  variableId: Scalars['ID'];
+};
+
+
 export type QueryGetCenoteVariablesWithoutDataArgs = {
   cenoteId: Scalars['ID'];
 };
@@ -832,12 +831,6 @@ export type QueryGetCenotesArgs = {
   name?: InputMaybe<Scalars['String']>;
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<SortField>;
-};
-
-
-export type QueryGetPermissionsArgs = {
-  type?: InputMaybe<PermissionType>;
-  userId: Scalars['ID'];
 };
 
 
@@ -904,6 +897,13 @@ export type QueryGetUsersArgs = {
 
 export type QueryGetVariableByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetVariablePermissionsArgs = {
+  cenoteId: Scalars['ID'];
+  userId: Scalars['ID'];
+  variableId: Scalars['ID'];
 };
 
 
@@ -1042,27 +1042,6 @@ export type SpeciesList = {
   totalCount: Scalars['Int'];
 };
 
-export type SpherePermissionInput = {
-  canDelete: Scalars['Boolean'];
-  canEdit: Scalars['Boolean'];
-  canView: Scalars['Boolean'];
-  name: Scalars['String'];
-};
-
-export type StatePermissionInput = {
-  canDelete: Scalars['Boolean'];
-  canEdit: Scalars['Boolean'];
-  canView: Scalars['Boolean'];
-  name: Scalars['String'];
-};
-
-export type ThemePermissionInput = {
-  canDelete: Scalars['Boolean'];
-  canEdit: Scalars['Boolean'];
-  canView: Scalars['Boolean'];
-  name: Scalars['String'];
-};
-
 export type UpdateCenotePermissions = {
   cenoteEditBlackList: Array<Scalars['String']>;
   cenoteEditWhiteList: Array<Scalars['String']>;
@@ -1182,6 +1161,8 @@ export type UserList = {
   users: Array<User>;
 };
 
+export type UserPermission = CenotePermission | VariablePermission;
+
 export type UserProfile =
   | 'GOVERN'
   | 'INVESTIGATOR'
@@ -1258,17 +1239,26 @@ export type VariableOrigin =
   | 'OFFICE'
   | 'WEB';
 
-export type VariablePermissionInput = {
+export type VariablePermission = {
+  __typename?: 'VariablePermission';
   canDelete: Scalars['Boolean'];
   canEdit: Scalars['Boolean'];
   canView: Scalars['Boolean'];
-  categories?: InputMaybe<Array<CategoryPermissionInput>>;
-  cenoteId: Scalars['ID'];
-  spheres?: InputMaybe<Array<SpherePermissionInput>>;
-  themes?: InputMaybe<Array<ThemePermissionInput>>;
-  userId: Scalars['ID'];
+  permissionType: PermissionType;
   variableId: Scalars['ID'];
-  variables?: InputMaybe<Array<CenotePermissionInput>>;
+};
+
+export type VariablePermissionInfo = {
+  canDelete: Scalars['Boolean'];
+  canEdit: Scalars['Boolean'];
+  canView: Scalars['Boolean'];
+  variableId: Scalars['ID'];
+};
+
+export type VariablePermissionInput = {
+  cenoteId: Scalars['ID'];
+  userId: Scalars['ID'];
+  variables?: InputMaybe<Array<VariablePermissionInfo>>;
 };
 
 export type VariableRepresentation =
@@ -1460,7 +1450,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type ResolversUnionTypes = {
+  UserPermission: ( CenotePermission ) | ( VariablePermission );
+};
 
+/** Mapping of union parent types */
+export type ResolversUnionParentTypes = {
+  UserPermission: ( CenotePermission ) | ( VariablePermission );
+};
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
@@ -1468,13 +1466,13 @@ export type ResolversTypes = {
   AuditLog: ResolverTypeWrapper<AuditLog>;
   AuditLogType: AuditLogType;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  CategoryPermissionInput: CategoryPermissionInput;
   Cenote: ResolverTypeWrapper<Cenote>;
   CenoteBounds: ResolverTypeWrapper<CenoteBounds>;
   CenoteIssue: CenoteIssue;
   CenoteList: ResolverTypeWrapper<CenoteList>;
   CenoteLocation: ResolverTypeWrapper<CenoteLocation>;
-  CenotePermissionInput: CenotePermissionInput;
+  CenotePermission: ResolverTypeWrapper<CenotePermission>;
+  CenotePermissionInfo: CenotePermissionInfo;
   CenoteSocialData: ResolverTypeWrapper<CenoteSocialData>;
   CenoteType: CenoteType;
   CenotesPermissionInput: CenotesPermissionInput;
@@ -1508,14 +1506,12 @@ export type ResolversTypes = {
   MofByCategory: ResolverTypeWrapper<MofByCategory>;
   MofModificationRequest: ResolverTypeWrapper<MofModificationRequest>;
   MofModificationRequestList: ResolverTypeWrapper<MofModificationRequestList>;
-  MunicipalityPermissionInput: MunicipalityPermissionInput;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewReferenceInput: NewReferenceInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
-  Permission: ResolverTypeWrapper<Permission>;
   PermissionType: PermissionType;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   ProfileData: ResolverTypeWrapper<ProfileData>;
@@ -1533,10 +1529,7 @@ export type ResolversTypes = {
   SortOrder: SortOrder;
   Species: ResolverTypeWrapper<Species>;
   SpeciesList: ResolverTypeWrapper<SpeciesList>;
-  SpherePermissionInput: SpherePermissionInput;
-  StatePermissionInput: StatePermissionInput;
   String: ResolverTypeWrapper<Scalars['String']>;
-  ThemePermissionInput: ThemePermissionInput;
   URL: ResolverTypeWrapper<Scalars['URL']>;
   UpdateCenotePermissions: UpdateCenotePermissions;
   UpdateMofInput: UpdateMofInput;
@@ -1547,12 +1540,15 @@ export type ResolversTypes = {
   UpdatedReferenceInput: UpdatedReferenceInput;
   User: ResolverTypeWrapper<User>;
   UserList: ResolverTypeWrapper<UserList>;
+  UserPermission: ResolverTypeWrapper<ResolversUnionTypes['UserPermission']>;
   UserProfile: UserProfile;
   UserRole: UserRole;
   Variable: ResolverTypeWrapper<Variable>;
   VariableCategory: VariableCategory;
   VariableList: ResolverTypeWrapper<VariableList>;
   VariableOrigin: VariableOrigin;
+  VariablePermission: ResolverTypeWrapper<VariablePermission>;
+  VariablePermissionInfo: VariablePermissionInfo;
   VariablePermissionInput: VariablePermissionInput;
   VariableRepresentation: VariableRepresentation;
   VariableSphere: VariableSphere;
@@ -1572,12 +1568,12 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AuditLog: AuditLog;
   Boolean: Scalars['Boolean'];
-  CategoryPermissionInput: CategoryPermissionInput;
   Cenote: Cenote;
   CenoteBounds: CenoteBounds;
   CenoteList: CenoteList;
   CenoteLocation: CenoteLocation;
-  CenotePermissionInput: CenotePermissionInput;
+  CenotePermission: CenotePermission;
+  CenotePermissionInfo: CenotePermissionInfo;
   CenoteSocialData: CenoteSocialData;
   CenotesPermissionInput: CenotesPermissionInput;
   CityDistances: CityDistances;
@@ -1603,14 +1599,12 @@ export type ResolversParentTypes = {
   MofByCategory: MofByCategory;
   MofModificationRequest: MofModificationRequest;
   MofModificationRequestList: MofModificationRequestList;
-  MunicipalityPermissionInput: MunicipalityPermissionInput;
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
   NewReferenceInput: NewReferenceInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
-  Permission: Permission;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   ProfileData: ProfileData;
   Query: {};
@@ -1624,10 +1618,7 @@ export type ResolversParentTypes = {
   SortField: SortField;
   Species: Species;
   SpeciesList: SpeciesList;
-  SpherePermissionInput: SpherePermissionInput;
-  StatePermissionInput: StatePermissionInput;
   String: Scalars['String'];
-  ThemePermissionInput: ThemePermissionInput;
   URL: Scalars['URL'];
   UpdateCenotePermissions: UpdateCenotePermissions;
   UpdateMofInput: UpdateMofInput;
@@ -1638,8 +1629,11 @@ export type ResolversParentTypes = {
   UpdatedReferenceInput: UpdatedReferenceInput;
   User: User;
   UserList: UserList;
+  UserPermission: ResolversUnionParentTypes['UserPermission'];
   Variable: Variable;
   VariableList: VariableList;
+  VariablePermission: VariablePermission;
+  VariablePermissionInfo: VariablePermissionInfo;
   VariablePermissionInput: VariablePermissionInput;
   VariableWithData: VariableWithData;
   iNaturalistFlagCounts: INaturalistFlagCounts;
@@ -1702,6 +1696,15 @@ export type CenoteLocationResolvers<ContextType = any, ParentType extends Resolv
   county?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   geojson?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   state?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CenotePermissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CenotePermission'] = ResolversParentTypes['CenotePermission']> = {
+  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  canEdit?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  canView?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  cenoteId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  permissionType?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1881,7 +1884,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteReference?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteReferenceArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'userId'>>;
   deleteVariable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteVariableArgs, 'id'>>;
-  inviteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
+  inviteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
   login?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   register?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'userInfo'>>;
   registerGovern?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterGovernArgs, 'profileData' | 'userInfo'>>;
@@ -1906,17 +1909,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   uploadPhoto?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'photoInput'>>;
 };
 
-export type PermissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Permission'] = ResolversParentTypes['Permission']> = {
-  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  canEdit?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  canView?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  firestoreId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type ProfileDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileData'] = ResolversParentTypes['ProfileData']> = {
   companyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   companyUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1938,14 +1930,16 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cenotesBounds?: Resolver<Maybe<ResolversTypes['CenoteBounds']>, ParentType, ContextType>;
   cenotesCsv?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   generateCenotePhotoUploadUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryGenerateCenotePhotoUploadUrlArgs, 'cenoteId' | 'contentType' | 'photoName'>>;
+  getAllCenotesPermissions?: Resolver<Array<ResolversTypes['CenotePermission']>, ParentType, ContextType, RequireFields<QueryGetAllCenotesPermissionsArgs, 'cenoteId' | 'userId'>>;
+  getAllVariablesPermissions?: Resolver<Maybe<Array<ResolversTypes['VariablePermission']>>, ParentType, ContextType, RequireFields<QueryGetAllVariablesPermissionsArgs, 'cenoteId' | 'userId'>>;
   getCategoriesByTheme?: Resolver<Array<ResolversTypes['VariableCategory']>, ParentType, ContextType, RequireFields<QueryGetCategoriesByThemeArgs, 'theme'>>;
   getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
   getCenoteDataByTheme?: Resolver<Array<ResolversTypes['MofByCategory']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
+  getCenotePermissions?: Resolver<Maybe<ResolversTypes['CenotePermission']>, ParentType, ContextType, RequireFields<QueryGetCenotePermissionsArgs, 'cenoteId' | 'userId' | 'variableId'>>;
   getCenoteVariablesWithoutData?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetCenoteVariablesWithoutDataArgs, 'cenoteId'>>;
   getCenotes?: Resolver<ResolversTypes['CenoteList'], ParentType, ContextType, Partial<QueryGetCenotesArgs>>;
   getMofModificationRequests?: Resolver<ResolversTypes['MofModificationRequestList'], ParentType, ContextType>;
-  getPermissions?: Resolver<Array<ResolversTypes['Permission']>, ParentType, ContextType, RequireFields<QueryGetPermissionsArgs, 'userId'>>;
   getReferenceById?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<QueryGetReferenceByIdArgs, 'id'>>;
   getReferences?: Resolver<ResolversTypes['ReferenceList'], ParentType, ContextType, Partial<QueryGetReferencesArgs>>;
   getSpecies?: Resolver<ResolversTypes['SpeciesList'], ParentType, ContextType, Partial<QueryGetSpeciesArgs>>;
@@ -1958,6 +1952,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUserByName?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByNameArgs, 'name'>>;
   getUsers?: Resolver<ResolversTypes['UserList'], ParentType, ContextType, Partial<QueryGetUsersArgs>>;
   getVariableById?: Resolver<Maybe<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariableByIdArgs, 'id'>>;
+  getVariablePermissions?: Resolver<Maybe<ResolversTypes['VariablePermission']>, ParentType, ContextType, RequireFields<QueryGetVariablePermissionsArgs, 'cenoteId' | 'userId' | 'variableId'>>;
   getVariables?: Resolver<ResolversTypes['VariableList'], ParentType, ContextType, Partial<QueryGetVariablesArgs>>;
   getVariablesByCategory?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariablesByCategoryArgs, 'category'>>;
   getVariablesByTheme?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType, RequireFields<QueryGetVariablesByThemeArgs, 'theme'>>;
@@ -2056,6 +2051,10 @@ export type UserListResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserPermissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserPermission'] = ResolversParentTypes['UserPermission']> = {
+  __resolveType: TypeResolveFn<'CenotePermission' | 'VariablePermission', ParentType, ContextType>;
+};
+
 export type VariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Variable'] = ResolversParentTypes['Variable']> = {
   accessLevel?: Resolver<ResolversTypes['AccessLevel'], ParentType, ContextType>;
   category?: Resolver<ResolversTypes['VariableCategory'], ParentType, ContextType>;
@@ -2080,6 +2079,15 @@ export type VariableResolvers<ContextType = any, ParentType extends ResolversPar
 export type VariableListResolvers<ContextType = any, ParentType extends ResolversParentTypes['VariableList'] = ResolversParentTypes['VariableList']> = {
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   variables?: Resolver<Array<ResolversTypes['Variable']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type VariablePermissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['VariablePermission'] = ResolversParentTypes['VariablePermission']> = {
+  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  canEdit?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  canView?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  permissionType?: Resolver<ResolversTypes['PermissionType'], ParentType, ContextType>;
+  variableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2184,6 +2192,7 @@ export type Resolvers<ContextType = any> = {
   CenoteBounds?: CenoteBoundsResolvers<ContextType>;
   CenoteList?: CenoteListResolvers<ContextType>;
   CenoteLocation?: CenoteLocationResolvers<ContextType>;
+  CenotePermission?: CenotePermissionResolvers<ContextType>;
   CenoteSocialData?: CenoteSocialDataResolvers<ContextType>;
   CityDistances?: CityDistancesResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
@@ -2203,7 +2212,6 @@ export type Resolvers<ContextType = any> = {
   MofModificationRequest?: MofModificationRequestResolvers<ContextType>;
   MofModificationRequestList?: MofModificationRequestListResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
-  Permission?: PermissionResolvers<ContextType>;
   ProfileData?: ProfileDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Reference?: ReferenceResolvers<ContextType>;
@@ -2213,8 +2221,10 @@ export type Resolvers<ContextType = any> = {
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   UserList?: UserListResolvers<ContextType>;
+  UserPermission?: UserPermissionResolvers<ContextType>;
   Variable?: VariableResolvers<ContextType>;
   VariableList?: VariableListResolvers<ContextType>;
+  VariablePermission?: VariablePermissionResolvers<ContextType>;
   VariableWithData?: VariableWithDataResolvers<ContextType>;
   iNaturalistFlagCounts?: INaturalistFlagCountsResolvers<ContextType>;
   iNaturalistPhoto?: INaturalistPhotoResolvers<ContextType>;

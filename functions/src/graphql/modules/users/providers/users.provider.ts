@@ -26,7 +26,6 @@ import {
 import { db } from "../../database/db";
 import { firestore } from "firebase-admin";
 import { VariableProvider } from "../../variables/providers/variable.provider";
-import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
 
 const usersDB = db.users;
 const registrationCodeDB = db.registration_code;
@@ -271,7 +270,7 @@ export class UsersProvider {
     cenotePermissions: UpdateCenotePermissions,
   ): Promise<User> {
     await this.userExists(userId);
-
+    /*
     const cenotes = [
       ...cenotePermissions.cenoteViewBlackList,
       ...cenotePermissions.cenoteViewBlackList,
@@ -285,7 +284,7 @@ export class UsersProvider {
       ...cenotePermissions,
       updatedAt: new Date().toISOString(),
     });
-
+*/
     const updatedUser = await usersDB.doc(userId).get();
     return updatedUser.data() as User;
   }
@@ -330,19 +329,27 @@ export class UsersProvider {
    * @param {string} name the name of the invitee
    * @param {UserRole} role the role of the user to be invitee
    *
-   * @return {Promise<Boolean>} boolean flag to acknowledge if invitation was sent
+   * @return {Promise<User>} the created user
    */
-  async inviteUser(
-    email: EmailAddress,
-    name: string,
-    role: UserRole,
-  ): Promise<boolean> {
+  async inviteUser(email: EmailAddress, name: string, role: UserRole): Promise<User> {
     const emailService = new EmailService();
 
     const code = await this.generateCode(email, name, role);
 
     emailService.sendInvitationEmail(email, name, code);
-    return true;
+
+    const docRef = usersDB.doc();
+    await docRef.set({
+      id: docRef.id,
+      role: role,
+      name: name,
+      email: email,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    const userSnapshot = await usersDB.doc(docRef.id).get();
+    return userSnapshot.data() as User;
   }
 
   /**
@@ -385,20 +392,11 @@ export class UsersProvider {
 
     const codeDetails = snapshot.data() as InvitationCode;
 
-    const docRef = usersDB.doc();
-    await docRef.set({
-      id: docRef.id,
-      role: codeDetails.role,
-      name: codeDetails.name,
-      email: codeDetails.email,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-
     await registrationCodeDB.doc(code).delete();
 
-    const userSnapshot = await usersDB.doc(docRef.id).get();
-    return userSnapshot.data() as User;
+    const userSnapshot = await usersDB.where("email", "==", codeDetails.email).get();
+    
+    return userSnapshot.docs[0].data() as User;
   }
 
   /**
