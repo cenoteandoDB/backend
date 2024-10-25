@@ -1,3 +1,7 @@
 type Query {
-  getPermissions(userId: ID!, type: PermissionType): [Permission!]!
+  getVariablePermissions(userId: ID!, cenoteId: ID!, variableId: ID!): VariablePermission
+  getAllVariablesPermissions(userId: ID!, cenoteId: ID!): [VariablePermission!]
+
+  getCenotePermissions(userId: ID!, cenoteId: ID!, variableId: ID!): CenotePermission
+  getAllCenotesPermissions(userId: ID!, cenoteId: ID!): [CenotePermission!]!
 }

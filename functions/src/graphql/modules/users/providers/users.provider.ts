@@ -26,7 +26,6 @@ import {
 import { db } from "../../database/db";
 import { firestore } from "firebase-admin";
 import { VariableProvider } from "../../variables/providers/variable.provider";
-import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
 
 const usersDB = db.users;
 const registrationCodeDB = db.registration_code;
@@ -271,7 +270,7 @@ export class UsersProvider {
     cenotePermissions: UpdateCenotePermissions,
   ): Promise<User> {
     await this.userExists(userId);
-
+    /*
     const cenotes = [
       ...cenotePermissions.cenoteViewBlackList,
       ...cenotePermissions.cenoteViewBlackList,
@@ -285,7 +284,7 @@ export class UsersProvider {
       ...cenotePermissions,
       updatedAt: new Date().toISOString(),
     });
-
+*/
     const updatedUser = await usersDB.doc(userId).get();
     return updatedUser.data() as User;
   }
