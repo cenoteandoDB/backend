@@ -15,11 +15,10 @@ export class CenotePermissionProvider {
    * @return {Promise<boolean>} if the user has permission to modify the cenote
    */
   async hasCenotePermission(cenoteId: ID, 
-    action: string, 
     userPermissions: UserPermission[],
   ): Promise<boolean> {
     
-
+    
     // logic
     return true;
   }

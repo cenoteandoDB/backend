@@ -4,10 +4,11 @@ import * as gm from "graphql-modules";
 export namespace MofModule {
   interface DefinedFields {
     MeasurementOrFact: 'timestamp' | 'value';
-    VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'firstTimestamp' | 'lastTimestamp';
+    VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'permissions' | 'firstTimestamp' | 'lastTimestamp';
     MofByCategory: 'category' | 'mofs';
     MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof' | 'cenoteName' | 'variableSphere' | 'variableTheme' | 'variableCategory' | 'creator' | 'creatorId';
     MofModificationRequestList: 'mofModificationRequests' | 'totalCount';
+    MofPermission: 'canView' | 'canEdit' | 'canDelete';
     Mutation: 'requestCreateMof' | 'requestDeleteMof' | 'requestUpdateMof' | 'acceptMofRequest' | 'rejectMofRequest';
     Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests' | 'getCenoteVariablesWithoutData';
   };
@@ -25,6 +26,7 @@ export namespace MofModule {
   export type MeasurementOrFact = Pick<Types.MeasurementOrFact, DefinedFields['MeasurementOrFact']>;
   export type VariableWithData = Pick<Types.VariableWithData, DefinedFields['VariableWithData']>;
   export type VariableRepresentation = Types.VariableRepresentation;
+  export type MofPermission = Pick<Types.MofPermission, DefinedFields['MofPermission']>;
   export type MofByCategory = Pick<Types.MofByCategory, DefinedFields['MofByCategory']>;
   export type RequestType = DefinedEnumValues['RequestType'];
   export type MofModificationRequest = Pick<Types.MofModificationRequest, DefinedFields['MofModificationRequest']>;
@@ -47,6 +49,7 @@ export namespace MofModule {
   export type MofByCategoryResolvers = Pick<Types.MofByCategoryResolvers, DefinedFields['MofByCategory'] | '__isTypeOf'>;
   export type MofModificationRequestResolvers = Pick<Types.MofModificationRequestResolvers, DefinedFields['MofModificationRequest'] | '__isTypeOf'>;
   export type MofModificationRequestListResolvers = Pick<Types.MofModificationRequestListResolvers, DefinedFields['MofModificationRequestList'] | '__isTypeOf'>;
+  export type MofPermissionResolvers = Pick<Types.MofPermissionResolvers, DefinedFields['MofPermission'] | '__isTypeOf'>;
   export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields['Mutation']>;
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields['Query']>;
   
@@ -56,6 +59,7 @@ export namespace MofModule {
     MofByCategory?: MofByCategoryResolvers;
     MofModificationRequest?: MofModificationRequestResolvers;
     MofModificationRequestList?: MofModificationRequestListResolvers;
+    MofPermission?: MofPermissionResolvers;
     Mutation?: MutationResolvers;
     Query?: QueryResolvers;
     DateTime?: Types.Resolvers['DateTime'];
@@ -80,6 +84,7 @@ export namespace MofModule {
       variableIcon?: gm.Middleware[];
       variableUnits?: gm.Middleware[];
       measurements?: gm.Middleware[];
+      permissions?: gm.Middleware[];
       firstTimestamp?: gm.Middleware[];
       lastTimestamp?: gm.Middleware[];
     };
@@ -107,6 +112,12 @@ export namespace MofModule {
       '*'?: gm.Middleware[];
       mofModificationRequests?: gm.Middleware[];
       totalCount?: gm.Middleware[];
+    };
+    MofPermission?: {
+      '*'?: gm.Middleware[];
+      canView?: gm.Middleware[];
+      canEdit?: gm.Middleware[];
+      canDelete?: gm.Middleware[];
     };
     Mutation?: {
       '*'?: gm.Middleware[];

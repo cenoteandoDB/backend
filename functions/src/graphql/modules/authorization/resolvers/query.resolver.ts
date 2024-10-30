@@ -5,7 +5,8 @@ const authorizationProvider = new AuthorizationProvider();
 
 export const QueryResolver: AuthorizationModule.Resolvers["Query"] = {
   getVariablePermissions: (parent, args, contextValue, info) => {
-    return authorizationProvider.getVariablePermissions(args.userId, args.cenoteId, args.variableId);
+    return authorizationProvider
+      .getVariablePermissions(args.userId, args.cenoteId, args.variableId);
   },
   getAllVariablesPermissions: (parent, args, contextValue, info) => {
     return authorizationProvider.getAllVariablesPermissions(args.userId, args.cenoteId);

@@ -15,6 +15,7 @@ type VariableWithData {
   variableIcon: String
   variableUnits: String 
   measurements: [MeasurementOrFact!]!
+  permissions: MofPermission!
   firstTimestamp: DateTime!
   lastTimestamp: DateTime!
 }
@@ -49,4 +50,10 @@ type MofModificationRequest {
 type MofModificationRequestList {
   mofModificationRequests: [MofModificationRequest!]!
   totalCount: Int!
+}
+
+type MofPermission {
+  canView: Boolean!
+  canEdit: Boolean!
+  canDelete: Boolean!
 }
