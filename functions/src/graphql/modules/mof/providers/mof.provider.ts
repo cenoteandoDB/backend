@@ -109,24 +109,29 @@ export class MofProvider {
   /**
    * Get cenote measurements or facts by variable.
    *
-   * @param {ID} cenoteId of the cenote to get MoF
-   * @param {ID} variableId of the variable to get MoF
+   * @param {ID} userId     the user ID
+   * @param {ID} cenoteId   the cenote to get MoF
+   * @param {ID} variableId the variable to get MoF
    *
    * @return {Promise<VariableWithData>} MoFs of given cenote and variable
    */
   async cenoteDataByVariable(
+    userId: ID,
     cenoteId: ID,
     variableId: ID,
   ): Promise<VariableWithData|null> {
-    const mof = await mofDB
+    const mofSnapshot = await mofDB
       .where("cenoteId", "==", cenoteId)
       .where("variableId", "==", variableId)
       .get();
 
-    if (mof.empty) {
+    if (mofSnapshot.empty) {
       return null;
     }
-    return mof.docs[0].data() as VariableWithData;
+    
+    const mof = mofSnapshot.docs[0].data() as VariableWithData;
+    mof.permissions = await mofPermissionProvider.getMofPermission(userId, cenoteId, variableId);
+    return mof;
   }
 
   async requestMofModification(request: MofModificationRequest, user: User): Promise<boolean> {
