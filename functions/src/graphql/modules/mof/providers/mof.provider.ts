@@ -17,23 +17,27 @@ import {
 import { VariableProvider } from "../../variables/providers/variable.provider";
 import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
 import { firestore } from "firebase-admin";
+import { MofPermissionProvider } from "./mof-permissions.provider";
 
 const mofDB = db.mofs;
 const requestMofModificationDB = db.requestMofsModification;
 const variableDB = db.variables;
 const cenoteProvider = new CenotesProvider();
 const variableProvider = new VariableProvider();
+const mofPermissionProvider = new MofPermissionProvider();
 
 export class MofProvider {
   /**
    * Get cenote measurements or facts by theme.
    *
+   * @param {ID} userId the ID of the user getting the MoF
    * @param {ID} cenoteId of the cenote to get MoF
    * @param {VariableTheme} theme of the cenote to get MoF
    *
    * @return {Promise<MofByCategory[]>} list of MoF of a theme grouped by category
    */
   async cenoteDataByTheme(
+    userId: ID,
     cenoteId: ID,
     theme: VariableTheme,
   ): Promise<MofByCategory[]> {
@@ -43,6 +47,9 @@ export class MofProvider {
     const mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
 
     for (const mof of mofs) {
+      mof.permissions = 
+        await mofPermissionProvider.getMofPermission(userId, mof.cenoteId, mof.variableId);
+
       const variableSnapshot = await variableDB.doc(mof.variableId).get();
       const variable = variableSnapshot.data() as Variable;
       if (variable.theme == theme) {
@@ -60,13 +67,22 @@ export class MofProvider {
   /**
    * Get cenote measurements or facts.
    *
+   * @param {ID} userId the id of the user getting the MoF
    * @param {ID} cenoteId of the cenote to get MoF
    *
    * @return {Promise<VariableWithData[]>} list of MoF
    */
-  async getCenoteData(cenoteId: ID): Promise<VariableWithData[]> {
+  async getCenoteData(userId: ID, cenoteId: ID): Promise<VariableWithData[]> {
+
     const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
-    return snapshot.docs.map((doc) => doc.data() as VariableWithData);
+    let mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
+
+    mofs = await Promise.all(mofs.map(async m => {
+      m.permissions = await mofPermissionProvider.getMofPermission(userId, cenoteId, m.variableId);
+      return m;
+    }));
+
+    return mofs;
   }
 
   /**
@@ -298,7 +314,8 @@ export class MofProvider {
 
   async getThemesByCenote(cenoteId: string): Promise<string[]> {
     const variableProvider = new VariableProvider();
-    const cenoteData = await this.getCenoteData(cenoteId);
+    const cenoteData = await this.getCenoteData("1",cenoteId);
+    // TODO FIX HERE
 
     const variablesIds = cenoteData.map((item) => item.variableId);
 

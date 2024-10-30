@@ -419,6 +419,13 @@ export type MofModificationRequestList = {
   totalCount: Scalars['Int'];
 };
 
+export type MofPermission = {
+  __typename?: 'MofPermission';
+  canDelete: Scalars['Boolean'];
+  canEdit: Scalars['Boolean'];
+  canView: Scalars['Boolean'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   acceptMofRequest?: Maybe<Scalars['Boolean']>;
@@ -1295,6 +1302,7 @@ export type VariableWithData = {
   id: Scalars['ID'];
   lastTimestamp: Scalars['DateTime'];
   measurements: Array<MeasurementOrFact>;
+  permissions: MofPermission;
   variableIcon?: Maybe<Scalars['String']>;
   variableId: Scalars['ID'];
   variableName: Scalars['String'];
@@ -1506,6 +1514,7 @@ export type ResolversTypes = {
   MofByCategory: ResolverTypeWrapper<MofByCategory>;
   MofModificationRequest: ResolverTypeWrapper<MofModificationRequest>;
   MofModificationRequestList: ResolverTypeWrapper<MofModificationRequestList>;
+  MofPermission: ResolverTypeWrapper<MofPermission>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1599,6 +1608,7 @@ export type ResolversParentTypes = {
   MofByCategory: MofByCategory;
   MofModificationRequest: MofModificationRequest;
   MofModificationRequestList: MofModificationRequestList;
+  MofPermission: MofPermission;
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1873,6 +1883,13 @@ export type MofModificationRequestListResolvers<ContextType = any, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MofPermissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['MofPermission'] = ResolversParentTypes['MofPermission']> = {
+  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  canEdit?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  canView?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   acceptMofRequest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAcceptMofRequestArgs, 'update_mof_id'>>;
   addFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
@@ -2097,6 +2114,7 @@ export type VariableWithDataResolvers<ContextType = any, ParentType extends Reso
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastTimestamp?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   measurements?: Resolver<Array<ResolversTypes['MeasurementOrFact']>, ParentType, ContextType>;
+  permissions?: Resolver<ResolversTypes['MofPermission'], ParentType, ContextType>;
   variableIcon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   variableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   variableName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2211,6 +2229,7 @@ export type Resolvers<ContextType = any> = {
   MofByCategory?: MofByCategoryResolvers<ContextType>;
   MofModificationRequest?: MofModificationRequestResolvers<ContextType>;
   MofModificationRequestList?: MofModificationRequestListResolvers<ContextType>;
+  MofPermission?: MofPermissionResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   ProfileData?: ProfileDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

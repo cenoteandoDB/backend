@@ -121,13 +121,43 @@ export class AuthorizationProvider {
    * @return {Promise<boolean>} if the cenote exists
    */
   async updatePermissionsCenote(cenotePermissionInput: CenotesPermissionInput): Promise<boolean> {
-    const docRef = permissionsDB.doc();
-    await docRef.set({
-      id: docRef.id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      ...cenotePermissionInput,
+    const querySnapshot = await permissionsDB
+      .where("permissionType", "==", "CENOTE")
+      .where("userId", "==", cenotePermissionInput.userId)
+      .get();
+
+    querySnapshot.forEach((doc) => {
+      permissionsDB.doc(doc.id).delete();
     });
+
+    if (cenotePermissionInput.cenotes == null) {
+      // allow all cenotes
+      const docRef = permissionsDB.doc();
+      await docRef.set({
+        id: docRef.id,
+        permissionType: "CENOTE",
+        userId: cenotePermissionInput.userId,
+        cenoteId: "*",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    } else {
+      // allow only variables specified
+      cenotePermissionInput.cenotes.forEach((cenotePermission) => {
+        const docRef = permissionsDB.doc();
+        docRef.set({
+          id: docRef.id,
+          permissionType: "CENOTE",
+          userId: cenotePermissionInput.userId,
+          cenoteId: cenotePermission.cenoteId,
+          canView: cenotePermission.canView,
+          canEdit: cenotePermission.canEdit,
+          canDelete: cenotePermission.canDelete,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        });
+      });
+    }
 
     return true;
   }
