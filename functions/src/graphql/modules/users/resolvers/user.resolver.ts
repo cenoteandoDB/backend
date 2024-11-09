@@ -19,6 +19,8 @@ export const UserResolver: UsersModule.Resolvers["User"] = {
     parent.variableEditWhiteList ? parent.variableEditWhiteList : [],
   variableEditBlackList: (parent) =>
     parent.variableEditBlackList ? parent.variableEditBlackList : [],
+  favouriteCenotesIds: (parent) => 
+    parent.favouriteCenotesIds ? parent.favouriteCenotesIds : [],
   favouriteCenotes: (parent) => {
     if (!parent.favouriteCenotesIds) return [];
     const cenotesProvider = new CenotesProvider();

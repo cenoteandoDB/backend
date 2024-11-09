@@ -5,7 +5,7 @@ import { User } from "../generated-types/graphql";
 
 const SALT_ROUNDS = 10;
 const SECRET = process.env.JWT_SECRET!;
-const EXPIRATION_TIME = "15 minutes";
+const EXPIRATION_TIME = "59 minutes";
 
 interface DecodedToken {
   userId: string;

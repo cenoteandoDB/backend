@@ -14,16 +14,15 @@ export class VariablePermissionProvider {
    */
   async getVariablePermission(variableId: ID,userPermissions: UserPermission[])
     :Promise<MofPermission> {
-    const variablePermissions = userPermissions.filter((p) => p.permissionType == "VARIABLE")
-      .map(p => p as VariablePermission);
-
-    const filteredPermissions = variablePermissions
-      .filter((p) => p.variableId == variableId || p.variableId == "*");
+      const filteredPermissions = userPermissions
+        .filter((p): p is VariablePermission => p.permissionType === "VARIABLE")
+        .filter((p) => p.variableId === variableId || p.variableId === "*");
+    
 
     if (filteredPermissions.length == 0) {
       return MofPermissionUtils.noAccess();
     } else {
-      return this.mofPermissions(variablePermissions[0]);
+      return this.mofPermissions(filteredPermissions[0]);
     }
   }
 
