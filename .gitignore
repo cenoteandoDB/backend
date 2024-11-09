@@ -76,3 +76,6 @@ functions/credentials/cenoteando.json
 
 # Excel files with cenoteando data
 *.csv
+
+# IDE
+.idea
