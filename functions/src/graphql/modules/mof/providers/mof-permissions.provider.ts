@@ -16,13 +16,17 @@ export class MofPermissionProvider {
   /**
    * Check user permissions to perform action in MoF.
    *
-   * @param {ID} userId     the user id to check if has permission
+   * @param {UserRole} userRole     the user role
+   * @param {UserPermission[]} userPermissions   the user permissions
    * @param {ID} cenoteId   the cenote id to check MoF permission
    * @param {ID} variableId the variable id to check MoF permission
    *
    * @return {Promise<MofPermission>} if the user has permission
    */
-  async getMofPermission(userRole: UserRole, userPermissions: UserPermission[], cenoteId: ID, variableId: ID): Promise<MofPermission> {
+  async getMofPermission(userRole: UserRole,
+    userPermissions: UserPermission[],
+    cenoteId: ID,
+    variableId: ID): Promise<MofPermission> {
     if (userRole == "ADMIN") {
       return MofPermissionUtils.fullAccess();
     }

@@ -54,8 +54,8 @@ export class MofProvider {
     const userPermissions = await mofPermissionProvider.getUserPermissions(userId, cenoteId);
     const userRole = await mofPermissionProvider.getUserRole(userId);
     for (const mof of mofs) {
-      mof.permissions = 
-        await mofPermissionProvider.getMofPermission(userRole, userPermissions, mof.cenoteId, mof.variableId);
+      mof.permissions = await mofPermissionProvider
+        .getMofPermission(userRole, userPermissions, mof.cenoteId, mof.variableId);
 
       const variable = variableMap.get(mof.variableId);
       if (variable !== null && variable !== undefined) {
@@ -67,7 +67,6 @@ export class MofProvider {
         mof.variableName = variable.name as string;
         data[variable.category].push(mof);
       }
-
     }
 
     // map results to MofByCategory list
@@ -83,14 +82,14 @@ export class MofProvider {
    * @return {Promise<VariableWithData[]>} list of MoF
    */
   async getCenoteData(userId: ID, cenoteId: ID): Promise<VariableWithData[]> {
-
     const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
     let mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
 
     const userPermissions = await mofPermissionProvider.getUserPermissions(userId, cenoteId);
     const userRole = await mofPermissionProvider.getUserRole(userId);
-    mofs = await Promise.all(mofs.map(async m => {
-      m.permissions = await mofPermissionProvider.getMofPermission(userRole, userPermissions, cenoteId, m.variableId);
+    mofs = await Promise.all(mofs.map(async (m) => {
+      m.permissions = await mofPermissionProvider.getMofPermission(userRole, 
+        userPermissions, cenoteId, m.variableId);
       return m;
     }));
 
@@ -144,7 +143,8 @@ export class MofProvider {
     const mof = mofSnapshot.docs[0].data() as VariableWithData;
     const userPermissions = await mofPermissionProvider.getUserPermissions(userId, cenoteId);
     const userRole = await mofPermissionProvider.getUserRole(userId);
-    mof.permissions = await mofPermissionProvider.getMofPermission(userRole, userPermissions, cenoteId, variableId);
+    mof.permissions = 
+      await mofPermissionProvider.getMofPermission(userRole, userPermissions, cenoteId, variableId);
     return mof;
   }
 
@@ -176,7 +176,7 @@ export class MofProvider {
     const requestDoc = await requestMofModificationDB.doc(requestMofCreateId).get();
     const requestCreateMof = requestDoc.data() as MofModificationRequest;
 
-    await this.applyMofRequest(requestCreateMof)
+    await this.applyMofRequest(requestCreateMof);
 
     await requestMofModificationDB.doc(requestMofCreateId).delete();
     return true;
@@ -189,18 +189,18 @@ export class MofProvider {
 
   private async applyMofRequest(request: MofModificationRequest): Promise<boolean> {
     switch (request.type) {
-      case "CREATE": {
-        this.createMoF(request);
-        break;
-      }
-      case "UPDATE": {
-        this.updateMoF(request);
-        break;
-      }
-      case "DELETE": {
-        this.deleteMoF(request);
-        break;
-      }
+    case "CREATE": {
+      this.createMoF(request);
+      break;
+    }
+    case "UPDATE": {
+      this.updateMoF(request);
+      break;
+    }
+    case "DELETE": {
+      this.deleteMoF(request);
+      break;
+    }
     }
 
     return true;
