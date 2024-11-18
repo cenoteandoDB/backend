@@ -35,4 +35,8 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
   uploadMap: async (parent, args, contextValue, info) => {
     return StorageProvider.uploadMap(args.mapInput);
   },
+  changeCenoteMainPhoto: async (parent, args, contextValue, info) => {
+    return cenotesProvider.changeCenoteMainPhoto(args.cenoteId, args.photoId);
+  },
+
 };

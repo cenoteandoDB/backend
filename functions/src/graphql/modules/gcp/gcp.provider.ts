@@ -1,5 +1,5 @@
 import { Storage, GetSignedUrlConfig } from "@google-cloud/storage";
-import { PhotoOrMapUploadInput } from "../../generated-types/graphql";
+import { Photo, PhotoOrMapUploadInput } from "../../generated-types/graphql";
 
 const storage = new Storage({
   keyFilename: "credentials/cenoteando.json",
@@ -7,8 +7,8 @@ const storage = new Storage({
 const bucketName = process.env.BUCKET_NAME!;
 
 export const StorageProvider = {
-  getPhotos: async (cenoteId: string) => {
-    return getSignedUrls(`photos/${cenoteId}/`);
+  getPhotos: async (cenoteId: string, mainPhoto: string) => {
+    return getCenotePhotos(`photos/${cenoteId}/`, mainPhoto);
   },
 
   getMaps: (cenoteId: string) => {
@@ -51,6 +51,31 @@ export const StorageProvider = {
 
     return generateUploadUrl(fileName, contentType);
   },
+};
+
+const getCenotePhotos = async (prefix: string, mainPhoto: string): Promise<Photo[]> => {
+  const photos: Photo[] = [];
+
+  let [files] = await storage.bucket(bucketName).getFiles({ prefix });
+  files = files.filter((file) => !file.name.endsWith("/"));
+
+  const options: GetSignedUrlConfig = {
+    version: "v4",
+    action: "read",
+    expires: Date.now() + 15 * 60 * 1000,
+  };
+
+  for (const file of files) {
+    const [url] = await file.getSignedUrl(options);
+    const isMainPhoto = file.name == mainPhoto;
+    photos.push({ url: url, id: file.name, isMain: isMainPhoto });
+  }
+
+  if ((mainPhoto == null || mainPhoto === "") && photos.length > 0) {
+    photos.at(0)!.isMain = true;
+  } 
+
+  return photos;
 };
 
 const getSignedUrls = async (prefix: string): Promise<string[]> => {

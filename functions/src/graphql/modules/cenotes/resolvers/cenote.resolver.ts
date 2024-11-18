@@ -6,7 +6,8 @@ import { CenotesModule } from "../generated-types/module-types";
 export const CenoteResolver: CenotesModule.Resolvers["Cenote"] = {
   name: (parent) => (parent.name != null ? parent.name : "no-name"),
   touristic: (parent) => (parent.touristic != null ? parent.touristic : false),
-  photos: (parent) => StorageProvider.getPhotos(parent.firestore_id),
+  mainPhoto: (parent) => (parent.mainPhoto != null ? parent.mainPhoto : ""),
+  photos: (parent) => StorageProvider.getPhotos(parent.firestore_id, parent.mainPhoto),
   maps: (parent) => StorageProvider.getMaps(parent.firestore_id),
   references: (parent) => {
     if (!parent.referencesIds) return [];
