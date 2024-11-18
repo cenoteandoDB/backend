@@ -2,7 +2,6 @@
 import { MofPermission } from "../../../generated-types/graphql";
 
 export class MofPermissionUtils {
-  
   public static fullAccess() {
     const totalPermissions: MofPermission = {
       canView: true,

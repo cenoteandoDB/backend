@@ -23,8 +23,9 @@ export const QueryResolver: MofModule.Resolvers["Query"] = {
     return mofProvider.getCenoteData(user.id, args.cenoteId);
   },
 
-  getThemesByCenote: (parent, args, contextValue, info) => {
-    return mofProvider.getThemesByCenote(args.cenoteId);
+  getThemesByCenote: async (parent, args, contextValue, info) => {
+    const user = await requireAuth(contextValue.token);
+    return mofProvider.getThemesByCenote(user.id, args.cenoteId);
   },
 
   getMofModificationRequests: (parent, args, contextValue, info) => {

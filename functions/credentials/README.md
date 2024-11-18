@@ -1,3 +1,3 @@
 # Instructions
 
-Put your credentials.json file from Google Cloud in this directory.
+Put your cenoteando.json file from Google Cloud in this directory.

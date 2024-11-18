@@ -4,7 +4,8 @@ import * as gm from "graphql-modules";
 export namespace CenotesModule {
   interface DefinedFields {
     CityDistances: 'location' | 'distance' | 'time';
-    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'maps' | 'referencesIds' | 'references' | 'speciesIds' | 'species' | 'createdAt' | 'updatedAt';
+    Photo: 'url' | 'id' | 'isMain';
+    Cenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'type' | 'touristic' | 'latitude' | 'longitude' | 'variable_count' | 'reference_count' | 'species_count' | 'photos' | 'mainPhoto' | 'maps' | 'referencesIds' | 'references' | 'speciesIds' | 'species' | 'createdAt' | 'updatedAt';
     CenoteList: 'cenotes' | 'totalCount';
     FavouriteCenote: 'firestore_id' | 'cenoteando_id' | 'name' | 'type' | 'touristic' | 'state' | 'municipality' | 'thumbnail';
     CenoteLocation: 'coordinates' | 'geojson' | 'country' | 'state' | 'county';
@@ -12,7 +13,7 @@ export namespace CenotesModule {
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
     Comment: 'commenter' | 'comment' | 'review';
-    Mutation: 'createCenote' | 'updateCenote' | 'deleteCenote' | 'uploadPhoto' | 'uploadMap';
+    Mutation: 'createCenote' | 'updateCenote' | 'deleteCenote' | 'uploadPhoto' | 'uploadMap' | 'changeCenoteMainPhoto';
     Query: 'getCenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds' | 'generateCenotePhotoUploadUrl';
   };
   
@@ -31,6 +32,7 @@ export namespace CenotesModule {
   export type CenoteType = DefinedEnumValues['CenoteType'];
   export type CenoteIssue = DefinedEnumValues['CenoteIssue'];
   export type CityDistances = Pick<Types.CityDistances, DefinedFields['CityDistances']>;
+  export type Photo = Pick<Types.Photo, DefinedFields['Photo']>;
   export type Cenote = Pick<Types.Cenote, DefinedFields['Cenote']>;
   export type Reference = Types.Reference;
   export type Species = Types.Species;
@@ -59,6 +61,7 @@ export namespace CenotesModule {
   export type CoordinateScalarConfig = Types.CoordinateScalarConfig;
   
   export type CityDistancesResolvers = Pick<Types.CityDistancesResolvers, DefinedFields['CityDistances'] | '__isTypeOf'>;
+  export type PhotoResolvers = Pick<Types.PhotoResolvers, DefinedFields['Photo'] | '__isTypeOf'>;
   export type CenoteResolvers = Pick<Types.CenoteResolvers, DefinedFields['Cenote'] | '__isTypeOf'>;
   export type CenoteListResolvers = Pick<Types.CenoteListResolvers, DefinedFields['CenoteList'] | '__isTypeOf'>;
   export type FavouriteCenoteResolvers = Pick<Types.FavouriteCenoteResolvers, DefinedFields['FavouriteCenote'] | '__isTypeOf'>;
@@ -72,6 +75,7 @@ export namespace CenotesModule {
   
   export interface Resolvers {
     CityDistances?: CityDistancesResolvers;
+    Photo?: PhotoResolvers;
     Cenote?: CenoteResolvers;
     CenoteList?: CenoteListResolvers;
     FavouriteCenote?: FavouriteCenoteResolvers;
@@ -100,6 +104,12 @@ export namespace CenotesModule {
       distance?: gm.Middleware[];
       time?: gm.Middleware[];
     };
+    Photo?: {
+      '*'?: gm.Middleware[];
+      url?: gm.Middleware[];
+      id?: gm.Middleware[];
+      isMain?: gm.Middleware[];
+    };
     Cenote?: {
       '*'?: gm.Middleware[];
       firestore_id?: gm.Middleware[];
@@ -116,6 +126,7 @@ export namespace CenotesModule {
       reference_count?: gm.Middleware[];
       species_count?: gm.Middleware[];
       photos?: gm.Middleware[];
+      mainPhoto?: gm.Middleware[];
       maps?: gm.Middleware[];
       referencesIds?: gm.Middleware[];
       references?: gm.Middleware[];
@@ -175,6 +186,7 @@ export namespace CenotesModule {
       deleteCenote?: gm.Middleware[];
       uploadPhoto?: gm.Middleware[];
       uploadMap?: gm.Middleware[];
+      changeCenoteMainPhoto?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];

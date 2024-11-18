@@ -45,17 +45,26 @@ export class MofProvider {
 
     const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
     const mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
+    const variables = await variableProvider.getVariablesByTheme(theme);
+    const variableMap = variables.reduce((map, variable) => {
+      map.set(variable.firestore_id, variable);
+      return map;
+    }, new Map<ID, Variable>());
 
+    const userPermissions = await mofPermissionProvider.getUserPermissions(userId, cenoteId);
+    const userRole = await mofPermissionProvider.getUserRole(userId);
     for (const mof of mofs) {
-      mof.permissions = 
-        await mofPermissionProvider.getMofPermission(userId, mof.cenoteId, mof.variableId);
+      mof.permissions = await mofPermissionProvider
+        .getMofPermission(userRole, userPermissions, mof.cenoteId, mof.variableId);
 
-      const variableSnapshot = await variableDB.doc(mof.variableId).get();
-      const variable = variableSnapshot.data() as Variable;
-      if (variable.theme == theme) {
+      const variable = variableMap.get(mof.variableId);
+      if (variable !== null && variable !== undefined) {
         if (!data[variable.category]) {
           data[variable.category] = [];
         }
+        mof.variableIcon = variable.icon as string;
+        mof.variableRepresentation = variable.variableRepresentation as VariableRepresentation;
+        mof.variableName = variable.name as string;
         data[variable.category].push(mof);
       }
     }
@@ -73,12 +82,14 @@ export class MofProvider {
    * @return {Promise<VariableWithData[]>} list of MoF
    */
   async getCenoteData(userId: ID, cenoteId: ID): Promise<VariableWithData[]> {
-
     const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
     let mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
 
-    mofs = await Promise.all(mofs.map(async m => {
-      m.permissions = await mofPermissionProvider.getMofPermission(userId, cenoteId, m.variableId);
+    const userPermissions = await mofPermissionProvider.getUserPermissions(userId, cenoteId);
+    const userRole = await mofPermissionProvider.getUserRole(userId);
+    mofs = await Promise.all(mofs.map(async (m) => {
+      m.permissions = await mofPermissionProvider.getMofPermission(userRole, 
+        userPermissions, cenoteId, m.variableId);
       return m;
     }));
 
@@ -130,26 +141,33 @@ export class MofProvider {
     }
     
     const mof = mofSnapshot.docs[0].data() as VariableWithData;
-    mof.permissions = await mofPermissionProvider.getMofPermission(userId, cenoteId, variableId);
+    const userPermissions = await mofPermissionProvider.getUserPermissions(userId, cenoteId);
+    const userRole = await mofPermissionProvider.getUserRole(userId);
+    mof.permissions = 
+      await mofPermissionProvider.getMofPermission(userRole, userPermissions, cenoteId, variableId);
     return mof;
   }
 
   async requestMofModification(request: MofModificationRequest, user: User): Promise<boolean> {
-    const cenote = await cenoteProvider.getCenoteById(request.cenoteId);
-    const variable = await variableProvider.getVariableById(request.variableId);
-
-    const docRef = requestMofModificationDB.doc();
-    await docRef.set({
-      firestore_id: docRef.id,
-      createdAt: new Date().toISOString(),
-      cenoteName: cenote.name,
-      variableSphere: variable.sphere,
-      variableTheme: variable.theme,
-      variableCategory: variable.category,
-      creator: user.name,
-      creatorId: user.id,
-      ...request,
-    });
+    if (user.role == "ADMIN") {
+      return this.applyMofRequest(request);
+    } else {
+      const cenote = await cenoteProvider.getCenoteById(request.cenoteId);
+      const variable = await variableProvider.getVariableById(request.variableId);
+  
+      const docRef = requestMofModificationDB.doc();
+      await docRef.set({
+        firestore_id: docRef.id,
+        createdAt: new Date().toISOString(),
+        cenoteName: cenote.name,
+        variableSphere: variable.sphere,
+        variableTheme: variable.theme,
+        variableCategory: variable.category,
+        creator: user.name,
+        creatorId: user.id,
+        ...request,
+      });
+    }
 
     return true;
   }
@@ -158,20 +176,7 @@ export class MofProvider {
     const requestDoc = await requestMofModificationDB.doc(requestMofCreateId).get();
     const requestCreateMof = requestDoc.data() as MofModificationRequest;
 
-    switch (requestCreateMof.type) {
-    case "CREATE": {
-      this.createMoF(requestCreateMof);
-      break;
-    }
-    case "UPDATE": {
-      this.updateMoF(requestCreateMof);
-      break;
-    }
-    case "DELETE": {
-      this.deleteMoF(requestCreateMof);
-      break;
-    }
-    }
+    await this.applyMofRequest(requestCreateMof);
 
     await requestMofModificationDB.doc(requestMofCreateId).delete();
     return true;
@@ -179,6 +184,25 @@ export class MofProvider {
 
   async rejectMofRequest(requestMofCreateId: string): Promise<boolean> {
     await requestMofModificationDB.doc(requestMofCreateId).delete();
+    return true;
+  }
+
+  private async applyMofRequest(request: MofModificationRequest): Promise<boolean> {
+    switch (request.type) {
+    case "CREATE": {
+      this.createMoF(request);
+      break;
+    }
+    case "UPDATE": {
+      this.updateMoF(request);
+      break;
+    }
+    case "DELETE": {
+      this.deleteMoF(request);
+      break;
+    }
+    }
+
     return true;
   }
 
@@ -317,9 +341,9 @@ export class MofProvider {
     });
   }
 
-  async getThemesByCenote(cenoteId: string): Promise<string[]> {
+  async getThemesByCenote(userId: ID, cenoteId: string): Promise<string[]> {
     const variableProvider = new VariableProvider();
-    const cenoteData = await this.getCenoteData("1",cenoteId);
+    const cenoteData = await this.getCenoteData(userId, cenoteId);
     // TODO FIX HERE
 
     const variablesIds = cenoteData.map((item) => item.variableId);

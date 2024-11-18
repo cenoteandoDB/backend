@@ -11,8 +11,10 @@ import {
   UpdatedCenoteInput,
   CenoteList,
   FavouriteCenote,
+  Photo,
 } from "../../../generated-types/graphql";
 import { firestore } from "firebase-admin";
+import { StorageProvider } from "../../gcp/gcp.provider";
 
 const cenotesDB = db.cenotes;
 
@@ -285,5 +287,24 @@ export class CenotesProvider {
     }
 
     return true;
+  }
+
+  /**
+   * Updates the main photo of a cenote.
+   *
+   * @param {ID}     cenoteId of the cenote to change main photo
+   * @param {string} photoId  the new main photo
+   *
+   * @return {Promise<Photo[]>} the updated cenote photos
+   */
+  async changeCenoteMainPhoto(cenoteId: ID, photoId: string): Promise<Photo[]> {
+    await this.cenoteExists(cenoteId);
+
+    await cenotesDB.doc(cenoteId).update({
+      mainPhoto: photoId,
+      updatedAt: new Date().toISOString(),
+    });
+
+    return StorageProvider.getPhotos(cenoteId, photoId);
   }
 }

@@ -53,10 +53,11 @@ export type Cenote = {
   firestore_id: Scalars['ID'];
   latitude: Scalars['Latitude'];
   longitude: Scalars['Longitude'];
+  mainPhoto: Scalars['String'];
   maps?: Maybe<Array<Scalars['URL']>>;
   municipality: Scalars['String'];
   name: Scalars['String'];
-  photos?: Maybe<Array<Scalars['URL']>>;
+  photos: Array<Photo>;
   reference_count: Scalars['Int'];
   references?: Maybe<Array<Reference>>;
   referencesIds?: Maybe<Array<Scalars['String']>>;
@@ -430,6 +431,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   acceptMofRequest?: Maybe<Scalars['Boolean']>;
   addFavouriteCenote?: Maybe<Scalars['Boolean']>;
+  changeCenoteMainPhoto: Array<Photo>;
   create?: Maybe<MapLayer>;
   createCenote?: Maybe<Cenote>;
   createReference?: Maybe<Reference>;
@@ -472,6 +474,12 @@ export type MutationAcceptMofRequestArgs = {
 export type MutationAddFavouriteCenoteArgs = {
   cenoteId: Scalars['ID'];
   userId: Scalars['ID'];
+};
+
+
+export type MutationChangeCenoteMainPhotoArgs = {
+  cenoteId: Scalars['ID'];
+  photoId: Scalars['String'];
 };
 
 
@@ -708,6 +716,13 @@ export type PaginationInput = {
 export type PermissionType =
   | 'CENOTE'
   | 'VARIABLE';
+
+export type Photo = {
+  __typename?: 'Photo';
+  id: Scalars['String'];
+  isMain: Scalars['Boolean'];
+  url: Scalars['URL'];
+};
 
 export type PhotoOrMapUploadInput = {
   cenoteId: Scalars['ID'];
@@ -1522,6 +1537,7 @@ export type ResolversTypes = {
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
   PermissionType: PermissionType;
+  Photo: ResolverTypeWrapper<Photo>;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   ProfileData: ResolverTypeWrapper<ProfileData>;
   Query: ResolverTypeWrapper<{}>;
@@ -1615,6 +1631,7 @@ export type ResolversParentTypes = {
   NewReferenceInput: NewReferenceInput;
   NewVariableInput: NewVariableInput;
   PaginationInput: PaginationInput;
+  Photo: Photo;
   PhotoOrMapUploadInput: PhotoOrMapUploadInput;
   ProfileData: ProfileData;
   Query: {};
@@ -1670,10 +1687,11 @@ export type CenoteResolvers<ContextType = any, ParentType extends ResolversParen
   firestore_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   latitude?: Resolver<ResolversTypes['Latitude'], ParentType, ContextType>;
   longitude?: Resolver<ResolversTypes['Longitude'], ParentType, ContextType>;
+  mainPhoto?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maps?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
   municipality?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  photos?: Resolver<Maybe<Array<ResolversTypes['URL']>>, ParentType, ContextType>;
+  photos?: Resolver<Array<ResolversTypes['Photo']>, ParentType, ContextType>;
   reference_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   references?: Resolver<Maybe<Array<ResolversTypes['Reference']>>, ParentType, ContextType>;
   referencesIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
@@ -1893,6 +1911,7 @@ export type MofPermissionResolvers<ContextType = any, ParentType extends Resolve
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   acceptMofRequest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAcceptMofRequestArgs, 'update_mof_id'>>;
   addFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
+  changeCenoteMainPhoto?: Resolver<Array<ResolversTypes['Photo']>, ParentType, ContextType, RequireFields<MutationChangeCenoteMainPhotoArgs, 'cenoteId' | 'photoId'>>;
   create?: Resolver<Maybe<ResolversTypes['MapLayer']>, ParentType, ContextType, RequireFields<MutationCreateArgs, 'input'>>;
   createCenote?: Resolver<Maybe<ResolversTypes['Cenote']>, ParentType, ContextType, RequireFields<MutationCreateCenoteArgs, 'new_cenote'>>;
   createReference?: Resolver<Maybe<ResolversTypes['Reference']>, ParentType, ContextType, RequireFields<MutationCreateReferenceArgs, 'new_reference'>>;
@@ -1924,6 +1943,13 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateVariablePermissions?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateVariablePermissionsArgs, 'userId' | 'variablePermissions'>>;
   uploadMap?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadMapArgs, 'mapInput'>>;
   uploadPhoto?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUploadPhotoArgs, 'photoInput'>>;
+};
+
+export type PhotoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Photo'] = ResolversParentTypes['Photo']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isMain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ProfileDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileData'] = ResolversParentTypes['ProfileData']> = {
@@ -2231,6 +2257,7 @@ export type Resolvers<ContextType = any> = {
   MofModificationRequestList?: MofModificationRequestListResolvers<ContextType>;
   MofPermission?: MofPermissionResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Photo?: PhotoResolvers<ContextType>;
   ProfileData?: ProfileDataResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Reference?: ReferenceResolvers<ContextType>;

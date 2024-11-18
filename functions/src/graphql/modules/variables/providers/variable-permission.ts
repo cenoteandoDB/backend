@@ -1,5 +1,8 @@
 /* eslint-disable require-jsdoc */
-import { MofPermission, UserPermission, VariablePermission } from "../../../generated-types/graphql";
+import { MofPermission,
+  UserPermission,
+  VariablePermission,
+} from "../../../generated-types/graphql";
 import { ID } from "graphql-modules/shared/types";
 import { MofPermissionUtils } from "../../mof/providers/mof-permission-util";
 
@@ -12,18 +15,17 @@ export class VariablePermissionProvider {
    *
    * @return {Promise<MofByCategory[]>} list of MoF of a theme grouped by category
    */
-  async getVariablePermission(variableId: ID,userPermissions: UserPermission[])
+  async getVariablePermission(variableId: ID, userPermissions: UserPermission[])
     :Promise<MofPermission> {
-    const variablePermissions = userPermissions.filter((p) => p.permissionType == "VARIABLE")
-      .map(p => p as VariablePermission);
-
-    const filteredPermissions = variablePermissions
-      .filter((p) => p.variableId == variableId || p.variableId == "*");
+    const filteredPermissions = userPermissions
+      .filter((p): p is VariablePermission => p.permissionType === "VARIABLE")
+      .filter((p) => p.variableId === variableId || p.variableId === "*");
+    
 
     if (filteredPermissions.length == 0) {
       return MofPermissionUtils.noAccess();
     } else {
-      return this.mofPermissions(variablePermissions[0]);
+      return this.mofPermissions(filteredPermissions[0]);
     }
   }
 
@@ -32,7 +34,7 @@ export class VariablePermissionProvider {
       canView: variablePermissions.canView,
       canEdit: variablePermissions.canEdit,
       canDelete: variablePermissions.canDelete,    
-    }
-    return permission
+    };
+    return permission;
   }
 }

@@ -18,6 +18,7 @@ interface ContextParams {
 }
 
 const server = new ApolloServer({
+  introspection: true,
   gateway: {
     async load() {
       return { executor: CenoteandoApp.createApolloExecutor() };

@@ -24,6 +24,12 @@ type CityDistances {
 
 # TODO: Reference, Species, VariableWithData
 
+type Photo {
+  url: URL!
+  id: String!
+  isMain: Boolean!
+}
+
 type Cenote {
   firestore_id: ID!
   cenoteando_id: ID!
@@ -42,7 +48,8 @@ type Cenote {
   reference_count: Int!
   species_count: Int!
 
-  photos: [URL!]
+  photos: [Photo!]!
+  mainPhoto: String!
   maps: [URL!]
 
   referencesIds: [String!]
@@ -53,15 +60,6 @@ type Cenote {
 
   createdAt: DateTime
   updatedAt: DateTime
-
-  # social: CenoteSocialData
-
-  # creator: User
-  # contributors: [User]
-
-  # distances: [CityDistances]
-
-  # reviewed: Boolean
 }
 
 type CenoteList {
