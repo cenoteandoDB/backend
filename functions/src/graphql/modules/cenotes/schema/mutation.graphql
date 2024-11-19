@@ -10,21 +10,6 @@ input NewCenoteInput {
   coordinates: CoordinatesInput!
 }
 
-input UpdatedCenoteInput {
-  id: ID!
-  touristic: Boolean
-  # location: CenoteLocation
-  type: CenoteType
-  name: String
-  alternativeNames: [String!]
-
-  issues: [CenoteIssue]
-  # social: CenoteSocialData
-
-  # references: [Reference!]
-  # species: [Species!]
-}
-
 input PhotoOrMapUploadInput {
   cenoteId: ID!
   filename: String!
@@ -32,10 +17,21 @@ input PhotoOrMapUploadInput {
   extension: String!
 }
 
+input UpdateCenoteBasicInfoInput {
+  firestore_id: ID!
+  cenoteando_id: ID!
+
+  name: String!
+  altnames: [String!]!
+  state: String!
+  municipality: String!
+  touristic: Boolean!
+}
+
 type Mutation {
   # Mutation fields go here
   createCenote(new_cenote: NewCenoteInput!): Cenote
-  updateCenote(updated_cenote: UpdatedCenoteInput!): Cenote
+  updateCenoteBasicInfo(updatedCenote: UpdateCenoteBasicInfoInput!): Cenote
   deleteCenote(id: ID!): Boolean
   uploadPhoto(photoInput: PhotoOrMapUploadInput!): Boolean
   uploadMap(mapInput: PhotoOrMapUploadInput!): Boolean
@@ -45,4 +41,5 @@ type Mutation {
   # -> Collaboration mutations (submit proposal: new cenote, update cenote details, new measurement, etc.) - These should always be linked with the corresponding evidence.
 
   changeCenoteMainPhoto(cenoteId: ID!, photoId: String!): [Photo!]!
+  deletePhoto(cenoteId: ID!, photoId: String!): [Photo!]!
 }

@@ -51,6 +51,13 @@ export const StorageProvider = {
 
     return generateUploadUrl(fileName, contentType);
   },
+
+  deleteFile: async (photoId: string): Promise<boolean> => {
+    const file = storage.bucket(bucketName).file(photoId);
+    await file.delete();
+
+    return true;
+  },
 };
 
 const getCenotePhotos = async (prefix: string, mainPhoto: string): Promise<Photo[]> => {
