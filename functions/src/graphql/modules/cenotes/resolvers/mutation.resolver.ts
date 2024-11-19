@@ -15,12 +15,12 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
 
     return cenote;
   },
-  updateCenote: async (parent, args, contextValue, info) => {
-    const cenote = await cenotesProvider.updateCenote(args.updated_cenote);
+  updateCenoteBasicInfo: async (parent, args, contextValue, info) => {
+    const cenote = await cenotesProvider.updateCenoteBasicInfo(args.updatedCenote);
     AuditLogsProvider.save(
-      args.updated_cenote.id,
+      args.updatedCenote.firestore_id,
       "UPDATED_CENOTE",
-      args.updated_cenote,
+      args.updatedCenote,
     );
     return cenote;
   },
@@ -37,6 +37,9 @@ export const MutationResolver: CenotesModule.Resolvers["Mutation"] = {
   },
   changeCenoteMainPhoto: async (parent, args, contextValue, info) => {
     return cenotesProvider.changeCenoteMainPhoto(args.cenoteId, args.photoId);
+  },
+  deletePhoto: async (parent, args, contextValue, info) => {
+    return cenotesProvider.deletePhoto(args.cenoteId, args.photoId);
   },
 
 };

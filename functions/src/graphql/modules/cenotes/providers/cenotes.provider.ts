@@ -8,7 +8,7 @@ import {
   NewCenoteInput,
   PaginationInput,
   SortField,
-  UpdatedCenoteInput,
+  UpdateCenoteBasicInfoInput,
   CenoteList,
   FavouriteCenote,
   Photo,
@@ -166,12 +166,12 @@ export class CenotesProvider {
   /**
    * Updates a cenote.
    *
-   * @param {UpdatedCenoteInput} updatedCenote the information to update the cenote
+   * @param {UpdateCenoteBasicInfoInput} updatedCenote the information to update the cenote
    *
    * @return {Promise<Cenote>} the updated cenote
    */
-  async updateCenote(updatedCenote: UpdatedCenoteInput): Promise<Cenote> {
-    const cenoteDoc = await this.getCenoteDocument(updatedCenote.id);
+  async updateCenoteBasicInfo(updatedCenote: UpdateCenoteBasicInfoInput): Promise<Cenote> {
+    const cenoteDoc = await this.getCenoteDocument(updatedCenote.firestore_id);
 
     await cenotesDB.doc(cenoteDoc.id).update({
       ...updatedCenote,
@@ -305,6 +305,27 @@ export class CenotesProvider {
       updatedAt: new Date().toISOString(),
     });
 
+    return StorageProvider.getPhotos(cenoteId, photoId);
+  }
+
+  /**
+   * Deletes a photo of a cenote.
+   *
+   * @param {ID}     cenoteId of the cenote to change main photo
+   * @param {string} photoId  the photo to be deleted
+   *
+   * @return {Promise<Photo[]>} the updated cenote photos
+   */
+  async deletePhoto(cenoteId: ID, photoId: string): Promise<Photo[]> {
+    const cenote = await this.getCenoteById(cenoteId);
+
+    if (cenote.mainPhoto === photoId) {
+      await cenotesDB.doc(cenoteId).update({
+        mainPhoto: "",
+        updatedAt: new Date().toISOString(),
+      });
+    }
+    await StorageProvider.deleteFile(photoId);
     return StorageProvider.getPhotos(cenoteId, photoId);
   }
 }

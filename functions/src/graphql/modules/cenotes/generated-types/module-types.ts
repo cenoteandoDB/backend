@@ -13,7 +13,7 @@ export namespace CenotesModule {
     CenoteBounds: 'top_left' | 'bottom_right';
     CenoteSocialData: 'comments';
     Comment: 'commenter' | 'comment' | 'review';
-    Mutation: 'createCenote' | 'updateCenote' | 'deleteCenote' | 'uploadPhoto' | 'uploadMap' | 'changeCenoteMainPhoto';
+    Mutation: 'createCenote' | 'updateCenoteBasicInfo' | 'deleteCenote' | 'uploadPhoto' | 'uploadMap' | 'changeCenoteMainPhoto' | 'deletePhoto';
     Query: 'getCenotes' | 'cenoteById' | 'cenotesCsv' | 'cenotesBounds' | 'generateCenotePhotoUploadUrl';
   };
   
@@ -25,8 +25,8 @@ export namespace CenotesModule {
   interface DefinedInputFields {
     CoordinatesInput: 'latitude' | 'longitude';
     NewCenoteInput: 'coordinates';
-    UpdatedCenoteInput: 'id' | 'touristic' | 'type' | 'name' | 'alternativeNames' | 'issues';
     PhotoOrMapUploadInput: 'cenoteId' | 'filename' | 'content' | 'extension';
+    UpdateCenoteBasicInfoInput: 'firestore_id' | 'cenoteando_id' | 'name' | 'altnames' | 'state' | 'municipality' | 'touristic';
   };
   
   export type CenoteType = DefinedEnumValues['CenoteType'];
@@ -45,8 +45,8 @@ export namespace CenotesModule {
   export type Comment = Pick<Types.Comment, DefinedFields['Comment']>;
   export type CoordinatesInput = Pick<Types.CoordinatesInput, DefinedInputFields['CoordinatesInput']>;
   export type NewCenoteInput = Pick<Types.NewCenoteInput, DefinedInputFields['NewCenoteInput']>;
-  export type UpdatedCenoteInput = Pick<Types.UpdatedCenoteInput, DefinedInputFields['UpdatedCenoteInput']>;
   export type PhotoOrMapUploadInput = Pick<Types.PhotoOrMapUploadInput, DefinedInputFields['PhotoOrMapUploadInput']>;
+  export type UpdateCenoteBasicInfoInput = Pick<Types.UpdateCenoteBasicInfoInput, DefinedInputFields['UpdateCenoteBasicInfoInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type SortField = Types.SortField;
@@ -182,11 +182,12 @@ export namespace CenotesModule {
     Mutation?: {
       '*'?: gm.Middleware[];
       createCenote?: gm.Middleware[];
-      updateCenote?: gm.Middleware[];
+      updateCenoteBasicInfo?: gm.Middleware[];
       deleteCenote?: gm.Middleware[];
       uploadPhoto?: gm.Middleware[];
       uploadMap?: gm.Middleware[];
       changeCenoteMainPhoto?: gm.Middleware[];
+      deletePhoto?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];
