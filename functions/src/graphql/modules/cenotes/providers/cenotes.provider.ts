@@ -64,13 +64,13 @@ export class CenotesProvider {
 
     const [cenotesSnapshot, totalCountSnapshot] = await Promise.all([
       query.get(),
-      countQuery.get(),
+      countQuery.count().get(),
     ]);
 
     const cenotes = cenotesSnapshot.docs.map(
       (doc: any) => doc.data() as Cenote,
     );
-    const totalCount = totalCountSnapshot.size;
+    const totalCount = totalCountSnapshot.data().count;
 
     return { cenotes, totalCount };
   }
