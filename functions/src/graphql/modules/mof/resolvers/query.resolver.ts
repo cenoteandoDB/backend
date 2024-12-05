@@ -11,6 +11,12 @@ export const QueryResolver: MofModule.Resolvers["Query"] = {
     return mofProvider.cenoteDataByTheme(user.id, args.cenoteId, args.theme);
   },
 
+  getCenoteDataByCategory: async (parent, args, contextValue, info) => {
+    const user = await requireAuth(contextValue.token);
+
+    return mofProvider.cenoteDataByCategory(user.id, args.cenoteId, args.category);
+  },
+
   getCenoteDataByVariable: async (parent, args, contextValue, info) => {
     const user = await requireAuth(contextValue.token);
 

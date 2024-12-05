@@ -1,5 +1,6 @@
 type Query {
   getCenoteDataByTheme(cenoteId: ID!, theme: VariableTheme!): [MofByCategory!]!
+  getCenoteDataByCategory(cenoteId: ID!, category: VariableCategory!): [VariableWithData!]!
   getCenoteDataByVariable(cenoteId: ID!, variableId: ID!): VariableWithData
   getCenoteData(cenoteId: ID!): [VariableWithData!]
   getThemesByCenote(cenoteId: ID!): [String!]!

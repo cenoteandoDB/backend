@@ -10,7 +10,7 @@ export namespace MofModule {
     MofModificationRequestList: 'mofModificationRequests' | 'totalCount';
     MofPermission: 'canView' | 'canEdit' | 'canDelete';
     Mutation: 'requestCreateMof' | 'requestDeleteMof' | 'requestUpdateMof' | 'acceptMofRequest' | 'rejectMofRequest';
-    Query: 'getCenoteDataByTheme' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests' | 'getCenoteVariablesWithoutData';
+    Query: 'getCenoteDataByTheme' | 'getCenoteDataByCategory' | 'getCenoteDataByVariable' | 'getCenoteData' | 'getThemesByCenote' | 'getMofModificationRequests' | 'getCenoteVariablesWithoutData';
   };
   
   interface DefinedEnumValues {
@@ -130,6 +130,7 @@ export namespace MofModule {
     Query?: {
       '*'?: gm.Middleware[];
       getCenoteDataByTheme?: gm.Middleware[];
+      getCenoteDataByCategory?: gm.Middleware[];
       getCenoteDataByVariable?: gm.Middleware[];
       getCenoteData?: gm.Middleware[];
       getThemesByCenote?: gm.Middleware[];
