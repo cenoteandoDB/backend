@@ -13,6 +13,7 @@ import {
   PaginationInput,
   SortField,
   MofModificationRequestList,
+  VariableCategory,
 } from "../../../generated-types/graphql";
 import { VariableProvider } from "../../variables/providers/variable.provider";
 import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
@@ -71,6 +72,50 @@ export class MofProvider {
 
     // map results to MofByCategory list
     return Object.keys(data).map((category) => ({category, mofs: data[category]}));
+  }
+
+  /**
+   * Get cenote measurements or facts by theme.
+   *
+   * @param {ID} userId the ID of the user getting the MoF
+   * @param {ID} cenoteId of the cenote to get MoF
+   * @param {VariableCategory} category of the cenote to get MoF
+   *
+   * @return {Promise<MofByCategory[]>} list of MoF of a theme grouped by category
+   */
+  async cenoteDataByCategory(
+    userId: ID,
+    cenoteId: ID,
+    category: VariableCategory,
+  ): Promise<VariableWithData[]> {
+    const data: VariableWithData[] = [];
+
+    const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
+    const mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
+    const variables = await variableProvider.getVariablesByCategory(category);
+
+
+    const variableMap = variables.reduce((map, variable) => {
+      map.set(variable.firestore_id, variable);
+      return map;
+    }, new Map<ID, Variable>());
+
+    const userPermissions = await mofPermissionProvider.getUserPermissions(userId, cenoteId);
+    const userRole = await mofPermissionProvider.getUserRole(userId);
+    for (const mof of mofs) {
+      mof.permissions = await mofPermissionProvider
+        .getMofPermission(userRole, userPermissions, mof.cenoteId, mof.variableId);
+
+      const variable = variableMap.get(mof.variableId);
+      if (variable !== null && variable !== undefined) {
+        mof.variableIcon = variable.icon as string;
+        mof.variableRepresentation = variable.variableRepresentation as VariableRepresentation;
+        mof.variableName = variable.name as string;
+        data.push(mof);
+      }
+    }
+
+    return data;
   }
 
   /**

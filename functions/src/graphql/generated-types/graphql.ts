@@ -764,6 +764,7 @@ export type Query = {
   getAllVariablesPermissions?: Maybe<Array<VariablePermission>>;
   getCategoriesByTheme: Array<VariableCategory>;
   getCenoteData?: Maybe<Array<VariableWithData>>;
+  getCenoteDataByCategory: Array<VariableWithData>;
   getCenoteDataByTheme: Array<MofByCategory>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
   getCenotePermissions?: Maybe<CenotePermission>;
@@ -828,6 +829,12 @@ export type QueryGetCategoriesByThemeArgs = {
 
 
 export type QueryGetCenoteDataArgs = {
+  cenoteId: Scalars['ID'];
+};
+
+
+export type QueryGetCenoteDataByCategoryArgs = {
+  category: VariableCategory;
   cenoteId: Scalars['ID'];
 };
 
@@ -1986,6 +1993,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAllVariablesPermissions?: Resolver<Maybe<Array<ResolversTypes['VariablePermission']>>, ParentType, ContextType, RequireFields<QueryGetAllVariablesPermissionsArgs, 'cenoteId' | 'userId'>>;
   getCategoriesByTheme?: Resolver<Array<ResolversTypes['VariableCategory']>, ParentType, ContextType, RequireFields<QueryGetCategoriesByThemeArgs, 'theme'>>;
   getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
+  getCenoteDataByCategory?: Resolver<Array<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByCategoryArgs, 'category' | 'cenoteId'>>;
   getCenoteDataByTheme?: Resolver<Array<ResolversTypes['MofByCategory']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
   getCenotePermissions?: Resolver<Maybe<ResolversTypes['CenotePermission']>, ParentType, ContextType, RequireFields<QueryGetCenotePermissionsArgs, 'cenoteId' | 'userId' | 'variableId'>>;
