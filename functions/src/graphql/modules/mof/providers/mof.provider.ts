@@ -14,6 +14,7 @@ import {
   SortField,
   MofModificationRequestList,
   VariableCategory,
+  MofWithVariable,
 } from "../../../generated-types/graphql";
 import { VariableProvider } from "../../variables/providers/variable.provider";
 import { CenotesProvider } from "../../cenotes/providers/cenotes.provider";
@@ -87,22 +88,27 @@ export class MofProvider {
     userId: ID,
     cenoteId: ID,
     category: VariableCategory,
-  ): Promise<VariableWithData[]> {
-    const data: VariableWithData[] = [];
+  ): Promise<MofWithVariable[]> {
+    const data: MofWithVariable[] = [];
 
     const snapshot = await mofDB.where("cenoteId", "==", cenoteId).get();
     const mofs = snapshot.docs.map((doc) => doc.data() as VariableWithData);
     const variables = await variableProvider.getVariablesByCategory(category);
-
 
     const variableMap = variables.reduce((map, variable) => {
       map.set(variable.firestore_id, variable);
       return map;
     }, new Map<ID, Variable>());
 
+    const variableSet = variables.reduce((map, variable) => {
+      map.set(variable.firestore_id, false);
+      return map;
+    }, new Map<ID, boolean>());
+
     const userPermissions = await mofPermissionProvider.getUserPermissions(userId, cenoteId);
     const userRole = await mofPermissionProvider.getUserRole(userId);
     for (const mof of mofs) {
+      variableSet.set(mof.variableId, true);
       mof.permissions = await mofPermissionProvider
         .getMofPermission(userRole, userPermissions, mof.cenoteId, mof.variableId);
 
@@ -111,9 +117,16 @@ export class MofProvider {
         mof.variableIcon = variable.icon as string;
         mof.variableRepresentation = variable.variableRepresentation as VariableRepresentation;
         mof.variableName = variable.name as string;
-        data.push(mof);
+        data.push({mof, variable});
       }
     }
+
+    variableSet.forEach((hasMof, variableId) => {
+      if (!hasMof) {
+        const variable = variableMap.get(variableId) as Variable;
+        data.push({ variable });
+      }
+    })
 
     return data;
   }

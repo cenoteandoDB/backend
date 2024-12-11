@@ -8,6 +8,10 @@ export const MutationResolver: UsersModule.Resolvers["Mutation"] = {
     return usersProvider.login(args.email, args.password);
   },
 
+  refreshToken: (parent, args, contextValue, info) => {
+    return usersProvider.refreshToken(args.refreshToken);
+  },  
+
   inviteUser: (parent, args, contextValue, info) => {
     return usersProvider.inviteUser(args.email, args.name, args.userRole);
   },

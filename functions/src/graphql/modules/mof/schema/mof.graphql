@@ -20,6 +20,11 @@ type VariableWithData {
   lastTimestamp: DateTime!
 }
 
+type MofWithVariable {
+  variable: Variable!
+  mof: VariableWithData
+}
+
 type MofByCategory {
   category: String!
   mofs: [VariableWithData!]!

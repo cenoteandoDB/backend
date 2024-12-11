@@ -21,6 +21,7 @@ import { UserList } from "../../../generated-types/graphql";
 import {
   comparePassword,
   createToken,
+  refreshAccessToken,
   encryptPassword,
 } from "../../../utils/auth";
 import { db } from "../../database/db";
@@ -208,7 +209,19 @@ export class UsersProvider {
       throw new Error("Password does not match.");
     }
 
-    return createToken(user.id);
+    return createToken(user.id).token;
+  }
+
+  /**
+   * Login an user. Returns access token in case of success.
+   *
+   * @param {string} email the email of the user
+   * @param {string} refreshToken the refresh token
+   *
+   * @return {Promise<string>} the jwt
+   */
+  async refreshToken(refreshToken: string): Promise<string> {
+    return refreshAccessToken(refreshToken);
   }
 
   /**

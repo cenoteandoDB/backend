@@ -3,7 +3,7 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace UsersModule {
   interface DefinedFields {
-    Mutation: 'login' | 'inviteUser' | 'register' | 'registerTourist' | 'registerStudent' | 'registerTeacher' | 'registerInvestigator' | 'registerGovern' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'addFavouriteCenote' | 'removeFavouriteCenote' | 'deleteUser';
+    Mutation: 'login' | 'inviteUser' | 'register' | 'registerTourist' | 'registerStudent' | 'registerTeacher' | 'registerInvestigator' | 'registerGovern' | 'refreshToken' | 'updateUserInfo' | 'updateCenotePermissions' | 'updateVariablePermissions' | 'addFavouriteCenote' | 'removeFavouriteCenote' | 'deleteUser';
     Query: 'getUsers' | 'getUserById' | 'getUserByEmail' | 'getUserByName' | 'verifyCode';
     ProfileData: 'companyName' | 'companyUrl' | 'school' | 'degree' | 'subject' | 'googleScholar' | 'orchid' | 'researchGate' | 'linkedin' | 'govern_type' | 'govern_institution';
     User: 'id' | 'name' | 'surname' | 'email' | 'password' | 'role' | 'profile' | 'profileData' | 'cenoteViewWhiteList' | 'cenoteViewBlackList' | 'cenoteEditWhiteList' | 'cenoteEditBlackList' | 'variableViewWhiteList' | 'variableViewBlackList' | 'variableEditWhiteList' | 'variableEditBlackList' | 'favouriteCenotesIds' | 'favouriteCenotes' | 'createdAt' | 'updatedAt';
@@ -87,6 +87,7 @@ export namespace UsersModule {
       registerTeacher?: gm.Middleware[];
       registerInvestigator?: gm.Middleware[];
       registerGovern?: gm.Middleware[];
+      refreshToken?: gm.Middleware[];
       updateUserInfo?: gm.Middleware[];
       updateCenotePermissions?: gm.Middleware[];
       updateVariablePermissions?: gm.Middleware[];

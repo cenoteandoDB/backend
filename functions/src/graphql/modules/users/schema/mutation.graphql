@@ -83,6 +83,8 @@ type Mutation {
     profileData: RegisterGovernInput!
   ): User
 
+  refreshToken(refreshToken: String!): String!
+
   updateUserInfo(userId: String!, userInfo: UpdateUserInfoInput!): User
   updateCenotePermissions(
     userId: String!
