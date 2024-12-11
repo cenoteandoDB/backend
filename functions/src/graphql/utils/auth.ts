@@ -5,7 +5,9 @@ import { User } from "../generated-types/graphql";
 
 const SALT_ROUNDS = 10;
 const SECRET = process.env.JWT_SECRET!;
+const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
 const EXPIRATION_TIME = "59 minutes";
+const REFRESH_EXPIRATION_TIME = "59 minutes";
 
 interface DecodedToken {
   userId: string;
@@ -41,12 +43,30 @@ export async function comparePassword(
  * @param {string} userId the user id
  * @return {string} the JWT
  */
-export function createToken(userId: string): string {
+export function createToken(userId: string): { token: string, refreshToken: string } {
   const payload = { userId: userId };
 
   const token = jwt.sign(payload, SECRET, { expiresIn: EXPIRATION_TIME });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET, { expiresIn: REFRESH_EXPIRATION_TIME });
 
-  return token;
+  console.log(`Token: ${token}`)
+  console.log(`Refresh Token: ${refreshToken}`)
+  return { token, refreshToken };
+}
+
+/**
+ * Refreshes the access token using a valid refresh token.
+ *
+ * @param {string} refreshToken the refresh token
+ * @return {string | null} the new access token, or null if invalid
+ */
+export function refreshAccessToken(refreshToken: string): string {
+  const decodedToken = jwt.verify(refreshToken, REFRESH_SECRET) as DecodedToken;
+  const { userId } = decodedToken;
+
+  const newAccessToken = jwt.sign({ userId }, SECRET, { expiresIn: EXPIRATION_TIME });
+
+  return newAccessToken;
 }
 
 /**

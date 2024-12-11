@@ -5,6 +5,7 @@ export namespace MofModule {
   interface DefinedFields {
     MeasurementOrFact: 'timestamp' | 'value';
     VariableWithData: 'id' | 'cenoteId' | 'variableId' | 'variableName' | 'variableRepresentation' | 'variableIcon' | 'variableUnits' | 'measurements' | 'permissions' | 'firstTimestamp' | 'lastTimestamp';
+    MofWithVariable: 'variable' | 'mof';
     MofByCategory: 'category' | 'mofs';
     MofModificationRequest: 'firestore_id' | 'type' | 'cenoteId' | 'variableId' | 'mof' | 'old_mof' | 'cenoteName' | 'variableSphere' | 'variableTheme' | 'variableCategory' | 'creator' | 'creatorId';
     MofModificationRequestList: 'mofModificationRequests' | 'totalCount';
@@ -27,6 +28,8 @@ export namespace MofModule {
   export type VariableWithData = Pick<Types.VariableWithData, DefinedFields['VariableWithData']>;
   export type VariableRepresentation = Types.VariableRepresentation;
   export type MofPermission = Pick<Types.MofPermission, DefinedFields['MofPermission']>;
+  export type MofWithVariable = Pick<Types.MofWithVariable, DefinedFields['MofWithVariable']>;
+  export type Variable = Types.Variable;
   export type MofByCategory = Pick<Types.MofByCategory, DefinedFields['MofByCategory']>;
   export type RequestType = DefinedEnumValues['RequestType'];
   export type MofModificationRequest = Pick<Types.MofModificationRequest, DefinedFields['MofModificationRequest']>;
@@ -39,13 +42,13 @@ export namespace MofModule {
   export type UpdateMofInput = Pick<Types.UpdateMofInput, DefinedInputFields['UpdateMofInput']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
-  export type Variable = Types.Variable;
   
   export type Scalars = Pick<Types.Scalars, 'DateTime'>;
   export type DateTimeScalarConfig = Types.DateTimeScalarConfig;
   
   export type MeasurementOrFactResolvers = Pick<Types.MeasurementOrFactResolvers, DefinedFields['MeasurementOrFact'] | '__isTypeOf'>;
   export type VariableWithDataResolvers = Pick<Types.VariableWithDataResolvers, DefinedFields['VariableWithData'] | '__isTypeOf'>;
+  export type MofWithVariableResolvers = Pick<Types.MofWithVariableResolvers, DefinedFields['MofWithVariable'] | '__isTypeOf'>;
   export type MofByCategoryResolvers = Pick<Types.MofByCategoryResolvers, DefinedFields['MofByCategory'] | '__isTypeOf'>;
   export type MofModificationRequestResolvers = Pick<Types.MofModificationRequestResolvers, DefinedFields['MofModificationRequest'] | '__isTypeOf'>;
   export type MofModificationRequestListResolvers = Pick<Types.MofModificationRequestListResolvers, DefinedFields['MofModificationRequestList'] | '__isTypeOf'>;
@@ -56,6 +59,7 @@ export namespace MofModule {
   export interface Resolvers {
     MeasurementOrFact?: MeasurementOrFactResolvers;
     VariableWithData?: VariableWithDataResolvers;
+    MofWithVariable?: MofWithVariableResolvers;
     MofByCategory?: MofByCategoryResolvers;
     MofModificationRequest?: MofModificationRequestResolvers;
     MofModificationRequestList?: MofModificationRequestListResolvers;
@@ -87,6 +91,11 @@ export namespace MofModule {
       permissions?: gm.Middleware[];
       firstTimestamp?: gm.Middleware[];
       lastTimestamp?: gm.Middleware[];
+    };
+    MofWithVariable?: {
+      '*'?: gm.Middleware[];
+      variable?: gm.Middleware[];
+      mof?: gm.Middleware[];
     };
     MofByCategory?: {
       '*'?: gm.Middleware[];

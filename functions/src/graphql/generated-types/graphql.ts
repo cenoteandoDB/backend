@@ -427,6 +427,12 @@ export type MofPermission = {
   canView: Scalars['Boolean'];
 };
 
+export type MofWithVariable = {
+  __typename?: 'MofWithVariable';
+  mof?: Maybe<VariableWithData>;
+  variable: Variable;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   acceptMofRequest?: Maybe<Scalars['Boolean']>;
@@ -443,6 +449,7 @@ export type Mutation = {
   deleteVariable: Scalars['Boolean'];
   inviteUser: User;
   login: Scalars['String'];
+  refreshToken: Scalars['String'];
   register: User;
   registerGovern?: Maybe<User>;
   registerInvestigator?: Maybe<User>;
@@ -540,6 +547,11 @@ export type MutationInviteUserArgs = {
 export type MutationLoginArgs = {
   email: Scalars['EmailAddress'];
   password: Scalars['String'];
+};
+
+
+export type MutationRefreshTokenArgs = {
+  refreshToken: Scalars['String'];
 };
 
 
@@ -764,7 +776,7 @@ export type Query = {
   getAllVariablesPermissions?: Maybe<Array<VariablePermission>>;
   getCategoriesByTheme: Array<VariableCategory>;
   getCenoteData?: Maybe<Array<VariableWithData>>;
-  getCenoteDataByCategory: Array<VariableWithData>;
+  getCenoteDataByCategory: Array<MofWithVariable>;
   getCenoteDataByTheme: Array<MofByCategory>;
   getCenoteDataByVariable?: Maybe<VariableWithData>;
   getCenotePermissions?: Maybe<CenotePermission>;
@@ -1545,6 +1557,7 @@ export type ResolversTypes = {
   MofModificationRequest: ResolverTypeWrapper<MofModificationRequest>;
   MofModificationRequestList: ResolverTypeWrapper<MofModificationRequestList>;
   MofPermission: ResolverTypeWrapper<MofPermission>;
+  MofWithVariable: ResolverTypeWrapper<MofWithVariable>;
   Mutation: ResolverTypeWrapper<{}>;
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1640,6 +1653,7 @@ export type ResolversParentTypes = {
   MofModificationRequest: MofModificationRequest;
   MofModificationRequestList: MofModificationRequestList;
   MofPermission: MofPermission;
+  MofWithVariable: MofWithVariable;
   Mutation: {};
   NewCenoteInput: NewCenoteInput;
   NewMeasurementOrFactInput: NewMeasurementOrFactInput;
@@ -1923,6 +1937,12 @@ export type MofPermissionResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MofWithVariableResolvers<ContextType = any, ParentType extends ResolversParentTypes['MofWithVariable'] = ResolversParentTypes['MofWithVariable']> = {
+  mof?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType>;
+  variable?: Resolver<ResolversTypes['Variable'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   acceptMofRequest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAcceptMofRequestArgs, 'update_mof_id'>>;
   addFavouriteCenote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddFavouriteCenoteArgs, 'cenoteId' | 'userId'>>;
@@ -1938,6 +1958,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteVariable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteVariableArgs, 'id'>>;
   inviteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationInviteUserArgs, 'email' | 'name' | 'userRole'>>;
   login?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  refreshToken?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationRefreshTokenArgs, 'refreshToken'>>;
   register?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'userInfo'>>;
   registerGovern?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterGovernArgs, 'profileData' | 'userInfo'>>;
   registerInvestigator?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterInvestigatorArgs, 'profileData' | 'userInfo'>>;
@@ -1993,7 +2014,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAllVariablesPermissions?: Resolver<Maybe<Array<ResolversTypes['VariablePermission']>>, ParentType, ContextType, RequireFields<QueryGetAllVariablesPermissionsArgs, 'cenoteId' | 'userId'>>;
   getCategoriesByTheme?: Resolver<Array<ResolversTypes['VariableCategory']>, ParentType, ContextType, RequireFields<QueryGetCategoriesByThemeArgs, 'theme'>>;
   getCenoteData?: Resolver<Maybe<Array<ResolversTypes['VariableWithData']>>, ParentType, ContextType, RequireFields<QueryGetCenoteDataArgs, 'cenoteId'>>;
-  getCenoteDataByCategory?: Resolver<Array<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByCategoryArgs, 'category' | 'cenoteId'>>;
+  getCenoteDataByCategory?: Resolver<Array<ResolversTypes['MofWithVariable']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByCategoryArgs, 'category' | 'cenoteId'>>;
   getCenoteDataByTheme?: Resolver<Array<ResolversTypes['MofByCategory']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByThemeArgs, 'cenoteId' | 'theme'>>;
   getCenoteDataByVariable?: Resolver<Maybe<ResolversTypes['VariableWithData']>, ParentType, ContextType, RequireFields<QueryGetCenoteDataByVariableArgs, 'cenoteId' | 'variableId'>>;
   getCenotePermissions?: Resolver<Maybe<ResolversTypes['CenotePermission']>, ParentType, ContextType, RequireFields<QueryGetCenotePermissionsArgs, 'cenoteId' | 'userId' | 'variableId'>>;
@@ -2273,6 +2294,7 @@ export type Resolvers<ContextType = any> = {
   MofModificationRequest?: MofModificationRequestResolvers<ContextType>;
   MofModificationRequestList?: MofModificationRequestListResolvers<ContextType>;
   MofPermission?: MofPermissionResolvers<ContextType>;
+  MofWithVariable?: MofWithVariableResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Photo?: PhotoResolvers<ContextType>;
   ProfileData?: ProfileDataResolvers<ContextType>;
